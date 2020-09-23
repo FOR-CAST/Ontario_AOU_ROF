@@ -40,6 +40,9 @@ AOU <- prepInputs(url,
                   team_drive = TRUE) %>%
   as_Spatial(.)
 
+area_ha_AOU <- rgeos::gArea(AOU) / 100^2
+nPixels_AOU <- area_ha / 6.25
+
 AOU_buffered <- prepInputs(url_buffered,
                            destinationPath = inputDir,
                            targetFile = "CEON_def_50km_buff.shp",
@@ -50,10 +53,15 @@ AOU_buffered <- prepInputs(url_buffered,
                            team_drive = TRUE) %>%
   as_Spatial(.)
 
+area_ha_AOU_buff <- rgeos::gArea(AOU_buffered) / 100^2
+nPixels_AOU_buff <- area_ha_AOU_buff / 6.25
+
+## maps
 
 checkPath("images", create = TRUE)
 
 png(file.path("images", "AOU.png"), width = 600, height = 600)
 plot(as_Spatial(ON))
 plot(AOU, add = TRUE, col = "lightblue")
+plot(AOU_buffered, add = TRUE)
 dev.off()
