@@ -1,0 +1,42 @@
+################################################################################
+## Set paths for each part of the simulation
+################################################################################
+
+## preamble
+paths1 <- list(
+  ## use same cachePath for all data-prep steps before dynamic simulation
+  cachePath = file.path(cacheDir, "dataPrepGIS", "preamble"),
+  modulePath = "modules",
+  inputPath = "data",
+  outputPath = file.path("outputs", runName)
+)
+
+## species layers
+paths2 <- list(
+  ## use same cachePath for all data-prep steps before dynamic simulation
+  cachePath = file.path(cacheDir, "dataPrepGIS", "speciesLayers"),
+  modulePath = "modules",
+  inputPath = "data",
+  outputPath = file.path("outputs", runName)
+)
+
+## boreal data prep
+paths2a <- list(
+  ## use same cachePath for all data-prep steps before dynamic simulation
+  cachePath = file.path(cacheDir, "dataPrepGIS", "borealDataPrep"),
+  modulePath = "modules",
+  inputPath = "data",
+  outputPath = file.path("outputs", runName)
+)
+
+## main simulation
+paths3 <- list(
+  ## NOTE: use separate cachePath for each dynamic simulation
+  cachePath = file.path(cacheDir, runName),
+  modulePath = "modules",
+  inputPath = "data",
+  outputPath = file.path("outputs", runName)
+)
+
+## tile path (same for all)
+tilePath <- file.path(paths1$outputPath, "tiles")
