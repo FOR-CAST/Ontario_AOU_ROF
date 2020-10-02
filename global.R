@@ -27,10 +27,12 @@ ON <- canProvs[canProvs$NAME_1 == "Ontario", ] %>%
 
 ## study area
 
-url <- "https://drive.google.com/file/d/1SmaLtI4-oueFTqBsW8pv9294l3a8h2l8"
-url_buffered <- "https://drive.google.com/file/d/1wdF4bKNKTv_P9b784mV0bBZQiwk4I5OI"
+#url <- "https://drive.google.com/file/d/1SmaLtI4-oueFTqBsW8pv9294l3a8h2l8"
+#url_buffered <- "https://drive.google.com/file/d/1wdF4bKNKTv_P9b784mV0bBZQiwk4I5OI"
+url2 <- "https://drive.google.com/file/d/1Idtreoo51hGBdfJXp0BmN83bOkKHTXvk"
+url2_buffered <- "https://drive.google.com/file/d/1ngQshBgoyLjkjuXnloXPg7IUMdLmppkB"
 
-AOU <- prepInputs(url,
+AOU <- prepInputs(url2,
                   destinationPath = inputDir,
                   targetFile = "CEON_def.shp",
                   alsoExtract = "similar",
@@ -41,9 +43,9 @@ AOU <- prepInputs(url,
   as_Spatial(.)
 
 area_ha_AOU <- rgeos::gArea(AOU) / 100^2
-nPixels_AOU <- area_ha / 6.25
+nPixels_AOU <- area_ha_AOU / 6.25
 
-AOU_buffered <- prepInputs(url_buffered,
+AOU_buffered <- prepInputs(url2_buffered,
                            destinationPath = inputDir,
                            targetFile = "CEON_def_50km_buff.shp",
                            alsoExtract = "similar",
@@ -60,7 +62,7 @@ nPixels_AOU_buff <- area_ha_AOU_buff / 6.25
 
 checkPath("images", create = TRUE)
 
-png(file.path("images", "AOU.png"), width = 600, height = 600)
+png(file.path("images", "AOU_v2.png"), width = 600, height = 600)
 plot(as_Spatial(ON))
 plot(AOU, add = TRUE, col = "lightblue")
 plot(AOU_buffered, add = TRUE)
