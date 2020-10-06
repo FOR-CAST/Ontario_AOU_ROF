@@ -3,7 +3,7 @@
 Simulation modelling of vegetation and fire dynamics in the Ontario Area of Undertaking.
 ## Study Area
 
-![](images/studyArea.png)
+![](images/AOU_v2.png)
 
 ## Modules
 
