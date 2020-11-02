@@ -7,9 +7,7 @@ do.call(SpaDES.core::setPaths, paths1) # Set them here so that we don't have to 
 objects1 <- list()
 
 parameters1 <- list(
-  Ontario_AOU_preamble = list(
-    "bufferDist" = 25000,        ## 25 km buffer
-    "bufferDistLarge" = 50000,   ## 50 km buffer
+  Ontario_preamble = list(
     "mapResFact" = mapResFact,
     "runName" = runName
   )
@@ -18,7 +16,7 @@ parameters1 <- list(
 simOutPreamble <- Cache(simInitAndSpades,
                         times = list(start = 0, end = 1),
                         params = parameters1,
-                        modules = c("Ontario_AOU_preamble"),
+                        modules = c("Ontario_preamble"),
                         objects = objects1,
                         paths = paths1,
                         debug = 1,

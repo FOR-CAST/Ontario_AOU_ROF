@@ -9,7 +9,7 @@ Simulation modelling of vegetation and fire dynamics in the Ontario Area of Unde
 
 ### Study area
 
-- [FOR-CAST/Ontario_AOU_preamble](https://github.com/FOR-CAST/Ontario_AOU_preamble)
+- [FOR-CAST/Ontario_preamble](https://github.com/FOR-CAST/Ontario_preamble)
 
 ### Forest vegetation dynamics (`LandR`)
 
@@ -33,7 +33,7 @@ Simulation modelling of vegetation and fire dynamics in the Ontario Area of Unde
 
 1. Black spruce (`PICE.MAR`)
 2. Jack pine (`PINU.BAN`)
-3. poplar (trembling + balsam) (`POPU.TRE`)
+3. poplar (trembling + balsam) (`POPU.TRE` + `POPU.BAL`)
 4. white birch (`BETU.PAP`)
 5. balsam fir (`ABIE.BAL`)
 6. larch (`LARY.LAR`)
