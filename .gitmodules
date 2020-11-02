@@ -34,6 +34,3 @@
 [submodule "modules/Biomass_speciesData"]
 	path = modules/Biomass_speciesData
 	url = https://github.com/PredictiveEcology/Biomass_speciesData
-[submodule "modules/Ontario_AOU_preamble"]
-	path = modules/Ontario_AOU_preamble
-	url = https://github.com/FOR-CAST/Ontario_AOU_preamble
