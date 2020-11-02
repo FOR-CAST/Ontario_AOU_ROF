@@ -8,6 +8,7 @@ objects1 <- list()
 
 parameters1 <- list(
   Ontario_preamble = list(
+    ".plotInitialTime" = ifelse(usePlot, 0, NA),
     "mapResFact" = mapResFact,
     "runName" = runName
   )
@@ -26,18 +27,3 @@ simOutPreamble <- Cache(simInitAndSpades,
                         cloudFolderID = cloudCacheFolderID)
 
 saveRDS(simOutPreamble$ml, file.path(Paths$outputPath, "ml_preamble.rds")) ## TODO: use `qs::qsave()`
-
-if (!is.na(.plotInitialTime)) {
-  lapply(dev.list(), function(x) {
-    try(quickPlot::clearPlot(force = TRUE))
-    try(dev.off())
-  })
-  quickPlot::dev(2, width = 18, height = 10)
-  grid::grid.rect(0.90, 0.03, width = 0.2, height = 0.06, gp = gpar(fill = "white", col = "white"))
-  grid::grid.text(label = runName, x = 0.90, y = 0.03)
-
-  Plot(simOutPreamble$studyAreaReporting, simOutPreamble$studyArea, simOutPreamble$studyAreaLarge)
-  Plot(simOutPreamble$rasterToMatchReporting) #bug in quickPlot that makes these not plot together
-  Plot(simOutPreamble$rasterToMatch)
-  Plot(simOutPreamble$rasterToMatchLarge)
-}

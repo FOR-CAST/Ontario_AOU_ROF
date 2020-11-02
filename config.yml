@@ -13,13 +13,13 @@ default:
 
 production:
   batchmode: true
-  plot: false
+  plot: true ## TODO: disable
 
 alex:
   inherits: production
   cachedb: "postgresql"
   cloud:
-    cachedir: "LandWeb_cloudCache" ## TODO: create and test this
+    cachedir: "ON_cloudCache" ## TODO: create and test this
     googleuser: "achubaty@for-cast.ca"
     usecloud: false
   paths:

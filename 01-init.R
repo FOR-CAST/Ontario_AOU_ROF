@@ -38,3 +38,4 @@ rerunSpeciesLayers <- if (grepl("LandWeb", runName)) FALSE else TRUE ## TODO
 scratchDir <- config::get("paths")[["scratchdir"]]
 sppEquivCol <- "LandWeb" ## TODO
 useCloudCache <- config::get("cloud")[["usecloud"]]
+usePlot <- config::get("plot")
