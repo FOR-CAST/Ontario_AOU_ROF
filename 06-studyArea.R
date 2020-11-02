@@ -22,7 +22,7 @@ simOutPreamble <- Cache(simInitAndSpades,
                         debug = 1,
                         omitArgs = c("debug", "paths"),
                         #useCache = "overwrite", ## TODO: remove this workaround
-                        useCloud = useCloudCache, #!isFALSE(getOption("reproducible.futurePlan")),
+                        useCloud = useCloudCache,
                         cloudFolderID = cloudCacheFolderID)
 
 saveRDS(simOutPreamble$ml, file.path(Paths$outputPath, "ml_preamble.rds")) ## TODO: use `qs::qsave()`

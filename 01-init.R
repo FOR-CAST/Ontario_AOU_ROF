@@ -28,11 +28,13 @@ getMapResFact <- function(runName) {
 }
 
 cacheDir <- config::get("paths")[["cachedir"]]
+cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
 deleteSpeciesLayers <- FALSE
 eventCaching <- c(".inputObjects", "init")
+mapParallel <- FALSE
 mapResFact <- getMapResFact(runName)
 rerunDataPrep <- if (grepl("LandWeb", runName)) FALSE else TRUE ## TODO
 rerunSpeciesLayers <- if (grepl("LandWeb", runName)) FALSE else TRUE ## TODO
 scratchDir <- config::get("paths")[["scratchdir"]]
 sppEquivCol <- "LandWeb" ## TODO
-
+useCloudCache <- config::get("cloud")[["usecloud"]]

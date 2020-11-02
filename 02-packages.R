@@ -34,8 +34,8 @@ SpaDESPkgs <- c(
   "raster"
 )
 
-moduleRqdPkgs <- lapply(basename(dir("m")), function(m) {
-  packages(modules = m, paths = "m")
+moduleRqdPkgs <- lapply(basename(dir("modules")), function(m) {
+  packages(modules = m, paths = "modules")
 }) %>%
   unlist() %>%
   unname() %>%

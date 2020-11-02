@@ -7,7 +7,7 @@ paths1 <- list(
   ## use same cachePath for all data-prep steps before dynamic simulation
   cachePath = file.path(cacheDir, "dataPrepGIS", "preamble"),
   modulePath = "modules",
-  inputPath = "data",
+  inputPath = "inputs",
   outputPath = file.path("outputs", runName)
 )
 
@@ -16,7 +16,7 @@ paths2 <- list(
   ## use same cachePath for all data-prep steps before dynamic simulation
   cachePath = file.path(cacheDir, "dataPrepGIS", "speciesLayers"),
   modulePath = "modules",
-  inputPath = "data",
+  inputPath = "inputs",
   outputPath = file.path("outputs", runName)
 )
 
@@ -25,7 +25,7 @@ paths2a <- list(
   ## use same cachePath for all data-prep steps before dynamic simulation
   cachePath = file.path(cacheDir, "dataPrepGIS", "borealDataPrep"),
   modulePath = "modules",
-  inputPath = "data",
+  inputPath = "inputs",
   outputPath = file.path("outputs", runName)
 )
 
@@ -34,7 +34,7 @@ paths3 <- list(
   ## NOTE: use separate cachePath for each dynamic simulation
   cachePath = file.path(cacheDir, runName),
   modulePath = "modules",
-  inputPath = "data",
+  inputPath = "inputs",
   outputPath = file.path("outputs", runName)
 )
 

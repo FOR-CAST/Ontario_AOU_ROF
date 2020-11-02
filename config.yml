@@ -1,0 +1,28 @@
+default:
+  batchmode: false
+  cachedb: "sqlite"
+  cloud:
+    cachedir: ""
+    googleuser: ""
+    usecloud: false
+  mapresfact: 1
+  paths:
+    cachedir: "cache"
+    scratchdir: "/tmp/scratch/ON_AoU"
+  plot: true
+
+production:
+  batchmode: true
+  plot: false
+
+alex:
+  inherits: production
+  cachedb: "postgresql"
+  cloud:
+    cachedir: "LandWeb_cloudCache" ## TODO: create and test this
+    googleuser: "achubaty@for-cast.ca"
+    usecloud: false
+  paths:
+    scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON_AoU" else "/mnt/scratch/ON_AoU"
+  slackchannel: "@alex.chubaty"
+
