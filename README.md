@@ -2,9 +2,9 @@
 
 Simulation modelling of vegetation and fire dynamics in the Ontario Area of Undertaking (AOU) and the Ring of Fire (ROF) regions.
 
-## Study Area
+## Study Areas
 
-![](images/AOU_v2.png)
+![](images/AOU_v2.png)![](images/RoF.png)
 
 ## Modules
 
