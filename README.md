@@ -5,7 +5,7 @@ Simulation modelling of vegetation and fire dynamics in the Ontario Area of Unde
 ## Study Areas
 
 ![](images/AOU_v2.png)
-![](images/RoF_buffered.png)
+![](images/RoF_buffer.png)
 
 ## Modules
 
