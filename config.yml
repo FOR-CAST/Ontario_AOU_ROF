@@ -5,11 +5,11 @@ default:
     cachedir: ""
     googleuser: ""
     usecloud: false
-  mapresfact: 1
   paths:
     cachedir: "cache"
-    scratchdir: "/tmp/scratch/ON_AoU"
+    scratchdir: "/tmp/scratch/ON"
   plot: true
+  resolution: 250
 
 production:
   batchmode: true
@@ -23,6 +23,6 @@ alex:
     googleuser: "achubaty@for-cast.ca"
     usecloud: false
   paths:
-    scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON_AoU" else "/mnt/scratch/ON_AoU"
+    scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON" else "/mnt/scratch/ON"
   slackchannel: "@alex.chubaty"
 

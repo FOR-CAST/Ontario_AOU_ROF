@@ -9,7 +9,8 @@ objects1 <- list()
 parameters1 <- list(
   Ontario_preamble = list(
     ".plotInitialTime" = ifelse(usePlot, 0, NA),
-    "mapResFact" = mapResFact,
+    ".useCache" = TRUE,
+    ".resolution" = resolution,
     "runName" = runName
   )
 )
@@ -22,8 +23,6 @@ simOutPreamble <- Cache(simInitAndSpades,
                         paths = paths1,
                         debug = 1,
                         omitArgs = c("debug", "paths"),
-                        #useCache = "overwrite", ## TODO: remove this workaround
+                        #useCache = "overwrite",
                         useCloud = useCloudCache,
                         cloudFolderID = cloudCacheFolderID)
-
-saveRDS(simOutPreamble$ml, file.path(Paths$outputPath, "ml_preamble.rds")) ## TODO: use `qs::qsave()`
