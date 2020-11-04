@@ -30,7 +30,7 @@ parameters2 <- list(
   Biomass_speciesData = list(
     "omitNonVegPixels" = TRUE,
     "sppEquivCol" = sppEquivCol,
-    "types" = c("KNN"),#, "FRION"), ## TODO: use CASFRIv5
+    "types" = c("KNN", "ONFRI"), ## TODO: use CASFRIv5?
     ".plotInitialTime" = .plotInitialTime,
     ".studyAreaName" = paste0(studyAreaName, 2001),
     ".useCache" = FALSE
