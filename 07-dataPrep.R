@@ -144,8 +144,9 @@ outputs2a_2011 <- data.frame(objectName = c("cohortData",
 
 parameters2a <- list(
   Biomass_borealDataPrep = list(
-    "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
-                                        (logAge + cover + speciesCode | ecoregionGroup))),
+    "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
+    #"biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
+    #                                    (logAge + cover + speciesCode | ecoregionGroup))),
     "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
     "forestedLCCClasses" = c(1:15, 20, 32, 34:36),
     "LCCClassesToReplaceNN" = 34:36,
@@ -167,7 +168,7 @@ parameters2a <- list(
   )
 )
 
-## (re)run boreal data prep
+## run boreal data prep
 year <- 2001
 dataPrepFile2001 <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
 simOutDataPrep2001 <- Cache(simInitAndSpades,
