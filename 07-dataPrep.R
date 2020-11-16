@@ -234,6 +234,6 @@ simOutFireSenseDataPrep <- Cache(simInitAndSpades,
                                  params = parameters2b,
                                  objects = objects2b,
                                  paths = paths2b,
-                                 modules = 'fireSense_dataPrepFit',
+                                 modules = "fireSense_dataPrepFit",
                                  userTags = c("fireSense_dataPrepFit", studyAreaName)
 )
