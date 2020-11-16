@@ -13,6 +13,7 @@ quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer()) ## TODO: temporar
 
 cacheDir <- config::get("paths")[["cachedir"]]
 cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
+delayStart <- config::get("delaystart")
 deleteSpeciesLayers <- FALSE
 eventCaching <- c(".inputObjects", "init")
 mapParallel <- FALSE
@@ -21,9 +22,17 @@ resolution <- as.integer(config::get("resolution"))
 scratchDir <- config::get("paths")[["scratchdir"]]
 sppEquivCol <- "ON"
 studyAreaName <- if (grepl("AOU", runName)) {
-  "AOU"
+  if (grepl("test", runName)) {
+    "AOU_test"
+  } else {
+    "AOU"
+  }
 } else if (grepl("ROF", runName)) {
-  "ROF"
+  if (grepl("test", runName)) {
+    "ROF_test" ## TODO: enable test area in preamble for RoF
+  } else {
+    "ROF"
+  }
 } else {
   stop("runName must contain one of 'AOU' or 'ROF'.")
 }

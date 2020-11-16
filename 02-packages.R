@@ -6,10 +6,10 @@
 # install.packages("rgdal", repos="http://R-Forge.R-project.org")
 stopifnot(packageVersion("rgdal") >= package_version("1.5-17")) ## need development version
 
-stopifnot(packageVersion("LandR") >= "0.0.9")
+stopifnot(packageVersion("LandR") >= "0.0.10")
 
 library(DBI)
-library(plyr); library(dplyr) ## ensure plyr loaded before dplyr or there will be problemas
+library(plyr); library(dplyr) ## ensure plyr loaded before dplyr or there will be problems
 library(data.table)
 library(magrittr)
 library(parallel)

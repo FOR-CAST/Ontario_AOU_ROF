@@ -5,24 +5,31 @@ default:
     cachedir: ""
     googleuser: ""
     usecloud: false
+  delaystart: 0
   paths:
     cachedir: "cache"
     scratchdir: "/tmp/scratch/ON"
   plot: true
+  rcp: 45
+  rep: 1
   resolution: 250
+  studyarea: "AOU"
 
 production:
   batchmode: true
-  plot: true ## TODO: disable
+  plot: false
+
+test:
+  plot: true
 
 alex:
-  inherits: production
+  inherits: test ## TODO: switch back to 'production'
   cachedb: "postgresql"
   cloud:
     cachedir: "ON_cloudCache" ## TODO: create and test this
     googleuser: "achubaty@for-cast.ca"
     usecloud: false
+  delaystart: !expr sample(5L:15L, 1) # 5-15 minute delay to stagger starts
   paths:
     scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON" else "/mnt/scratch/ON"
   slackchannel: "@alex.chubaty"
-

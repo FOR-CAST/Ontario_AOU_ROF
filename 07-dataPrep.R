@@ -56,7 +56,7 @@ simOutSpeciesLayers2001 <- Cache(simInitAndSpades,
 saveSimList(Copy(simOutSpeciesLayers2001), sppLayersFile2001) ## TODO: fix issue loading simList
 
 simOutSpeciesLayers2011 <- simOutSpeciesLayers2001
-simOutSpeciesLayers2011$Biomass_speciesData$types <- c("KNN2011") ## TODO: FRION
+simOutSpeciesLayers2011$Biomass_speciesData$types <- c("KNN2011", "ONFRI")
 simOutSpeciesLayers2011$Biomass_speciesData <- paste0(studyAreaName, 2011)
 simOutSpeciesLayers2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, 2011)
 

@@ -1,13 +1,14 @@
 switch(peutils::user(),
        "achubaty" = Sys.setenv(R_CONFIG_ACTIVE = "alex"),
-       Sys.setenv(R_CONFIG_ACTIVE = "default")
+       Sys.setenv(R_CONFIG_ACTIVE = "test")
 )
 #Sys.getenv("R_CONFIG_ACTIVE") ## verify
 
 if (isFALSE(config::get("batchmode"))) {
   runName <- paste0(
     config::get("studyarea"),
-    "_res", 250 / config::get("mapresfact"),
+    sprintf("_RCP%02g", config::get("rcp")),
+    "_res", config::get("resolution"),
     if (isTRUE(config::is_active("test"))) "_test" else "",
     sprintf("_rep%02g", config::get("rep"))
   )
