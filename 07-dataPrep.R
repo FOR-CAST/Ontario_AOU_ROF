@@ -208,3 +208,32 @@ saveSimList(simOutDataPrep2011, dataPrepFile2011) ## TODO: fix issue loading sim
 ## fireSense data prep
 ################################################################################
 
+do.call(SpaDES.core::setPaths, paths2b)
+
+parameters2b <- list(
+  fireSense_dataPrepFit = list(
+    "fireYears" = 1991:2017,
+    "useCentroids" = TRUE,
+    "whichModulesToPrepare" = c("fireSense_SpreadFit") ## TODO: only this one for now
+  )
+)
+
+objects2b <- list(
+  "cohortData2001" = simOutDataPrep2001$cohortData,
+  "cohortData2011" = simOutDataPrep2011$cohortData,
+  "historicalClimateRasters" = simOutPreamble$historicalClimateRasters,
+  "pixelGroupMap2001" = simOutDataPrep2001$pixelGroupMap,
+  "pixelGroupMap2011" = simOutDataPrep2011$pixelGroupMap,
+  "rasterToMatch" = simOutPreamble$rasterToMatch, #this needs to be masked
+  "rstLCC" = simOutDataPrep2001$rstLCC,
+  "studyArea" = simOutPreamble$studyArea
+)
+
+simOutFireSenseDataPrep <- Cache(simInitAndSpades,
+                                 times =  list(start = 2011, end = 2011),
+                                 params = parameters2b,
+                                 objects = objects2b,
+                                 paths = paths2b,
+                                 modules = 'fireSense_dataPrepFit',
+                                 userTags = c("fireSense_dataPrepFit", studyAreaName)
+)

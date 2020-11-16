@@ -29,6 +29,15 @@ paths2a <- list(
   outputPath = file.path("outputs", runName)
 )
 
+## fireSense data prep
+paths2b <- list(
+  ## use same cachePath for all data-prep steps before dynamic simulation
+  cachePath = file.path(cacheDir, "dataPrepGIS", "fireSenseDataPrep"),
+  modulePath = "modules",
+  inputPath = "inputs",
+  outputPath = file.path("outputs", runName)
+)
+
 ## main simulation
 paths3 <- list(
   ## NOTE: use separate cachePath for each dynamic simulation
