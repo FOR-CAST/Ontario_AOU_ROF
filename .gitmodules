@@ -1,9 +1,6 @@
 [submodule "modules/fireSense"]
 	path = modules/fireSense
 	url = https://github.com/PredictiveEcology/fireSense
-[submodule "modules/fireSense_dataPrep"]
-	path = modules/fireSense_dataPrep
-	url = https://github.com/PredictiveEcology/fireSense_dataPrep
 [submodule "modules/fireSense_IgnitionFit"]
 	path = modules/fireSense_IgnitionFit
 	url = https://github.com/PredictiveEcology/fireSense_IgnitionFit
