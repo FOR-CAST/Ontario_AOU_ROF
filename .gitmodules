@@ -34,3 +34,9 @@
 [submodule "modules/Ontario_preamble"]
 	path = modules/Ontario_preamble
 	url = https://github.com/FOR-CAST/Ontario_preamble
+[submodule "modules/fireSense_dataPrepFit"]
+	path = modules/fireSense_dataPrepFit
+	url = https://github.com/PredictiveEcology/fireSense_dataPrepFit.git
+[submodule "modules/fireSense_dataPrepPredict"]
+	path = modules/fireSense_dataPrepPredict
+	url = https://github.com/PredictiveEcology/fireSense_dataPrepPredict.git
