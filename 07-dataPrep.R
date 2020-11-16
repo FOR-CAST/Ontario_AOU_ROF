@@ -70,7 +70,7 @@ simOutSpeciesLayers2011 <- Cache(simInitAndSpades,
                                  omitArgs = c("debug", "paths", ".plotInitialTime"),
                                  outputs = outputs2_2011,
                                  paths = paths2,
-                                 useCache = if (isTRUE(rerunSpeciesLayers)) "overwrite" else TRUE,
+                                 useCache = TRUE,
                                  useCloud = useCloudCache,
                                  cloudFolderID = cloudCacheFolderID,
                                  .plotInitialTime = year + .plotInitialTime,
@@ -154,7 +154,7 @@ parameters2a <- list(
     #   age and biomass
     "runName" = runName,
     "pixelGroupAgeClass" = successionTimestep * 2,  ## can be coarse because initial conditions are irrelevant
-    "pixelGroupBiomassClass" = 1000 / mapResFact^2, ## can be coarse because initial conditions are irrelevant
+    "pixelGroupBiomassClass" = 1000 / (250/resolution)^2, ## can be coarse because initial conditions are irrelevant
     "sppEquivCol" = sppEquivCol,
     "subsetDataAgeModel" = 100,
     "subsetDataBiomassModel" = 100,
