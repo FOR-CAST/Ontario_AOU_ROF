@@ -28,9 +28,12 @@ if (delayStart > 0) {
 }
 
 source("06-studyArea.R")
-source("07-speciesLayers.R")
+source("07-dataPrep.R")
 
 message(crayon::red(runName))
 
-source("08-borealDataPrep.R")
+source("08a-ignitionFit.R")
+source("08b-escapeFit.R")
+source("08c-spreadFit.R")
+
 source("09-pre-sim.R")
