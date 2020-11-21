@@ -20,6 +20,7 @@ library(SpaDES.core)
 library(pemisc)
 library(map)
 library(LandR)
+library(fireSenseUtils)
 
 #devtools::install_github("achubaty/amc@development")
 library(amc)
@@ -33,6 +34,7 @@ SpaDESPkgs <- c(
   "PredictiveEcology/map@development",
   "PredictiveEcology/pemisc@development",
   "PredictiveEcology/LandR@development",
+  "PredictiveEcology/fireSenseUtils@development",
   "raster"
 )
 
@@ -45,14 +47,15 @@ moduleRqdPkgs <- lapply(basename(dir("modules")), function(m) {
   sort()
 
 fromCRAN <- names(which(!pemisc::isGitHubPkg(moduleRqdPkgs)))
-fromGitHub <- names(which(pemisc::isGitHubPkg(moduleRqdPkgs)))
+fromGitHub <- names(which(pemisc::isGitHubPkg(moduleRqdPkgs))) %>% Require::trimVersionNumber(.)
 
 if (any(!(fromCRAN %in% installed.packages()[, "Package"]))) {
   pkgIds <- which(!(fromCRAN %in% installed.packages()[, "Package"]))
   install.packages(fromCRAN[pkgIds])
 }
 
-if (any(!(pemisc::ghPkgName(fromGitHub) %in% installed.packages()[, "Package"]))) {
-  pkgIds <- which(!(pemisc::ghPkgName(fromGitHub) %in% installed.packages()[, "Package"]))
-  lapply(fromGitHub[pkgIds], devtools::install_github)
+if (any(!(Require::extractPkgGitHub(fromGitHub) %in% installed.packages()[, "Package"]))) {
+  pkgIds <- which(!(Require::extractPkgGitHub(fromGitHub) %in% installed.packages()[, "Package"]))
+  pkgs <- pemisc::ghPkgName(fromGitHub[pkgIds])
+  lapply(pkgs, devtools::install_github)
 }
