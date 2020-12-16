@@ -155,13 +155,13 @@ parameters2a <- list(
     "runName" = runName,
     "pixelGroupAgeClass" = successionTimestep * 2,  ## can be coarse because initial conditions are irrelevant
     "pixelGroupBiomassClass" = 1000 / (250/resolution)^2, ## can be coarse because initial conditions are irrelevant
-    "sppEquivCol" = sppEquivCol,
-    "subsetDataAgeModel" = 100,
-    "subsetDataBiomassModel" = 100,
     "speciesUpdateFunction" = list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
+    "sppEquivCol" = sppEquivCol,
+    "subsetDataAgeModel" = 100,
+    "subsetDataBiomassModel" = 100,
     "useCloudCacheForStats" = useCloudCache,
     ".studyAreaName" = studyAreaName,
     ".useCache" = eventCaching
@@ -224,8 +224,8 @@ objects2b <- list(
   "historicalClimateRasters" = simOutPreamble$historicalClimateRasters,
   "pixelGroupMap2001" = simOutDataPrep2001$pixelGroupMap,
   "pixelGroupMap2011" = simOutDataPrep2011$pixelGroupMap,
-  "rasterToMatch" = simOutPreamble$rasterToMatch, #this needs to be masked
-  "rstLCC" = simOutDataPrep2001$rstLCC,
+  "rasterToMatch" = simOutPreamble$rasterToMatch,
+  "rstLCC" = crop(simOutDataPrep2001$rstLCC, simOutDataPrep2001$rasterToMatch), ## NOTE: rstLCC based on rtml ??
   "studyArea" = simOutPreamble$studyArea
 )
 
