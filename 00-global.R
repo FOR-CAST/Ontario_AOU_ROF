@@ -7,7 +7,7 @@ switch(peutils::user(),
 if (isFALSE(config::get("batchmode"))) {
   runName <- paste0(
     config::get("studyarea"),
-    sprintf("_RCP%02g", config::get("rcp")),
+    sprintf("_CCSM4_RCP%02g", config::get("rcp")),
     "_res", config::get("resolution"),
     if (isTRUE(config::is_active("test"))) "_test" else "",
     sprintf("_rep%02g", config::get("rep"))

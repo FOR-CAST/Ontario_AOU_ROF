@@ -149,21 +149,22 @@ parameters2a <- list(
                                         (logAge + cover | ecoregionGroup))),
     "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
     "forestedLCCClasses" = c(1:15, 20, 32, 34:36),
-    "LCCClassesToReplaceNN" = 34:36,
+    "LCCClassesToReplaceNN" = 34:35,
     # next two are used when assigning pixelGroup membership; what resolution for
     #   age and biomass
     "runName" = runName,
     "pixelGroupAgeClass" = successionTimestep * 2,  ## can be coarse because initial conditions are irrelevant
     "pixelGroupBiomassClass" = 1000 / (250/resolution)^2, ## can be coarse because initial conditions are irrelevant
+    "speciesTableAreas" = c("WestON"),
     "speciesUpdateFunction" = list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
     "sppEquivCol" = sppEquivCol,
-    "subsetDataAgeModel" = 100,
-    "subsetDataBiomassModel" = 100,
+    "subsetDataAgeModel" = 50,
+    "subsetDataBiomassModel" = 50,
     "useCloudCacheForStats" = useCloudCache,
-    ".studyAreaName" = studyAreaName,
+    ".studyAreaName" = paste0(studyAreaName, 2001),
     ".useCache" = eventCaching
   )
 )
@@ -185,8 +186,10 @@ simOutDataPrep2001 <- Cache(simInitAndSpades,
                             debug = 1)
 saveSimList(simOutDataPrep2001, dataPrepFile2001) ## TODO: fix issue loading simList
 
-simOutDataPrep2011 <- simOutDataPrep2001
-simOutDataPrep2011$Biomass_borealDataPrep$.studyAreaName <- paste0(studyAreaName, 2011)
+dataPrepParams2011 <- dataPrepParams2001
+dataPrepParams2011$Biomass_speciesData$types <- "KNN2011"
+dataPrepParams2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, 2011)
+dataPrepParams2011$Biomass_borealDataPrep$.studyAreaName <- paste0(studyAreaName, 2011)
 
 year <- 2011
 dataPrepFile2011 <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))

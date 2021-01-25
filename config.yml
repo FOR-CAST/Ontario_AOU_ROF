@@ -10,7 +10,7 @@ default:
     cachedir: "cache"
     scratchdir: "/tmp/scratch/ON"
   plot: true
-  rcp: 45
+  rcp: 85
   rep: 1
   resolution: 250
   studyarea: "AOU"
