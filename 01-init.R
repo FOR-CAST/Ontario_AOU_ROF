@@ -6,8 +6,7 @@
 
 if (file.exists(".Renviron")) readRenviron(".Renviron")
 
-library(config)
-library(magrittr)
+Require(c("magrittr", "PredictiveEcology/quickPlot@development"))
 
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer()) ## TODO: temporary for Alex's testing
 

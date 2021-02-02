@@ -5,6 +5,7 @@
 do.call(SpaDES.core::setPaths, paths2)
 
 objects2 <- list(
+  ".runName" = runName,
   #"nonTreePixels" = simOutPreamble[["nonTreePixels"]],
   "rasterToMatch" = simOutPreamble[["rasterToMatch"]],
   "rasterToMatchLarge" = simOutPreamble[["rasterToMatchLarge"]],
@@ -97,6 +98,7 @@ if (!is.na(.plotInitialTime)) {
 do.call(SpaDES.core::setPaths, paths2a)
 
 objects2a_2001 <- list(
+  ".runName" = runName,
   "cloudFolderID" = cloudCacheFolderID,
   "rstLCC" = simOutPreamble[["LCC"]],
   "rasterToMatch" = simOutPreamble[["rasterToMatch"]],
@@ -222,6 +224,7 @@ parameters2b <- list(
 )
 
 objects2b <- list(
+  ".runName" = runName,
   "cohortData2001" = simOutDataPrep2001$cohortData,
   "cohortData2011" = simOutDataPrep2011$cohortData,
   "historicalClimateRasters" = simOutPreamble$historicalClimateRasters,

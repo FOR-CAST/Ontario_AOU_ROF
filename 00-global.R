@@ -1,3 +1,5 @@
+Require(c("config", "crayon", "PredictiveEcology/peutils@development"))
+
 switch(peutils::user(),
        "achubaty" = Sys.setenv(R_CONFIG_ACTIVE = "alex"),
        Sys.setenv(R_CONFIG_ACTIVE = "test")
@@ -18,10 +20,12 @@ stopifnot(exists("runName", envir = .GlobalEnv)) ## run name should be set: e.g.
 message(crayon::red(runName))
 
 source("01-init.R")
-source("02-packages.R")
-source("03-paths.R")
+source("02-paths.R")
+source("03-packages.R")
 source("04-options.R")
 source("05-sim-objects.R")
+
+message(crayon::red(runName))
 
 if (delayStart > 0) {
   message(crayon::green("\nStaggered job start: delaying by", as.integer(delayStart), "minutes."))
@@ -33,8 +37,8 @@ source("07-dataPrep.R")
 
 message(crayon::red(runName))
 
-source("08a-ignitionFit.R")
-source("08b-escapeFit.R")
+#source("08a-ignitionFit.R")
+#source("08b-escapeFit.R")
 source("08c-spreadFit.R")
 
 source("09-pre-sim.R")

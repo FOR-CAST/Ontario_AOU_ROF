@@ -4,7 +4,9 @@
 
 do.call(SpaDES.core::setPaths, paths1) # Set them here so that we don't have to specify at each call to Cache
 
-objects1 <- list()
+objects1 <- list(
+  ".runName" = runName
+)
 
 parameters1 <- list(
   Ontario_preamble = list(
