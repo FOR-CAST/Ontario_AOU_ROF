@@ -1,3 +1,4 @@
+library(Require)
 Require(c("config", "crayon", "PredictiveEcology/peutils@development"))
 
 switch(peutils::user(),

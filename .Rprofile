@@ -24,9 +24,3 @@ if (!dir.exists(pkgDir)) {
   dir.create(pkgDir, recursive = TRUE)
 }
 .libPaths(pkgDir)
-
-## ensure
-if (!suppressWarnings(require("Require"))) {
-  install.packages("Require")
-  library(Require)
-}
