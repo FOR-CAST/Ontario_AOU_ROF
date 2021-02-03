@@ -49,3 +49,6 @@ paths3 <- list(
 
 ## tile path (same for all)
 tilePath <- file.path(paths1$outputPath, "tiles")
+
+checkPath(scratchDir, create = TRUE)
+checkPath(tilePath, create = TRUE)
