@@ -58,7 +58,6 @@ saveSimList(Copy(simOutSpeciesLayers2001), sppLayersFile2001) ## TODO: fix issue
 
 simOutSpeciesLayers2011 <- simOutSpeciesLayers2001
 simOutSpeciesLayers2011$Biomass_speciesData$types <- c("KNN2011", "ONFRI")
-simOutSpeciesLayers2011$Biomass_speciesData <- paste0(studyAreaName, 2011)
 simOutSpeciesLayers2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, 2011)
 
 year <- 2011
@@ -108,13 +107,14 @@ objects2a_2001 <- list(
   "speciesTable" = simOutPreamble[["speciesTable"]],
   "sppColorVect" = simOutPreamble[["sppColorVect"]],
   "sppEquiv" = simOutPreamble[["sppEquiv"]],
-  "standAgeMap" = simOutPreamble[["ageMap"]],
+  "standAgeMap" = simOutPreamble[["ageMap2001"]],
   "studyArea" = simOutPreamble[["studyArea"]],
   "studyAreaLarge" = simOutPreamble[["studyAreaLarge"]]
 )
 
 objects2a_2011 <- objects2a_2001
 objects2a_2011[["speciesLayers"]] <- simOutSpeciesLayers2011[["speciesLayers"]]
+objects2a_2011[["standAgeMap"]] <- simOutPreamble[["ageMap2011"]]
 
 outputs2a_2001 <- data.frame(objectName = c("cohortData",
                                             "pixelGroupMap",
