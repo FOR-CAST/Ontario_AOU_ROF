@@ -144,7 +144,7 @@ outputs2a_2011 <- data.frame(objectName = c("cohortData",
                                              "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
-parameters2a <- list(
+parameters2a_2001 <- list(
   Biomass_borealDataPrep = list(
     # "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
     "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
@@ -176,7 +176,7 @@ year <- 2001
 dataPrepFile2001 <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
 simOutDataPrep2001 <- Cache(simInitAndSpades,
                             times = list(start = year, end = year),
-                            params = parameters2a,
+                            params = parameters2a_2001,
                             modules = c("Biomass_borealDataPrep"),
                             objects = objects2a_2001,
                             omitArgs = c("debug", "paths", ".plotInitialTime"),
@@ -188,16 +188,16 @@ simOutDataPrep2001 <- Cache(simInitAndSpades,
                             debug = 1)
 saveSimList(simOutDataPrep2001, dataPrepFile2001) ## TODO: fix issue loading simList
 
-dataPrepParams2011 <- dataPrepParams2001
-dataPrepParams2011$Biomass_speciesData$types <- "KNN2011"
-dataPrepParams2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, 2011)
-dataPrepParams2011$Biomass_borealDataPrep$.studyAreaName <- paste0(studyAreaName, 2011)
-
 year <- 2011
+parameters2a_2011 <- parameters2a_2001
+parameters2a_2011$Biomass_speciesData$types <- "KNN2011"
+parameters2a_2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, year)
+parameters2a_2011$Biomass_borealDataPrep$.studyAreaName <- paste0(studyAreaName, year)
+
 dataPrepFile2011 <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
 simOutDataPrep2011 <- Cache(simInitAndSpades,
                             times = list(start = year, end = year),
-                            params = parameters2a,
+                            params = parameters2a_2011,
                             modules = c("Biomass_borealDataPrep"),
                             objects = objects2a_2011,
                             omitArgs = c("debug", "paths", ".plotInitialTime"),
@@ -217,7 +217,7 @@ do.call(SpaDES.core::setPaths, paths2b)
 
 parameters2b <- list(
   fireSense_dataPrepFit = list(
-    "fireYears" = 1991:2017,
+    "fireYears" = 1991:2019,
     "useCentroids" = TRUE,
     "whichModulesToPrepare" = c("fireSense_SpreadFit") ## TODO: only this one for now
   )
