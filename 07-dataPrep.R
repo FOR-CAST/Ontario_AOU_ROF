@@ -217,24 +217,31 @@ do.call(SpaDES.core::setPaths, paths2b)
 
 parameters2b <- list(
   fireSense_dataPrepFit = list(
-    "fireYears" = 1991:2019,
+    ".studyAreaName" = studyAreaName,
+    "fireYears" = 2001:2019, # this will be fixed to post kNN only
+    "sppEquivCol" = "ON",
     "useCentroids" = TRUE,
+    ".useCache" = ".inputObjects",
     "whichModulesToPrepare" = c("fireSense_SpreadFit") ## TODO: only this one for now
   )
 )
 
 objects2b <- list(
   ".runName" = runName,
-  "cohortData2001" = simOutDataPrep2001$cohortData,
-  "cohortData2011" = simOutDataPrep2011$cohortData,
-  "historicalClimateRasters" = simOutPreamble$historicalClimateRasters,
-  "pixelGroupMap2001" = simOutDataPrep2001$pixelGroupMap,
-  "pixelGroupMap2011" = simOutDataPrep2011$pixelGroupMap,
-  "rasterToMatch" = simOutPreamble$rasterToMatch,
-  "rstLCC" = crop(simOutDataPrep2001$rstLCC, simOutDataPrep2001$rasterToMatch), ## NOTE: rstLCC based on rtml ??
-  "studyArea" = simOutPreamble$studyArea
+  "cohortData2001" = simOutDataPrep2001[["cohortData"]],
+  "cohortData2011" = simOutDataPrep2011[["cohortData"]],
+  "historicalClimateRasters" = simOutPreamble[["historicalClimateRasters"]],
+  "pixelGroupMap2001" = simOutDataPrep2001[["pixelGroupMap"]],
+  "pixelGroupMap2011" = simOutDataPrep2011[["pixelGroupMap"]],
+  "rasterToMatch" = simOutPreamble[["rasterToMatch"]],
+  "rstLCC" = crop(simOutDataPrep2001[["rstLCC"]], simOutDataPrep2001[["rasterToMatch"]]), ## NOTE: rstLCC based on rtml ??
+  "sppEquiv" = simOutPreamble[["sppEquiv"]],
+  "standAgeMap2001" = simOutDataPrep2001[["standAgeMap"]],
+  "standAgeMap2011" = simOutDataPrep2011[["standAgeMap"]],
+  "studyArea" = simOutPreamble[["studyArea"]]
 )
 
+amc::.gc()
 simOutFireSenseDataPrep <- Cache(simInitAndSpades,
                                  times =  list(start = 2011, end = 2011),
                                  params = parameters2b,

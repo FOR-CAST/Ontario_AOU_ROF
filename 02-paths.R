@@ -38,6 +38,27 @@ paths2b <- list(
   outputPath = file.path("outputs", runName)
 )
 
+ignitionFitPaths <- list(
+  cachePath = file.path(cacheDir, "fireSenseIgnitionFit"),
+  modulePath = "modules",
+  inputPath = "inputs",
+  outputPath = file.path("outputs", runName)
+)
+
+escapeFitPaths <- list(
+  cachePath = file.path(cacheDir, "fireSenseEscapeFit"),
+  modulePath = "modules",
+  inputPath = "inputs",
+  outputPath = file.path("outputs", runName)
+)
+
+spreadFitPaths <- list(
+  cachePath = file.path(cacheDir, "fireSenseSpreadFit"),
+  modulePath = "modules",
+  inputPath = "inputs",
+  outputPath = file.path("outputs", runName)
+)
+
 ## main simulation
 paths3 <- list(
   ## NOTE: use separate cachePath for each dynamic simulation
@@ -47,8 +68,9 @@ paths3 <- list(
   outputPath = file.path("outputs", runName)
 )
 
-## tile path (same for all)
-tilePath <- file.path(paths1$outputPath, "tiles")
+## scratch
+scratchDir <- checkPath(scratchDir, create = TRUE) ## from config
 
-checkPath(scratchDir, create = TRUE)
-checkPath(tilePath, create = TRUE)
+## tile path (same for all)
+tilePath <- checkPath(file.path(paths1$outputPath, "tiles"), create = TRUE)
+
