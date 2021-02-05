@@ -23,7 +23,7 @@ test:
   plot: true
 
 alex:
-  inherits: test ## TODO: switch back to 'production'
+  inherits: production
   cachedb: "postgresql"
   cloud:
     cachedir: "ON_cloudCache" ## TODO: create and test this
