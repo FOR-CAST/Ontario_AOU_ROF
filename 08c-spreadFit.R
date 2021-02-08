@@ -12,7 +12,7 @@ spreadFitObjects <- list(
   rasterToMatch = simOutFireSenseDataPrep[["rasterToMatch"]]
 )
 
-extremeVals <- 10
+extremeVals <- 3
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(simOutFireSenseDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)
 upperParamsNonAnnual <- rep(extremeVals, times = length(lowerParamsNonAnnual))
@@ -26,17 +26,19 @@ upperParams <- c(upperParamsAnnual, upperParamsNonAnnual)
 # lower <- c(0.22, 0.001, 0.001, lowerParams)
 # upper <- c(0.29, 10, 10, upperParams)
 
-lower <- c(0.22, 0.001, lowerParams)
-upper <- c(0.286, 10, upperParams)
+lower <- c(0.25, 0.2, 0.1, lowerParams)
+upper <- c(0.286, 2, 4, upperParams)
 dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
 cores <- if (peutils::user("achubaty") && Sys.info()["nodename"] == "forcast02") {
-  rep("localhost", 90)
+  c(rep("localhost", 90), rep("forcast01.local", 10))
 } else {
   stop("please specify number of cores to use for spreadFit")
 }
+
+stopifnot(length(cores) == length(lower)*10) ## 10 populations per parameter for DEoptim
 
 spreadFitParams <- list(
   fireSense_SpreadFit = list(
