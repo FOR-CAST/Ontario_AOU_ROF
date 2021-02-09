@@ -68,9 +68,11 @@ spreadFitParams <- list(
 #add tags when it stabilizes
 # rm(biomassMaps2001, biomassMaps2011)
 
+fs_SpreadFit_file <- file.path(Paths$outputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
 spreadSim <- simInit(times = list(start = 0, end = 1),
                      params = spreadFitParams,
                      modules = "fireSense_SpreadFit",
                      paths = spreadFitPaths,
                      objects = spreadFitObjects)
 spreadOut <- spades(spreadSim)
+saveSimList(Copy(spreadOut), fs_SpreadFit_file) ## TODO: fix issue loading simList
