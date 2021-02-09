@@ -13,7 +13,7 @@ default:
   rcp: 85
   rep: 1
   resolution: 250
-  studyarea: "AOU"
+  studyarea: "AOU" ## AOU or ROF
 
 production:
   batchmode: true
