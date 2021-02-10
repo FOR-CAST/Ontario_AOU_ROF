@@ -29,4 +29,4 @@ fromGitHub <- names(which(pemisc::isGitHubPkg(moduleRqdPkgs))) %>%
   unique()
 
 Require(fromCRAN, upgrade = FALSE)
-Require(fromGitHub, upgrade = TRUE)
+Require(fromGitHub, upgrade = FALSE) ## TODO: confirm this is what I want
