@@ -45,7 +45,7 @@ spreadFitParams <- list(
     # "cacheId_DE" = paste0("DEOptim_", studyAreaName), # This is NWT DEoptim Cache
     "cloudFolderID_DE" = cloudCacheFolderID,
     "cores" = cores,
-    "debugMode" = FALSE,
+    "debugMode" = TRUE, ## TODO: sue TRUE for now
     "iterDEoptim" = 150,
     "iterStep" = 150,
     "iterThresh" = 192L,

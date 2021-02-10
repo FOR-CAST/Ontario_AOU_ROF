@@ -222,7 +222,7 @@ parameters2b <- list(
     "sppEquivCol" = "ON",
     "useCentroids" = TRUE,
     ".useCache" = ".inputObjects",
-    "whichModulesToPrepare" = c("fireSense_SpreadFit") ## TODO: only this one for now
+    "whichModulesToPrepare" = c("fireSense_SpreadFit", "fireSense_IgnitionFit") ## TODO: "fireSense_EscapeFit"
   )
 )
 
