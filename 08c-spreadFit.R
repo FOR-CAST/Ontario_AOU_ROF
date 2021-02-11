@@ -60,9 +60,9 @@ spreadFitParams <- list(
     "SNLL_FS_thresh" = NULL, # NULL means 'autocalibrate' to find suitable threshold value
     "upper" = upper,
     #"urlDEOptimObject" = "spreadOut_2021-02-10_Limit3_150_SNLL_FS_thresh_cNG42y", ## TODO: by studyArea
+    "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,
     "visualizeDEoptim" = FALSE,
-    "useCloud_DE" = useCloudCache,
     ".plotSize" = list(height = 1600, width = 2000)
   )
 )
