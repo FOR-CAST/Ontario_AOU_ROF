@@ -7,6 +7,7 @@ Require(c("plyr", "dplyr"), upgrade = FALSE) ## ensure plyr loaded before dplyr 
 Require("PredictiveEcology/SpaDES.core@development",
         which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core
 Require("PredictiveEcology/pemisc@development", upgrade = FALSE)
+Require("slackr")
 
 moduleRqdPkgs <- lapply(basename(dir(paths1$modulePath)), function(m) {
   packages(modules = m, paths = paths1$modulePath)

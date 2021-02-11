@@ -12,6 +12,7 @@
 *_cache/
 /cache/
 cache/
+.channel_cache
 
 # R packages
 packages/
