@@ -45,12 +45,14 @@ spreadFitParams <- list(
     # "cacheId_DE" = paste0("DEOptim_", studyAreaName), # This is NWT DEoptim Cache
     "cloudFolderID_DE" = cloudCacheFolderID,
     "cores" = cores,
-    "mode" = "fit", ## one of "debug", "fit", "visualize"
+    "DEoptimTests" = c("adTest", "snll_fs"), # Can be one or both of c("adTest", "snll_fs")
+    "doObjFunAssertions" = TRUE, ## TODO: use FALSE for production runs
     "iterDEoptim" = 150,
     "iterStep" = 150,
     "iterThresh" = 192L,
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
+    "mode" = "fit", ## one of "debug", "fit", "visualize"
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,
@@ -63,6 +65,7 @@ spreadFitParams <- list(
     "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,
     "visualizeDEoptim" = FALSE,
+    ".plot" = TRUE,
     ".plotSize" = list(height = 1600, width = 2000)
   )
 )
