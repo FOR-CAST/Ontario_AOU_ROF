@@ -12,7 +12,7 @@ spreadFitObjects <- list(
   rasterToMatch = simOutFireSenseDataPrep[["rasterToMatch"]]
 )
 
-extremeVals <- 3
+extremeVals <- 4
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(simOutFireSenseDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)
 upperParamsNonAnnual <- rep(extremeVals, times = length(lowerParamsNonAnnual))
