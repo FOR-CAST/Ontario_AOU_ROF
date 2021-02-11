@@ -45,7 +45,7 @@ spreadFitParams <- list(
     # "cacheId_DE" = paste0("DEOptim_", studyAreaName), # This is NWT DEoptim Cache
     "cloudFolderID_DE" = cloudCacheFolderID,
     "cores" = cores,
-    "debugMode" = TRUE, ## TODO: sue TRUE for now
+    "mode" = "fit", ## one of "debug", "fit", "visualize"
     "iterDEoptim" = 150,
     "iterStep" = 150,
     "iterThresh" = 192L,
@@ -54,10 +54,12 @@ spreadFitParams <- list(
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,
+    #"onlyLoadDEOptim" = FALSE,
     "rescaleAll" = TRUE,
     "trace" = 1,
     "SNLL_FS_thresh" = NULL, # NULL means 'autocalibrate' to find suitable threshold value
     "upper" = upper,
+    #"urlDEOptimObject" = "spreadOut_2021-02-10_Limit3_150_SNLL_FS_thresh_cNG42y", ## TODO: by studyArea
     "verbose" = TRUE,
     "visualizeDEoptim" = FALSE,
     "useCloud_DE" = useCloudCache,
@@ -68,11 +70,10 @@ spreadFitParams <- list(
 #add tags when it stabilizes
 # rm(biomassMaps2001, biomassMaps2011)
 
-fs_SpreadFit_file <- file.path(Paths$outputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
-spreadSim <- simInit(times = list(start = 0, end = 1),
-                     params = spreadFitParams,
-                     modules = "fireSense_SpreadFit",
-                     paths = spreadFitPaths,
-                     objects = spreadFitObjects)
-spreadOut <- spades(spreadSim)
+fs_SpreadFit_file <- file.path(Paths$inputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
+spreadOut <- simInitAndSpades(times = list(start = 0, end = 1),
+                              params = spreadFitParams,
+                              modules = "fireSense_SpreadFit",
+                              paths = spreadFitPaths,
+                              objects = spreadFitObjects)
 saveSimList(Copy(spreadOut), fs_SpreadFit_file) ## TODO: fix issue loading simList
