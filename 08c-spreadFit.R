@@ -1,17 +1,5 @@
 do.call(setPaths, spreadFitPaths)
 
-spreadFitObjects <- list(
-  fireBufferedListDT = simOutFireSenseDataPrep[["fireBufferedListDT"]],
-  fireSense_annualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_annualSpreadFitCovariates"]],
-  fireSense_nonAnnualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
-  fireSense_spreadFormula = simOutFireSenseDataPrep[["fireSense_spreadFormula"]],
-  firePolys = simOutFireSenseDataPrep[["firePolys"]],
-  flammableRTM = simOutFireSenseDataPrep[["flammableRTM"]],
-  spreadFirePoints = simOutFireSenseDataPrep[["spreadFirePoints"]],
-  studyArea = simOutFireSenseDataPrep[["studyArea"]],
-  rasterToMatch = simOutFireSenseDataPrep[["rasterToMatch"]]
-)
-
 extremeVals <- 4
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(simOutFireSenseDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)
@@ -33,7 +21,7 @@ message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
 cores <- if (peutils::user("achubaty") && Sys.info()["nodename"] == "forcast02") {
-  c(rep("localhost", 90), rep("forcast01.local", 10))
+  c(rep("localhost", 68), rep("forcast01.local", 32))
 } else {
   stop("please specify number of cores to use for spreadFit")
 }
@@ -52,7 +40,7 @@ spreadFitParams <- list(
     "iterThresh" = 192L,
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
-    "mode" = "fit", ## one of "debug", "fit", "visualize"
+    "mode" = c("fit", "visualize"), ##  "debug", or combo of "fit", "visualize"
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,
@@ -68,6 +56,19 @@ spreadFitParams <- list(
     ".plot" = TRUE,
     ".plotSize" = list(height = 1600, width = 2000)
   )
+)
+
+spreadFitObjects <- list(
+  fireBufferedListDT = simOutFireSenseDataPrep[["fireBufferedListDT"]],
+  firePolys = simOutFireSenseDataPrep[["firePolys"]],
+  fireSense_annualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_annualSpreadFitCovariates"]],
+  fireSense_nonAnnualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
+  fireSense_spreadFormula = simOutFireSenseDataPrep[["fireSense_spreadFormula"]],
+  flammableRTM = simOutFireSenseDataPrep[["flammableRTM"]],
+  #parsKnown = spreadOut$fireSense_SpreadFitted$meanCoef,
+  rasterToMatch = simOutFireSenseDataPrep[["rasterToMatch"]],
+  spreadFirePoints = simOutFireSenseDataPrep[["spreadFirePoints"]],
+  studyArea = simOutFireSenseDataPrep[["studyArea"]]
 )
 
 #add tags when it stabilizes
