@@ -82,6 +82,8 @@ spreadOut <- simInitAndSpades(times = list(start = 0, end = 1),
                               objects = spreadFitObjects)
 saveSimList(Copy(spreadOut), fs_SpreadFit_file) ## TODO: fix issue loading simList
 
+source("R/upload_spreadFit.R")
+
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()
   slackr::text_slackr(
