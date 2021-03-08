@@ -2,7 +2,6 @@
 ## Options
 ################################################################################
 
-## cache database connection (requires reproducbile >= 1.0.0)
 cacheDBconn <- if (config::get("cachedb") == "sqlite") {
   Require("RSQLite")
   NULL ## default to sqlite
@@ -39,7 +38,7 @@ opts <- options(
   #"reproducible.devMode" = if (user("emcintir")) TRUE else FALSE,
   "reproducible.futurePlan" = if (.Platform$OS.type != "windows" && user("emcintir")) FALSE else FALSE,
   "reproducible.inputPaths" = if (user("emcintir")) normPath("~/data") else NULL,
-  "reproducible.nThreads" = 2,
+  "reproducible.nThreads" = 2L,
   "reproducible.overwrite" = TRUE,
   "reproducible.polygonShortcut" = FALSE,
   "reproducible.quick" = FALSE,
@@ -50,8 +49,9 @@ opts <- options(
   "reproducible.useMemoise" = FALSE,
   "reproducible.useNewDigestAlgorithm" = TRUE,
   "reproducible.useRequire" = FALSE,
+  "spades.messagingNumCharsModule" = 36L,
   "spades.moduleCodeChecks" = FALSE,
-  "spades.nThreads" = 4,
+  "spades.nThreads" = 4L,
   "spades.recoveryMode" = FALSE,
   "spades.restartR.restartDir" = paths3$outputPath,
   "spades.useRequire" = FALSE # Don't use Require... meaning assume all pkgs installed
