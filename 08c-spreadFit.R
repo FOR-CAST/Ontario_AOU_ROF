@@ -86,7 +86,7 @@ source("R/upload_spreadFit.R")
 
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()
-  slackr::text_slackr(
+  slackr::slackr_msg(
     paste0("`fireSense_SpreadFit` for `", runName, "` completed on host `", Sys.info()[["nodename"]], "`."),
     channel = config::get("slackchannel"), preformatted = FALSE
   )
