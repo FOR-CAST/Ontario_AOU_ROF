@@ -42,4 +42,4 @@ message(crayon::red(runName))
 #source("08b-escapeFit.R")
 source("08c-spreadFit.R")
 
-source("09-pre-sim.R")
+#source("09-pre-sim.R")

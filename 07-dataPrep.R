@@ -107,7 +107,7 @@ objects2a_2001 <- list(
   "speciesTable" = simOutPreamble[["speciesTable"]],
   "sppColorVect" = simOutPreamble[["sppColorVect"]],
   "sppEquiv" = simOutPreamble[["sppEquiv"]],
-  "standAgeMap" = simOutPreamble[["ageMap2001"]],
+  "standAgeMap" = simOutPreamble[["standAgeMap2001"]],
   "studyArea" = simOutPreamble[["studyArea"]],
   "studyAreaLarge" = simOutPreamble[["studyAreaLarge"]]
 )
@@ -222,7 +222,7 @@ parameters2b <- list(
     "sppEquivCol" = "ON",
     "useCentroids" = TRUE,
     ".useCache" = ".inputObjects",
-    "whichModulesToPrepare" = c("fireSense_SpreadFit", "fireSense_IgnitionFit") ## TODO: "fireSense_EscapeFit"
+    "whichModulesToPrepare" = c("fireSense_SpreadFit")#, "fireSense_IgnitionFit") ## TODO: "fireSense_EscapeFit"
   )
 )
 
