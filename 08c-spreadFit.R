@@ -34,10 +34,10 @@ spreadFitParams <- list(
     "cloudFolderID_DE" = cloudCacheFolderID,
     "cores" = cores,
     "DEoptimTests" = c("adTest", "snll_fs"), # Can be one or both of c("adTest", "snll_fs")
-    "doObjFunAssertions" = TRUE, ## TODO: use FALSE for production runs
+    "doObjFunAssertions" = FALSE,
     "iterDEoptim" = 150,
     "iterStep" = 150,
-    "iterThresh" = 192L,
+    "iterThresh" = 396L,
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
     "mode" = c("fit", "visualize"), ##  "debug", or combo of "fit", "visualize"
