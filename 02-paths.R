@@ -11,19 +11,10 @@ paths1 <- list(
   outputPath = file.path("outputs", runName)
 )
 
-## species layers
-paths2 <- list(
-  ## use same cachePath for all data-prep steps before dynamic simulation
-  cachePath = file.path(cacheDir, "dataPrepGIS", "speciesLayers"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
-)
-
-## boreal data prep
+## species layers + borealDataPrep
 paths2a <- list(
   ## use same cachePath for all data-prep steps before dynamic simulation
-  cachePath = file.path(cacheDir, "dataPrepGIS", "borealDataPrep"),
+  cachePath = file.path(cacheDir, "dataPrepGIS", "biomassMaps"),
   modulePath = "modules",
   inputPath = "inputs",
   outputPath = file.path("outputs", runName)

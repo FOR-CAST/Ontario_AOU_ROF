@@ -37,6 +37,5 @@ if (isTRUE(newGoogleIDs)) {
   #googledrive::drive_put(media = asimOutPreamble, path = gdriveURL, name = basename(asimOutPreamble), verbose = TRUE)
 } else {
   googledrive::drive_update(file = as_id(gdriveSims[["simOutPreamble"]]), media = fsimOutPreamble)
-  googledrive::drive_update(file = as_id("11oTUX0R1i65uIjuI1PmYYd3ibjVu0cyP"), media = fsimOutPreamble) ## sample_sim
   #googledrive::drive_update(file = as_id(gdriveSims[["simOutPreambleArchive"]]), media = asimOutPreamble)
 }
