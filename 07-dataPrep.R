@@ -186,7 +186,7 @@ simOutDataPrep2001 <- Cache(simInitAndSpades,
                             .plotInitialTime = year + .plotInitialTime,
                             paths = paths2a,
                             debug = 1)
-saveSimList(simOutDataPrep2001, dataPrepFile2001) ## TODO: fix issue loading simList
+saveSimList(simOutDataPrep2001, dataPrepFile2001, fileBackend = 2)
 
 year <- 2011
 parameters2a_2011 <- parameters2a_2001
@@ -207,7 +207,7 @@ simOutDataPrep2011 <- Cache(simInitAndSpades,
                             .plotInitialTime = year + .plotInitialTime,
                             paths = paths2a,
                             debug = 1)
-saveSimList(simOutDataPrep2011, dataPrepFile2011) ## TODO: fix issue loading simList
+saveSimList(simOutDataPrep2011, dataPrepFile2011, fileBackend = 2)
 
 ################################################################################
 ## fireSense data prep
@@ -242,6 +242,8 @@ objects2b <- list(
 )
 
 amc::.gc()
+
+dataPrepFileFS <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, ".qs"))
 simOutFireSenseDataPrep <- Cache(simInitAndSpades,
                                  times =  list(start = 2011, end = 2011),
                                  params = parameters2b,
@@ -250,3 +252,4 @@ simOutFireSenseDataPrep <- Cache(simInitAndSpades,
                                  modules = "fireSense_dataPrepFit",
                                  userTags = c("fireSense_dataPrepFit", studyAreaName)
 )
+saveSimList(simOutFireSenseDataPrep, dataPrepFileFS, fileBackend = 2)

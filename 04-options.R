@@ -47,7 +47,7 @@ opts <- options(
   "reproducible.useCloud" = TRUE,
   "reproducible.useGDAL" = FALSE, ## NOTE: gdal is faster, but mixing gdal with raster causes inconsistencies
   "reproducible.useMemoise" = FALSE,
-  "reproducible.useNewDigestAlgorithm" = TRUE,
+  "reproducible.useNewDigestAlgorithm" = 2, ## improved file-backed rasters for cache/saveSimList
   "reproducible.useRequire" = FALSE,
   "spades.messagingNumCharsModule" = 36L,
   "spades.moduleCodeChecks" = FALSE,
