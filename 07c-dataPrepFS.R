@@ -35,10 +35,11 @@ fFSdataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", st
 simOutFireSenseDataPrep <- Cache(
   simInitAndSpades,
   times =  list(start = 2011, end = 2011),
+  modules = "fireSense_dataPrepFit",
   params = parameters2b,
   objects = objects2b,
   paths = paths2b,
-  modules = "fireSense_dataPrepFit",
+  .plots = NA,
   userTags = c("fireSense_dataPrepFit", studyAreaName)
 )
 saveSimList(simOutFireSenseDataPrep, fFSdataPrep, fileBackend = 2)
