@@ -70,7 +70,7 @@ parameters2a_2001 <- list(
   )
 )
 
-fBiomassMaps2001 <- file.path(Paths$inputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
+fBiomassMaps2001 <- file.path(Paths$outputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
 simOutBiomassMaps2001 <- Cache(
   simInitAndSpades,
   times = list(start = year, end = year),
@@ -90,8 +90,8 @@ saveSimList(simOutBiomassMaps2001, fBiomassMaps2001, fileBackend = 2) ## TODO: u
 
 ## UPLOAD TO GOOGLE DRIVE
 if (isTRUE(newGoogleIDs)) {
-  googledrive::drive_put(media = fBiomassMaps2011, path = gdriveURL, name = basename(fBiomassMaps2011), verbose = TRUE)
-  #googledrive::drive_put(media = aBiomassMaps2001, path = gdriveURL, name = basename(aBiomassMaps2011), verbose = TRUE)
+  googledrive::drive_put(media = fBiomassMaps2001, path = gdriveURL, name = basename(fBiomassMaps2001), verbose = TRUE)
+  #googledrive::drive_put(media = aBiomassMaps2001, path = gdriveURL, name = basename(aBiomassMaps2001), verbose = TRUE)
 } else {
   googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2001"]]), media = fBiomassMaps2001)
   #googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2001Archive"]]), media = aBiomassMaps2001)
@@ -108,5 +108,4 @@ if (!is.na(.plotInitialTime)) {
   grid::grid.text(label = runName, x = 0.90, y = 0.03)
 
   Plot(simOutSpeciesLayers2001$speciesLayers)
-  Plot(simOutSpeciesLayers2011$speciesLayers)
 }

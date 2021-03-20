@@ -43,11 +43,15 @@ simOutBiomassMaps2011 <- Cache(
 )
 saveSimList(simOutBiomassMaps2011, fBiomassMaps2011, fileBackend = 2)
 
-## TODO: update this for both 2001 and 2011
 if (isTRUE(newGoogleIDs)) {
   googledrive::drive_put(media = fBiomassMaps2011, path = gdriveURL, name = basename(fBiomassMaps2011), verbose = TRUE)
   #googledrive::drive_put(media = aBiomassMaps2011, path = gdriveURL, name = basename(aBiomassMaps2011), verbose = TRUE)
 } else {
   googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2011"]]), media = fBiomassMaps2011)
   #googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2011Archive"]]), media = aBiomassMaps2011)
+}
+
+## PLOTTING
+if (!is.na(.plotInitialTime)) {
+  Plot(simOutSpeciesLayers2011$speciesLayers)
 }

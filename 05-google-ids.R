@@ -24,9 +24,9 @@ gdriveSims <- if (grepl("AOU", runName)) {
   list(
     simOutPreamble = "11oTUX0R1i65uIjuI1PmYYd3ibjVu0cyP",
     simOutPreambleArchive = "",
-    biomassMaps2001 = "",
+    biomassMaps2001 = "1o0_Y8_2Eqq8-hznhVyA72z1wd47enK0f",
     biomassMaps2001Archive = "",
-    biomassMaps2011 = "",
+    biomassMaps2011 = "135tLgXpKzp-UA274A3KvXPg1M9BviACY",
     biomassMaps2011Archive = "",
     fSsimDataPrep = "",
     fSsimDataPrepArchive = "",

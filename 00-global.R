@@ -34,7 +34,9 @@ if (delayStart > 0) {
 }
 
 source("06-studyArea.R")
-source("07-dataPrep.R")
+source("07a-dataPrep2001.R")
+source("07b-dataPrep2011.R")
+source("07c-dataPrepFS.R")
 
 message(crayon::red(runName))
 
