@@ -31,7 +31,7 @@ objects2b <- list(
 
 amc::.gc()
 
-fFSdataPrep <- file.path(Paths$inputPath, paste0("simOutBiomassMaps_", studyAreaName, ".qs"))
+fFSdataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
 simOutFireSenseDataPrep <- Cache(
   simInitAndSpades,
   times =  list(start = 2011, end = 2011),
