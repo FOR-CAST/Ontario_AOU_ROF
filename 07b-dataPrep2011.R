@@ -50,8 +50,8 @@ if (isTRUE(newGoogleIDs)) {
   googledrive::drive_put(media = fBiomassMaps2011, path = gdriveURL, name = basename(fBiomassMaps2011), verbose = TRUE)
   #googledrive::drive_put(media = aBiomassMaps2011, path = gdriveURL, name = basename(aBiomassMaps2011), verbose = TRUE)
 } else {
-  googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2011"]]), media = fBiomassMaps2011)
-  #googledrive::drive_update(file = as_id(gdriveSims[["BiomassMaps2011Archive"]]), media = aBiomassMaps2011)
+  googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2011"]]), media = fBiomassMaps2011)
+  #googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2011Archive"]]), media = aBiomassMaps2011)
 }
 
 ## PLOTTING
