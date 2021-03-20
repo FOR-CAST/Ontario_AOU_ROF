@@ -1,5 +1,8 @@
 do.call(setPaths, spreadFitPaths)
 
+source("05-prerun.R")
+newGoogleIDs <- gdriveSims[["spreadOut"]] == ""
+
 extremeVals <- 4
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(simOutFireSenseDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)

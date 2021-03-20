@@ -1,5 +1,8 @@
 do.call(SpaDES.core::setPaths, paths2a)
 
+source("05-prerun.R")
+newGoogleIDs <- gdriveSims[["BiomassMaps2001"]] == ""
+
 year <- 2001
 
 modules2a <- list("Biomass_speciesData", "Biomass_borealDataPrep")
