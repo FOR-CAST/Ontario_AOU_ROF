@@ -1,6 +1,6 @@
 do.call(setPaths, spreadFitPaths)
 
-source("05-prerun.R")
+source("05-google-ids.R")
 newGoogleIDs <- gdriveSims[["spreadOut"]] == ""
 
 extremeVals <- 4
