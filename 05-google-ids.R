@@ -5,9 +5,9 @@ gdriveURL <- "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeR
 
 gdriveSims <- if (grepl("AOU", runName)) {
   list(
-    simOutPreamble = "",
+    simOutPreamble = "1InmRgjKLZip36AzUy6XzRufdt2mk1nwA",
     simOutPreambleArchive = "",
-    biomassMaps2001 = "",
+    biomassMaps2001 = "1eAYoAKDOBkYvdIF5Txwy8FyBlmpL9s19",
     biomassMaps2001Archive = "",
     biomassMaps2011 = "",
     biomassMaps2011Archive = "",
