@@ -1,8 +1,6 @@
 library(Require)
 Require(c(
-  "config", "crayon", "PredictiveEcology/peutils@development",
-  "PredictiveEcology/reproducible@CopyGenericChange (>= 1.0.6.9010)",   ## 2021-03-17
-  "PredictiveEcology/SpaDES.core@rasterToMemoryUpdates (>= 1.0.6.9022)" ## 2021-03-17
+  "config", "crayon", "PredictiveEcology/peutils@development"
 ))
 
 switch(peutils::user(),
