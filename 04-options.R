@@ -19,7 +19,7 @@ cacheDBconn <- if (config::get("cachedb") == "sqlite") {
 
 maxMemory <- 5e+12
 
-rasterOptions(default = TRUE)
+raster::rasterOptions(default = TRUE)
 opts <- options(
   "fftempdir" = scratchDir,
   "future.globals.maxSize" = 1000*1024^2,

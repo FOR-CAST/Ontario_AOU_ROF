@@ -36,5 +36,5 @@ fromGitHub <- names(which(pemisc::isGitHubPkg(moduleRqdPkgs))) %>%
   gsub(pattern = "fireSenseUtils", replacement = "fireSenseUtils@development", x = .) %>%
   unique()
 
-Require(fromCRAN, upgrade = FALSE)
-Require(fromGitHub, upgrade = FALSE) ## TODO: confirm this is what I want
+Require(fromCRAN, upgrade = FALSE, require = FALSE)
+Require(fromGitHub, upgrade = FALSE, require = FALSE)
