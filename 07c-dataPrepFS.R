@@ -22,7 +22,7 @@ objects2b <- list(
   "pixelGroupMap2001" = simOutBiomassMaps2001[["pixelGroupMap"]],
   "pixelGroupMap2011" = simOutBiomassMaps2011[["pixelGroupMap"]],
   "rasterToMatch" = simOutPreamble[["rasterToMatch"]],
-  "rstLCC" = crop(simOutBiomassMaps2001[["rstLCC"]], simOutBiomassMaps2001[["rasterToMatch"]]), ## NOTE: rstLCC based on rtml ??
+  "rstLCC" = raster::crop(simOutBiomassMaps2001[["rstLCC"]], simOutBiomassMaps2001[["rasterToMatch"]]), ## NOTE: rstLCC based on rtml ??
   "sppEquiv" = simOutPreamble[["sppEquiv"]],
   "standAgeMap2001" = simOutBiomassMaps2001[["standAgeMap"]],
   "standAgeMap2011" = simOutBiomassMaps2011[["standAgeMap"]],

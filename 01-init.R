@@ -15,6 +15,7 @@ cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
 delayStart <- config::get("delaystart")
 deleteSpeciesLayers <- FALSE
 eventCaching <- c(".inputObjects", "init")
+firstRunSpreadFit <- FALSE
 mapParallel <- FALSE
 rep <- config::get("rep")
 resolution <- as.integer(config::get("resolution"))

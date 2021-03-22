@@ -43,7 +43,7 @@ spreadFitParams <- list(
     "iterThresh" = 396L,
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
-    "mode" = c("fit", "visualize"), ##  "debug", or combo of "fit", "visualize"
+    "mode" = if (isTRUE(firstRunSpreadFit)) c("fit", "visualize") else "fit", ##  "debug", or combo of "fit", "visualize"
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,
