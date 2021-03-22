@@ -44,10 +44,12 @@ simOutFireSenseDataPrep <- Cache(
 )
 saveSimList(simOutFireSenseDataPrep, fFSdataPrep, fileBackend = 2)
 
-if (isTRUE(newGoogleIDs)) {
-  googledrive::drive_put(media = fFSdataPrep, path = gdriveURL, name = basename(fFSdataPrep), verbose = TRUE)
-  #googledrive::drive_put(media = aFSsimDataPrep, path = gdriveURL, name = basename(aFSsimDataPrep), verbose = TRUE)
-} else {
-  googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = fFSdataPrep)
-  #googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrepArchive"]]), media = aFSsimDataPrep)
+if (isTRUE(uplaod2GDrive)) {
+  if (isTRUE(newGoogleIDs)) {
+    googledrive::drive_put(media = fFSdataPrep, path = gdriveURL, name = basename(fFSdataPrep), verbose = TRUE)
+    #googledrive::drive_put(media = aFSsimDataPrep, path = gdriveURL, name = basename(aFSsimDataPrep), verbose = TRUE)
+  } else {
+    googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = fFSdataPrep)
+    #googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrepArchive"]]), media = aFSsimDataPrep)
+  }
 }

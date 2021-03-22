@@ -77,15 +77,34 @@ spreadFitObjects <- list(
 #add tags when it stabilizes
 # rm(biomassMaps2001, biomassMaps2011)
 
-fs_SpreadFit_file <- file.path(Paths$inputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
+#dspreadOut <- file.path(Paths$outputPath, paste0("ignitionOut_", studyAreaName)) %>%
+#  checkPath(create = TRUE)
+#aspreadOut <- paste0(dspreadOut, ".7z")
+fspreadOut <- file.path(Paths$inputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
 spreadOut <- simInitAndSpades(times = list(start = 0, end = 1),
                               params = spreadFitParams,
                               modules = "fireSense_SpreadFit",
                               paths = spreadFitPaths,
                               objects = spreadFitObjects)
-saveSimList(Copy(spreadOut), fs_SpreadFit_file) ## TODO: fix issue loading simList
+saveSimList(
+  spreadOut,
+  fspreadOut,
+  #filebackedDir = dspreadOut,
+  fileBackend = 2 ## TODO use fileBackend = 1
+)
+#archive::archive_write_dir(archive = aspreadOut, dir = dspreadOut)
 
-source("R/upload_spreadFit.R")
+if (isTRUE(uplaod2GDrive)) {
+  source("R/upload_spreadFit.R")
+
+  if (isTRUE(newGoogleIDs)) {
+    googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut), verbose = TRUE)
+    #googledrive::drive_put(media = aspreadOut, path = gdriveURL, name = basename(aspreadOut), verbose = TRUE)
+  } else {
+    googledrive::drive_update(file = as_id(gdriveSims[["spreadOut"]]), media = fspreadOut)
+    #googledrive::drive_update(file = as_id(gdriveSims[["spreadOutArchive"]]), media = aspreadOut)
+  }
+}
 
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()

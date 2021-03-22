@@ -51,14 +51,15 @@ saveSimList(
 )
 #archive::archive_write_dir(archive = aignitionOut, dir = dignitionOut)
 
-if (isTRUE(newGoogleIDs)) {
-  googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut), verbose = TRUE)
-  #googledrive::drive_put(media = aignitionOut, path = gdriveURL, name = basename(aignitionOut), verbose = TRUE)
-} else {
-  googledrive::drive_update(file = as_id(gdriveSims[["ignitionOut"]]), media = fignitionOut)
-  #googledrive::drive_update(file = as_id(gdriveSims[["ignitionOutArchive"]]), media = aignitionOut)
+if (isTRUE(uplaod2GDrive)) {
+  if (isTRUE(newGoogleIDs)) {
+    googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut), verbose = TRUE)
+    #googledrive::drive_put(media = aignitionOut, path = gdriveURL, name = basename(aignitionOut), verbose = TRUE)
+  } else {
+    googledrive::drive_update(file = as_id(gdriveSims[["ignitionOut"]]), media = fignitionOut)
+    #googledrive::drive_update(file = as_id(gdriveSims[["ignitionOutArchive"]]), media = aignitionOut)
+  }
 }
-
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()
   slackr::slackr_msg(

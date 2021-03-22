@@ -14,6 +14,7 @@ default:
   rep: 1
   resolution: 250  ## 250 for AOU; 125 for ROF
   studyarea: "AOU" ## "AOU" or "ROF"
+  upload: true
 
 production:
   batchmode: true
@@ -21,6 +22,7 @@ production:
 
 test:
   plot: true
+  upload: false
 
 alex:
   inherits: production
@@ -33,3 +35,4 @@ alex:
   paths:
     scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON" else "/mnt/scratch/ON"
   slackchannel: "@alex.chubaty"
+  upload: false

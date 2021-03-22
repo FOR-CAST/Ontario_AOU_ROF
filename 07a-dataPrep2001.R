@@ -91,13 +91,14 @@ simOutBiomassMaps2001 <- Cache(
 )
 saveSimList(simOutBiomassMaps2001, fBiomassMaps2001, fileBackend = 2) ## TODO: use fileBackend = 1
 
-## UPLOAD TO GOOGLE DRIVE
-if (isTRUE(newGoogleIDs)) {
-  googledrive::drive_put(media = fBiomassMaps2001, path = gdriveURL, name = basename(fBiomassMaps2001), verbose = TRUE)
-  #googledrive::drive_put(media = aBiomassMaps2001, path = gdriveURL, name = basename(aBiomassMaps2001), verbose = TRUE)
-} else {
-  googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2001"]]), media = fBiomassMaps2001)
-  #googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2001Archive"]]), media = aBiomassMaps2001)
+if (isTRUE(uplaod2GDrive)) {
+  if (isTRUE(newGoogleIDs)) {
+    googledrive::drive_put(media = fBiomassMaps2001, path = gdriveURL, name = basename(fBiomassMaps2001), verbose = TRUE)
+    #googledrive::drive_put(media = aBiomassMaps2001, path = gdriveURL, name = basename(aBiomassMaps2001), verbose = TRUE)
+  } else {
+    googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2001"]]), media = fBiomassMaps2001)
+    #googledrive::drive_update(file = as_id(gdriveSims[["biomassMaps2001Archive"]]), media = aBiomassMaps2001)
+  }
 }
 
 ## PLOTTING

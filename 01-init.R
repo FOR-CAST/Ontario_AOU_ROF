@@ -36,6 +36,7 @@ studyAreaName <- if (grepl("AOU", runName)) {
   stop("runName must contain one of 'AOU' or 'ROF'.")
 }
 successionTimestep <- 10
+uplaod2GDrive <- config::get("upload")
 useCloudCache <- config::get("cloud")[["usecloud"]]
 usePlot <- config::get("plot")
 .plotInitialTime <- if (isTRUE(usePlot)) 0 else NA

@@ -35,10 +35,12 @@ simOutPreamble <- Cache(simInitAndSpades,
 fsimOutPreamble <- simFile("simOutPreamble", Paths$outputPath, ext = "qs")
 saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2) ## TODO: use fileBackend = 1 ?
 
-if (isTRUE(newGoogleIDs)) {
-  googledrive::drive_put(media = fsimOutPreamble, path = gdriveURL, name = basename(fsimOutPreamble), verbose = TRUE)
-  #googledrive::drive_put(media = asimOutPreamble, path = gdriveURL, name = basename(asimOutPreamble), verbose = TRUE)
-} else {
-  googledrive::drive_update(file = as_id(gdriveSims[["simOutPreamble"]]), media = fsimOutPreamble)
-  #googledrive::drive_update(file = as_id(gdriveSims[["simOutPreambleArchive"]]), media = asimOutPreamble)
+if (isTRUE(uplaod2GDrive)) {
+  if (isTRUE(newGoogleIDs)) {
+    googledrive::drive_put(media = fsimOutPreamble, path = gdriveURL, name = basename(fsimOutPreamble), verbose = TRUE)
+    #googledrive::drive_put(media = asimOutPreamble, path = gdriveURL, name = basename(asimOutPreamble), verbose = TRUE)
+  } else {
+    googledrive::drive_update(file = as_id(gdriveSims[["simOutPreamble"]]), media = fsimOutPreamble)
+    #googledrive::drive_update(file = as_id(gdriveSims[["simOutPreambleArchive"]]), media = asimOutPreamble)
+  }
 }
