@@ -5,9 +5,9 @@ newGoogleIDs <- gdriveSims[["ignitionOut"]] == ""
 
 #ub and lb have to be provided for now
 
-biggestObj <- as.numeric(object.size(fSsimDataPrep[["fireSense_ignitionCovariates"]]))/1e6 * 1.2
+biggestObj <- as.numeric(object.size(simOutFireSenseDataPrep[["fireSense_ignitionCovariates"]]))/1e6 * 1.2
 
-form <- fSsimDataPrep[["fireSense_ignitionFormula"]]
+form <- simOutFireSenseDataPrep[["fireSense_ignitionFormula"]]
 
 nCores <- pmin(14, pemisc::optimalClusterNum(biggestObj)/2 - 6)
 ignitionFitParams <- list(
@@ -15,18 +15,18 @@ ignitionFitParams <- list(
     cores = nCores,
     fireSense_ignitionFormula = form,
     lb = list(coef = 0,
-              knots = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.05), digits = 0)),
+              knots = round(quantile(simOutFireSenseDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.05), digits = 0)),
     ## Ian: I don't know if this is the MDC value of the knot....
     ##      if using binomial need to pass theta to lb and ub
     ub = list(coef = 4,
-              knots = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.8), digits = 0)),
+              knots = round(quantile(simOutFireSenseDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.8), digits = 0)),
     family = quote(MASS::negative.binomial(theta = 1, link = "identity")),
     iterDEoptim = 300
   )
 )
 
 ignitionFitObjects <- list(
-  fireSense_ignitionCovariates = fSsimDataPrep$fireSense_ignitionCovariates
+  fireSense_ignitionCovariates = simOutFireSenseDataPrep$fireSense_ignitionCovariates
 )
 
 #dignitionOut <- file.path(Paths$outputPath, paste0("ignitionOut_", studyAreaName)) %>%

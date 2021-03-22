@@ -5,12 +5,12 @@ newGoogleIDs <- gdriveSims[["escapeOut"]] == ""
 
 escapeFitParams <- list(
   fireSense_EscapeFit = list(
-    fireSense_escapeFormula = fSsimDataPrep$fireSense_escapeFormula
+    fireSense_escapeFormula = simOutFireSenseDataPrep$fireSense_escapeFormula
   )
 )
 
 escapeFitObjects <- list(
-  fireSense_escapeCovariates = fSsimDataPrep$fireSense_escapeCovariates
+  fireSense_escapeCovariates = simOutFireSenseDataPrep$fireSense_escapeCovariates
 )
 
 #descapeOut <- file.path(Paths$outputPath, paste0("escapeOut_", studyAreaName)) %>%
