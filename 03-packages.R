@@ -13,7 +13,7 @@ if (FALSE) {
 Require("PredictiveEcology/SpaDES.core@development (>= 1.0.6.9018)",
         which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core
 Require("PredictiveEcology/pemisc@development", upgrade = FALSE)
-Require("PredictiveEcology/fireSenseUtils@development", require = FALSE) ## force pemisc and others to be installed correctly
+Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9050)", require = FALSE) ## force pemisc and others to be installed correctly
 Require(c("jimhester/archive", "slackr"))
 
 moduleRqdPkgs <- lapply(basename(dir(paths1$modulePath)), function(m) {
