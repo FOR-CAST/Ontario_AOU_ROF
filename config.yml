@@ -12,8 +12,8 @@ default:
   plot: true
   rcp: 85
   rep: 1
-  resolution: 125 ## 250 for AOU; 125 for ROF
-  studyarea: "ROF" ## AOU or ROF
+  resolution: 125  ## 250 for AOU; 125 for ROF
+  studyarea: "ROF" ## "AOU" or "ROF"
 
 production:
   batchmode: true
