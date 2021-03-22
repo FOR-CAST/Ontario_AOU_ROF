@@ -3,6 +3,7 @@
 ## don't need to load packages for modules; done automatically, but ensure they are installed
 ####################################################################################################
 
+Require("data.table")
 Require(c("plyr", "dplyr"), upgrade = FALSE) ## ensure plyr loaded before dplyr or there will be problems
 
 if (FALSE) {
@@ -12,7 +13,6 @@ if (FALSE) {
 
 Require("PredictiveEcology/SpaDES.core@development (>= 1.0.6.9018)",
         which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core
-Require("PredictiveEcology/pemisc@development", upgrade = FALSE)
 Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9050)", require = FALSE) ## force pemisc and others to be installed correctly
 Require(c("jimhester/archive", "slackr"))
 
