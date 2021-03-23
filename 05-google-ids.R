@@ -17,7 +17,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
     ignitionOutArchive = "",
     escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J",
     escapeOutArchive = "",
-    spreadOut = "",
+    spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs",
     spreadOutArchive = ""
   )
 } else if (grepl("ROF", runName)) {
@@ -30,7 +30,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
     biomassMaps2011Archive = "",
     fSsimDataPrep = "179z3eiBexZZraVkpSXfp-K0VjZzuNwSW",
     fSsimDataPrepArchive = "",
-    ignitionOut = "",
+    ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO",
     ignitionOutArchive = "",
     escapeOut = "10v5bXiRxPoTgINZBv70uxb-zNr1HTlUi",
     escapeOutArchive = "",
