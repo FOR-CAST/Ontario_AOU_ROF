@@ -13,9 +13,9 @@ gdriveSims <- if (grepl("AOU", runName)) {
     biomassMaps2011Archive = "",
     fSsimDataPrep = "1t_4fap26_W9cRXbXaWzX22LUMBOvaySE",
     fSsimDataPrepArchive = "",
-    ignitionOut = "",
+    ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa",
     ignitionOutArchive = "",
-    escapeOut = "",
+    escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J",
     escapeOutArchive = "",
     spreadOut = "",
     spreadOutArchive = ""
