@@ -32,7 +32,7 @@ simOutPreamble <- Cache(simInitAndSpades,
                         useCloud = useCloudCache,
                         cloudFolderID = cloudCacheFolderID)
 
-fsimOutPreamble <- simFile("simOutPreamble", Paths$outputPath, ext = "qs")
+fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName), Paths$outputPath, ext = "qs")
 saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2) ## TODO: use fileBackend = 1 ?
 
 if (isTRUE(uplaod2GDrive)) {
