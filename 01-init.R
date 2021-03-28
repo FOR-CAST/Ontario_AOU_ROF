@@ -17,7 +17,7 @@ deleteSpeciesLayers <- FALSE
 eventCaching <- c(".inputObjects", "init")
 firstRunSpreadFit <- FALSE
 mapParallel <- FALSE
-rep <- config::get("rep")
+rep <- as.numeric(substr(runName, nchar(runName) - 1, nchar(runName)))
 resolution <- as.integer(config::get("resolution"))
 scratchDir <- config::get("paths")[["scratchdir"]]
 sppEquivCol <- "ON"
