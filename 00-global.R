@@ -31,7 +31,7 @@ source("05-google-ids.R")
 message(crayon::red(runName))
 
 if (delayStart > 0) {
-  message(crayon::green("\nStaggered job start: delaying by", as.integer(delayStart), "minutes."))
+  message(crayon::green("\nStaggered job start: delaying by", delayStart, "minutes."))
   Sys.sleep(delayStart*60)
 }
 

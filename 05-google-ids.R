@@ -18,7 +18,8 @@ gdriveSims <- if (grepl("AOU", runName)) {
     escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J",
     escapeOutArchive = "",
     spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs",
-    spreadOutArchive = ""
+    spreadOutArchive = "",
+    results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"
   )
 } else if (grepl("ROF", runName)) {
   list(
@@ -35,6 +36,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
     escapeOut = "10v5bXiRxPoTgINZBv70uxb-zNr1HTlUi",
     escapeOutArchive = "",
     spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM",
-    spreadOutArchive = ""
+    spreadOutArchive = "",
+    results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"
   )
 }

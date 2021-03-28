@@ -18,6 +18,7 @@ default:
 
 production:
   batchmode: true
+  delaystart: !expr sample(5L:15L, 1) # 5-15 minute delay to stagger starts
   plot: false
 
 test:
@@ -31,7 +32,6 @@ alex:
     cachedir: "ON_cloudCache" ## TODO: create and test this
     googleuser: "achubaty@for-cast.ca"
     usecloud: false
-  delaystart: !expr sample(5L:15L, 1) # 5-15 minute delay to stagger starts
   paths:
     scratchdir: !expr if (Sys.info()[["nodename"]] == "forcast03") "/tmp/scratch/ON" else "/mnt/scratch/ON"
   slackchannel: "@alex.chubaty"
