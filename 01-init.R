@@ -41,3 +41,5 @@ uplaod2GDrive <- config::get("upload")
 useCloudCache <- config::get("cloud")[["usecloud"]]
 usePlot <- config::get("plot")
 .plotInitialTime <- if (isTRUE(usePlot)) 0 else NA
+
+firstRunMDCplots <- if (rep == 1) TRUE else FALSE
