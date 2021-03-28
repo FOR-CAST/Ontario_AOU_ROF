@@ -1,15 +1,12 @@
+Require::Require("reproducible")
 Require::Require("googledrive")
+
+source("05-google-ids.R")
 
 filesToUpload <- c("fireSense_SpreadFit_veg_coeffs.txt",
                    "figures/PCAcoeffLoadings.png",
                    "figures/spreadFit_coeffs.png")
 
-gdrive_ID <- if (grepl("AOU", runName)) {
-  "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"
-} else if (grepl("ROF", runName)) {
-  "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"
-}
-
 lapply(filesToUpload, function(f) {
-  drive_upload(file.path("outputs", runName, f), as_id(gdrive_ID), overwrite = TRUE)
+  retry(drive_upload(file.path("outputs", studyAreaName, f), as_id(gdriveSims[["results"]]), overwrite = TRUE))
 })
