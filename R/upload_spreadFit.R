@@ -8,5 +8,5 @@ filesToUpload <- c("fireSense_SpreadFit_veg_coeffs.txt",
                    "figures/spreadFit_coeffs.png")
 
 lapply(filesToUpload, function(f) {
-  retry(drive_upload(file.path("outputs", studyAreaName, f), as_id(gdriveSims[["results"]]), overwrite = TRUE))
+  retry(quote(drive_upload(file.path("outputs", studyAreaName, f), as_id(gdriveSims[["results"]]), overwrite = TRUE)))
 })

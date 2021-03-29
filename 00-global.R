@@ -47,3 +47,5 @@ source("08b-escapeFit.R")
 source("08c-spreadFit.R")
 
 source("09-main-sim.R")
+
+message(crayon::red(runName))

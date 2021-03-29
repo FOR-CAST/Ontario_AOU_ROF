@@ -146,11 +146,10 @@ saveSimList(
 )
 #archive::archive_write_dir(archive = afSsimDataPrep, dir = dfSsimDataPrep)
 
-resultsDir <- drive_mkdir(name = runName, path = as_id(gdriveSims[["results"]]), overwrite = TRUE, verbose = TRUE)
-#lapply(dynamicOutputs$file, function(f) {
-lapply(list.files(file.path("outputs", runName)), function(f) {
-  retry(drive_upload(file.path("outputs", runName, f), as_id(resultsDir[["id"]]), overwrite = TRUE))
-})
+resultsDir <- file.path("outputs", runName)
+#archive::archive_write_dir(archive = paste0(resultsDir, ".tar.gz"), dir = resultsDir) ## does'nt work
+utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip")
+retry(quote(drive_upload(paste0(resultsDir, ".tar.gz"), as_id(gdriveSims[["results"]]), overwrite = TRUE)))
 
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()
