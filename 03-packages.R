@@ -6,14 +6,17 @@
 Require("data.table")
 Require(c("plyr", "dplyr"), upgrade = FALSE) ## ensure plyr loaded before dplyr or there will be problems
 
+Require("PredictiveEcology/reproducible@CopyGenericChange (>= 1.2.6.9011)") ## 2021-03-17
+Require("PredictiveEcology/SpaDES.core@rasterToMemoryUpdates (>= 1.0.6.9022)", ## 2021-03-17
+        which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core)
+
+Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9052)", require = FALSE) ## force pemisc and others to be installed correctly
+
 if (FALSE) {
-  remotes::install_github("PredictiveEcology/reproducible@CopyGenericChange") ## 2021-03-17
-  remotes::install_github("PredictiveEcology/SpaDES.core@rasterToMemoryUpdates", force = TRUE) ## 2021-03-17
+  Require::Require("PredictiveEcology/SpaDES.install (>= 0.0.2)")
+  out <- makeSureAllPackagesInstalled(modulePath = "modules")
 }
 
-Require("PredictiveEcology/SpaDES.core@development (>= 1.0.6.9018)",
-        which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core
-Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9050)", require = FALSE) ## force pemisc and others to be installed correctly
 Require(c("jimhester/archive", "slackr"))
 
 moduleRqdPkgs <- lapply(basename(dir(paths1$modulePath)), function(m) {

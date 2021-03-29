@@ -31,7 +31,7 @@ objects2b <- list(
 
 amc::.gc()
 
-fFSdataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
+fSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
 simOutFireSenseDataPrep <- Cache(
   simInitAndSpades,
   times =  list(start = 2011, end = 2011),
@@ -42,15 +42,15 @@ simOutFireSenseDataPrep <- Cache(
   .plots = NA,
   userTags = c("fireSense_dataPrepFit", studyAreaName)
 )
-saveSimList(simOutFireSenseDataPrep, fFSdataPrep, fileBackend = 2)
+saveSimList(simOutFireSenseDataPrep, fSsimDataPrep, fileBackend = 2)
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {
-    googledrive::drive_put(media = fFSdataPrep, path = gdriveURL, name = basename(fFSdataPrep), verbose = TRUE)
-    #googledrive::drive_put(media = aFSsimDataPrep, path = gdriveURL, name = basename(aFSsimDataPrep), verbose = TRUE)
+    googledrive::drive_put(media = fSsimDataPrep, path = gdriveURL, name = basename(fSsimDataPrep), verbose = TRUE)
+    #googledrive::drive_put(media = aSsimDataPrep, path = gdriveURL, name = basename(aSsimDataPrep), verbose = TRUE)
   } else {
-    googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = fFSdataPrep)
-    #googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrepArchive"]]), media = aFSsimDataPrep)
+    googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = fSsimDataPrep)
+    #googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrepArchive"]]), media = aSsimDataPrep)
   }
 }
 
