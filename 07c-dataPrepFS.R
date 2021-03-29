@@ -31,8 +31,8 @@ objects2b <- list(
 
 amc::.gc()
 
-fSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
-simOutFireSenseDataPrep <- Cache(
+ffSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
+fSsimDataPrep <- Cache(
   simInitAndSpades,
   times =  list(start = 2011, end = 2011),
   modules = "fireSense_dataPrepFit",
@@ -42,14 +42,14 @@ simOutFireSenseDataPrep <- Cache(
   .plots = NA,
   userTags = c("fireSense_dataPrepFit", studyAreaName)
 )
-saveSimList(simOutFireSenseDataPrep, fSsimDataPrep, fileBackend = 2)
+saveSimList(fSsimDataPrep, fSsimDataPrep, fileBackend = 2)
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {
-    googledrive::drive_put(media = fSsimDataPrep, path = gdriveURL, name = basename(fSsimDataPrep), verbose = TRUE)
-    #googledrive::drive_put(media = aSsimDataPrep, path = gdriveURL, name = basename(aSsimDataPrep), verbose = TRUE)
+    googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep), verbose = TRUE)
+    #googledrive::drive_put(media = afSsimDataPrep, path = gdriveURL, name = basename(afSsimDataPrep), verbose = TRUE)
   } else {
-    googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = fSsimDataPrep)
+    googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrep"]]), media = ffSsimDataPrep)
     #googledrive::drive_update(file = as_id(gdriveSims[["fSsimDataPrepArchive"]]), media = aSsimDataPrep)
   }
 }
@@ -58,7 +58,7 @@ source("R/compareMDC.R") ## defines the compareMDC() function
 ggMDC <- compareMDC(historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
                     projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
                     flammableRTM = fSsimDataPrep$flammableRTM)
-fggMDC <- file.path(dataPrepPaths$outputPath, "figures", paste0("compareMDC_", studyAreaName, ".png"))
+fggMDC <- file.path(paths2b$outputPath, "figures", paste0("compareMDC_", studyAreaName, ".png"))
 checkPath(dirname(fggMDC), create = TRUE)
 
 ggsave(plot = ggMDC, filename = fggMDC)
