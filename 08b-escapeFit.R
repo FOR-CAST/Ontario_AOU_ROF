@@ -5,33 +5,37 @@ newGoogleIDs <- gdriveSims[["escapeOut"]] == ""
 
 escapeFitParams <- list(
   fireSense_EscapeFit = list(
-    fireSense_escapeFormula = simOutFireSenseDataPrep$fireSense_escapeFormula
+    fireSense_escapeFormula = fSsimDataPrep$fireSense_escapeFormula
   )
 )
 
 escapeFitObjects <- list(
-  fireSense_escapeCovariates = simOutFireSenseDataPrep$fireSense_escapeCovariates
+  fireSense_escapeCovariates = fSsimDataPrep$fireSense_escapeCovariates
 )
 
-#descapeOut <- file.path(Paths$outputPath, paste0("escapeOut_", studyAreaName)) %>%
+#descapeOut <- file.path(Paths$outputPath, paste0("fS_EscapeFit_", studyAreaName)) %>%
 #  checkPath(create = TRUE)
 #aescapeOut <- paste0(descapeOut, ".7z")
-fescapeOut <- file.path(Paths$outputPath, paste0("escapeOut_", studyAreaName, ".qs"))
-escapeOut <- simInitAndSpades(
-  times = list(start = 0, end = 1),
-  # ignitionSim <- simInit(times = list(start = 0, end = 1),
-  params = escapeFitParams,
-  modules = "fireSense_EscapeFit",
-  paths = escapeFitPaths,
-  objects = escapeFitObjects
-)
-saveSimList(
-  sim = escapeOut,
-  filename = fescapeOut,
-  #filebackedDir = descapeOut,
-  fileBackend = 2 ## TODO: use fileBackend = 1
-)
-#archive::archive_write_dir(archive = aescapeOut, dir = descapeOut)
+fescapeOut <- file.path(Paths$outputPath, paste0("fS_EscapeFit_", studyAreaName, ".qs"))
+if (isTRUE(usePrerun)) {
+  escapeOut <- loadSimList(fescapeOut)
+} else {
+  escapeOut <- simInitAndSpades(
+    times = list(start = 0, end = 1),
+    # ignitionSim <- simInit(times = list(start = 0, end = 1),
+    params = escapeFitParams,
+    modules = "fireSense_EscapeFit",
+    paths = escapeFitPaths,
+    objects = escapeFitObjects
+  )
+  saveSimList(
+    sim = escapeOut,
+    filename = fescapeOut,
+    #filebackedDir = descapeOut,
+    fileBackend = 2 ## TODO: use fileBackend = 1
+  )
+  #archive::archive_write_dir(archive = aescapeOut, dir = descapeOut)
+}
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {

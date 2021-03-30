@@ -74,22 +74,26 @@ parameters2a_2001 <- list(
 )
 
 fBiomassMaps2001 <- file.path(Paths$outputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
-simOutBiomassMaps2001 <- Cache(
-  simInitAndSpades,
-  times = list(start = year, end = year),
-  params = parameters2a_2001,
-  modules = modules2a,
-  objects = objects2a_2001,
-  loadOrder = unlist(modules2a),
-  omitArgs = c("debug", "paths", ".plotInitialTime"),
-  useCache = TRUE,
-  useCloud = useCloudCache,
-  cloudFolderID = cloudCacheFolderID,
-  .plotInitialTime = year + .plotInitialTime,
-  paths = paths2a,
-  debug = 1
-)
-saveSimList(simOutBiomassMaps2001, fBiomassMaps2001, fileBackend = 2) ## TODO: use fileBackend = 1
+if (isTRUE(usePrerun)) {
+  simOutBiomassMaps2001 <- loadSimList(fBiomassMaps2001)
+} else {
+  simOutBiomassMaps2001 <- Cache(
+    simInitAndSpades,
+    times = list(start = year, end = year),
+    params = parameters2a_2001,
+    modules = modules2a,
+    objects = objects2a_2001,
+    loadOrder = unlist(modules2a),
+    omitArgs = c("debug", "paths", ".plotInitialTime"),
+    useCache = TRUE,
+    useCloud = useCloudCache,
+    cloudFolderID = cloudCacheFolderID,
+    .plotInitialTime = year + .plotInitialTime,
+    paths = paths2a,
+    debug = 1
+  )
+  saveSimList(simOutBiomassMaps2001, fBiomassMaps2001, fileBackend = 2) ## TODO: use fileBackend = 1
+}
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {

@@ -1,4 +1,4 @@
-do.call(setPaths, dynamicPaths)
+do.call(setPaths, paths3)
 
 times <- list(start = 2011, end = 2100)
 
@@ -11,11 +11,11 @@ dynamicModules <- list("fireSense_dataPrepPredict",
                        "Biomass_regeneration")
 
 dynamicObjects <- list(
-  biomassMap = biomassMaps2011$biomassMap, ## unclear why Biomass_core needs this atm
+  biomassMap = simOutBiomassMaps2011$biomassMap, ## unclear why Biomass_core needs this atm
   climateComponentsTouse = fSsimDataPrep$climateComponentsToUse,
   cohortData = fSsimDataPrep$cohortData2011,
-  ecoregion = biomassMaps2011$ecoregion,
-  ecoregionMap = biomassMaps2011$ecoregionMap,
+  ecoregion = simOutBiomassMaps2011$ecoregion,
+  ecoregionMap = simOutBiomassMaps2011$ecoregionMap,
   flammableRTM = fSsimDataPrep$flammableRTM,
   fireSense_IgnitionFitted = ignitionOut$fireSense_IgnitionFitted,
   fireSense_EscapeFitted = escapeOut$fireSense_EscapeFitted,
@@ -24,21 +24,21 @@ dynamicObjects <- list(
   landcoverDT = fSsimDataPrep$landcoverDT,
   nonForest_timeSinceDisturbance = fSsimDataPrep$nonForest_timeSinceDisturbance,
   ## this is the 2011 TSD - perhaps I should rename it in dataPrepFit to make it explicit?
-  minRelativeB = biomassMaps2011$minRelativeB,
+  minRelativeB = simOutBiomassMaps2011$minRelativeB,
   PCAveg = fSsimDataPrep$PCAveg,
   pixelGroupMap = fSsimDataPrep$pixelGroupMap2011,
   projectedClimateLayers = simOutPreamble$projectedClimateRasters,
-  rasterToMatch = biomassMaps2011$rasterToMatch,
-  rasterToMatchLarge = biomassMaps2011$rasterToMatchLarge,
-  species = biomassMaps2011$species,
-  speciesEcoregion = biomassMaps2011$speciesEcoregion,
-  speciesLayers = biomassMaps2011$speciesLayers, ## does Biomass_core actually need this?
-  sppColorVect = biomassMaps2011$sppColorVect,
+  rasterToMatch = simOutBiomassMaps2011$rasterToMatch,
+  rasterToMatchLarge = simOutBiomassMaps2011$rasterToMatchLarge,
+  species = simOutBiomassMaps2011$species,
+  speciesEcoregion = simOutBiomassMaps2011$speciesEcoregion,
+  speciesLayers = simOutBiomassMaps2011$speciesLayers, ## does Biomass_core actually need this?
+  sppColorVect = simOutBiomassMaps2011$sppColorVect,
   sppEquiv = fSsimDataPrep$sppEquiv,
-  studyArea = biomassMaps2011$studyArea,
-  studyAreaLarge = biomassMaps2011$studyAreaLarge,
-  studyAreaReporting = biomassMaps2011$studyAreaReporting,
-  sufficientLight = biomassMaps2011$sufficientLight,
+  studyArea = simOutBiomassMaps2011$studyArea,
+  studyAreaLarge = simOutBiomassMaps2011$studyAreaLarge,
+  studyAreaReporting = simOutBiomassMaps2011$studyAreaReporting,
+  sufficientLight = simOutBiomassMaps2011$sufficientLight,
   terrainDT = fSsimDataPrep$terrainDT,
   vegComponentsToUse = fSsimDataPrep$vegComponentsToUse
 )
@@ -135,7 +135,7 @@ mainSim <- simInitAndSpades(
   objects = dynamicObjects,
   outputs = dynamicOutputs,
   params = dynamicParams,
-  paths = dynamicPaths
+  paths = paths3
 )
 
 saveSimList(

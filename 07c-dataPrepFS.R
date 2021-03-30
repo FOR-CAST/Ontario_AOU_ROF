@@ -32,17 +32,35 @@ objects2b <- list(
 amc::.gc()
 
 ffSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
-fSsimDataPrep <- Cache(
-  simInitAndSpades,
-  times =  list(start = 2011, end = 2011),
-  modules = "fireSense_dataPrepFit",
-  params = parameters2b,
-  objects = objects2b,
-  paths = paths2b,
-  .plots = NA,
-  userTags = c("fireSense_dataPrepFit", studyAreaName)
-)
-saveSimList(fSsimDataPrep, fSsimDataPrep, fileBackend = 2)
+if (isTRUE(usePrerun)) {
+  fSsimDataPrep <- loadSimList(ffSsimDataPrep)
+
+  ## TODO: temporary until bug in qs is fixed
+  fSsimDataPrep$fireSense_escapeCovariates <- as.data.table(fSsimDataPrep$fireSense_escapeCovariates)
+  fSsimDataPrep$fireSense_annualSpreadFitCovariates <- lapply(fSsimDataPrep$fireSense_annualSpreadFitCovariates, as.data.table)
+  fSsimDataPrep$fireBufferedListDT <- lapply(fSsimDataPrep$fireBufferedListDT, as.data.table)
+  fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]])
+  fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[2]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[2]])
+  fSsimDataPrep$cohortData2011 <- as.data.table(fSsimDataPrep$cohortData2011)
+  fSsimDataPrep$cohortData2001 <- as.data.table(fSsimDataPrep$cohortData2001)
+  fSsimDataPrep$fireSense_ignitionCovariates <- as.data.table(fSsimDataPrep$fireSense_ignitionCovariates)
+  fSsimDataPrep$landcoverDT <- as.data.table(fSsimDataPrep$landcoverDT)
+  fSsimDataPrep$terrainDT <- as.data.table(fSsimDataPrep$terrainDT)
+  fSsimDataPrep$sppEquiv <- as.data.table(fSsimDataPrep$sppEquiv)
+  ## end TODO
+} else {
+  fSsimDataPrep <- Cache(
+    simInitAndSpades,
+    times =  list(start = 2011, end = 2011),
+    modules = "fireSense_dataPrepFit",
+    params = parameters2b,
+    objects = objects2b,
+    paths = paths2b,
+    .plots = NA,
+    userTags = c("fireSense_dataPrepFit", studyAreaName)
+  )
+  saveSimList(fSsimDataPrep, fSsimDataPrep, fileBackend = 2)
+}
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {

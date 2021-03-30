@@ -8,7 +8,7 @@ paths1 <- list(
   cachePath = file.path(cacheDir, "dataPrepGIS", "preamble"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 ## species layers + borealDataPrep
@@ -17,7 +17,7 @@ paths2a <- list(
   cachePath = file.path(cacheDir, "dataPrepGIS", "biomassMaps"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 ## fireSense data prep
@@ -26,28 +26,28 @@ paths2b <- list(
   cachePath = file.path(cacheDir, "dataPrepGIS", "fireSenseDataPrep"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 ignitionFitPaths <- list(
   cachePath = file.path(cacheDir, "fireSenseIgnitionFit"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 escapeFitPaths <- list(
   cachePath = file.path(cacheDir, "fireSenseEscapeFit"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 spreadFitPaths <- list(
   cachePath = file.path(cacheDir, "fireSenseSpreadFit"),
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
+  outputPath = file.path("outputs", studyAreaName)
 )
 
 ## main simulation
@@ -64,4 +64,3 @@ scratchDir <- checkPath(scratchDir, create = TRUE) ## from config
 
 ## tile path (same for all)
 tilePath <- checkPath(file.path(paths1$outputPath, "tiles"), create = TRUE)
-

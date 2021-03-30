@@ -4,7 +4,7 @@ source("05-google-ids.R")
 newGoogleIDs <- gdriveSims[["spreadOut"]] == ""
 
 extremeVals <- 4
-lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(simOutFireSenseDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
+lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)
 upperParamsNonAnnual <- rep(extremeVals, times = length(lowerParamsNonAnnual))
 upperParamsAnnual <- c(extremeVals, extremeVals)
@@ -62,16 +62,16 @@ spreadFitParams <- list(
 )
 
 spreadFitObjects <- list(
-  fireBufferedListDT = simOutFireSenseDataPrep[["fireBufferedListDT"]],
-  firePolys = simOutFireSenseDataPrep[["firePolys"]],
-  fireSense_annualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_annualSpreadFitCovariates"]],
-  fireSense_nonAnnualSpreadFitCovariates = simOutFireSenseDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
-  fireSense_spreadFormula = simOutFireSenseDataPrep[["fireSense_spreadFormula"]],
-  flammableRTM = simOutFireSenseDataPrep[["flammableRTM"]],
+  fireBufferedListDT = fSsimDataPrep[["fireBufferedListDT"]],
+  firePolys = fSsimDataPrep[["firePolys"]],
+  fireSense_annualSpreadFitCovariates = fSsimDataPrep[["fireSense_annualSpreadFitCovariates"]],
+  fireSense_nonAnnualSpreadFitCovariates = fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
+  fireSense_spreadFormula = fSsimDataPrep[["fireSense_spreadFormula"]],
+  flammableRTM = fSsimDataPrep[["flammableRTM"]],
   #parsKnown = spreadOut$fireSense_SpreadFitted$meanCoef,
-  rasterToMatch = simOutFireSenseDataPrep[["rasterToMatch"]],
-  spreadFirePoints = simOutFireSenseDataPrep[["spreadFirePoints"]],
-  studyArea = simOutFireSenseDataPrep[["studyArea"]]
+  rasterToMatch = fSsimDataPrep[["rasterToMatch"]],
+  spreadFirePoints = fSsimDataPrep[["spreadFirePoints"]],
+  studyArea = fSsimDataPrep[["studyArea"]]
 )
 
 #add tags when it stabilizes
@@ -80,19 +80,34 @@ spreadFitObjects <- list(
 #dspreadOut <- file.path(Paths$outputPath, paste0("ignitionOut_", studyAreaName)) %>%
 #  checkPath(create = TRUE)
 #aspreadOut <- paste0(dspreadOut, ".7z")
-fspreadOut <- file.path(Paths$inputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
-spreadOut <- simInitAndSpades(times = list(start = 0, end = 1),
-                              params = spreadFitParams,
-                              modules = "fireSense_SpreadFit",
-                              paths = spreadFitPaths,
-                              objects = spreadFitObjects)
-saveSimList(
-  spreadOut,
-  fspreadOut,
-  #filebackedDir = dspreadOut,
-  fileBackend = 2 ## TODO use fileBackend = 1
-)
-#archive::archive_write_dir(archive = aspreadOut, dir = dspreadOut)
+fspreadOut <- file.path(Paths$outputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
+if (isTRUE(usePrerun)) {
+  spreadOut <- loadSimList(fspreadOut)
+} else {
+  spreadOut <- Cache(
+    simInitAndSpades,
+    times = list(start = 0, end = 1),
+    params = spreadFitParams,
+    modules = "fireSense_SpreadFit",
+    paths = spreadFitPaths,
+    objects = spreadFitObjects
+  )
+  saveSimList(
+    spreadOut,
+    fspreadOut,
+    #filebackedDir = dspreadOut,
+    fileBackend = 2 ## TODO use fileBackend = 1
+  )
+  #archive::archive_write_dir(archive = aspreadOut, dir = dspreadOut)
+
+  if (requireNamespace("slackr") & file.exists("~/.slackr")) {
+    slackr::slackr_setup()
+    slackr::slackr_msg(
+      paste0("`fireSense_SpreadFit` for `", runName, "` completed on host `", Sys.info()[["nodename"]], "`."),
+      channel = config::get("slackchannel"), preformatted = FALSE
+    )
+  }
+}
 
 if (isTRUE(uplaod2GDrive)) {
   source("R/upload_spreadFit.R")
@@ -104,12 +119,4 @@ if (isTRUE(uplaod2GDrive)) {
     googledrive::drive_update(file = as_id(gdriveSims[["spreadOut"]]), media = fspreadOut)
     #googledrive::drive_update(file = as_id(gdriveSims[["spreadOutArchive"]]), media = aspreadOut)
   }
-}
-
-if (requireNamespace("slackr") & file.exists("~/.slackr")) {
-  slackr::slackr_setup()
-  slackr::slackr_msg(
-    paste0("`fireSense_SpreadFit` for `", runName, "` completed on host `", Sys.info()[["nodename"]], "`."),
-    channel = config::get("slackchannel"), preformatted = FALSE
-  )
 }

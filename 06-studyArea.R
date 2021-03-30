@@ -20,20 +20,24 @@ parameters1 <- list(
   )
 )
 
-simOutPreamble <- Cache(simInitAndSpades,
-                        times = list(start = 0, end = 1),
-                        params = parameters1,
-                        modules = c("Ontario_preamble"),
-                        objects = objects1,
-                        paths = paths1,
-                        debug = 1,
-                        omitArgs = c("debug", "paths"),
-                        #useCache = "overwrite",
-                        useCloud = useCloudCache,
-                        cloudFolderID = cloudCacheFolderID)
-
 fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName), Paths$outputPath, ext = "qs")
-saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2) ## TODO: use fileBackend = 1 ?
+
+if (isTRUE(usePrerun)) {
+  simOutPreamble <- loadSimList(fsimOutPreamble)
+} else {
+  simOutPreamble <- Cache(simInitAndSpades,
+                          times = list(start = 0, end = 1),
+                          params = parameters1,
+                          modules = c("Ontario_preamble"),
+                          objects = objects1,
+                          paths = paths1,
+                          debug = 1,
+                          omitArgs = c("debug", "paths"),
+                          #useCache = "overwrite",
+                          useCloud = useCloudCache,
+                          cloudFolderID = cloudCacheFolderID)
+  saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2) ## TODO: use fileBackend = 1 ?
+}
 
 if (isTRUE(uplaod2GDrive)) {
   if (isTRUE(newGoogleIDs)) {
