@@ -36,7 +36,7 @@ if (isTRUE(usePrerun)) {
   simOutBiomassMaps2011$cohortData <- as.data.table(simOutBiomassMaps2011$cohortData)
   simOutBiomassMaps2011$minRelativeB <- as.data.table(simOutBiomassMaps2011$minRelativeB)
   simOutBiomassMaps2011$pixelFateDT <- as.data.table(simOutBiomassMaps2011$pixelFateDT)
-  simOutBiomassMaps2011$species <- as.data.table(biomassMaps2001$species)
+  simOutBiomassMaps2011$species <- as.data.table(simOutBiomassMaps2001$species)
   simOutBiomassMaps2011$speciesEcoregion <- as.data.table(simOutBiomassMaps2011$speciesEcoregion)
   simOutBiomassMaps2011$sppEquiv <- as.data.table(simOutBiomassMaps2011$sppEquiv)
   simOutBiomassMaps2011$sufficientLight <- as.data.frame(simOutBiomassMaps2011$sufficientLight)
