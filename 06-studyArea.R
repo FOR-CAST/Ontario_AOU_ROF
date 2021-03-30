@@ -24,6 +24,10 @@ fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName), Paths$outpu
 
 if (isTRUE(usePrerun)) {
   simOutPreamble <- loadSimList(fsimOutPreamble)
+
+  ## TODO: temp until bug in qs resolved
+  simOutPreamble$speciesTable <- as.data.table(simOutPreamble$speciesTable)
+  ## end TODO
 } else {
   simOutPreamble <- Cache(simInitAndSpades,
                           times = list(start = 0, end = 1),

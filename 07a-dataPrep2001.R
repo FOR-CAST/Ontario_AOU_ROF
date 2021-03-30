@@ -76,6 +76,16 @@ parameters2a_2001 <- list(
 fBiomassMaps2001 <- file.path(Paths$outputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
 if (isTRUE(usePrerun)) {
   simOutBiomassMaps2001 <- loadSimList(fBiomassMaps2001)
+
+  ## TODO: temp until bug in qs resolved
+  simOutBiomassMaps2001$cohortData <- as.data.table(simOutBiomassMaps2001$cohortData)
+  simOutBiomassMaps2001$minRelativeB <- as.data.table(simOutBiomassMaps2001$minRelativeB)
+  simOutBiomassMaps2001$pixelFateDT <- as.data.table(simOutBiomassMaps2001$pixelFateDT)
+  simOutBiomassMaps2001$species <- as.data.table(simOutBiomassMaps2001$species)
+  simOutBiomassMaps2001$speciesEcoregion <- as.data.table(simOutBiomassMaps2001$speciesEcoregion)
+  simOutBiomassMaps2001$sppEquiv <- as.data.table(simOutBiomassMaps2001$sppEquiv)
+  simOutBiomassMaps2001$sufficientLight <- as.data.frame(simOutBiomassMaps2001$sufficientLight)
+  ## end TODO
 } else {
   simOutBiomassMaps2001 <- Cache(
     simInitAndSpades,
