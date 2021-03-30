@@ -102,7 +102,7 @@ dynamicOutputs <- rbind(annualRasters, annualObjects, finalYearOutputs)
 
 dynamicParams <- list(
   Biomass_core = list(
-    "sppEquivCol" = fSsimDataPrep@params$fireSense_dataPrepFit$sppEquivCol,
+    "sppEquivCol" = sppEquivCol,
     "vegLeadingProportion" = 0, ## apparently sppColorVect has no mixed color
     ".plotInitialTime" = NA
   ),
@@ -111,7 +111,7 @@ dynamicParams <- list(
   ),
   fireSense_dataPrepPredict = list(
     "fireTimeStep" = 1,
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
+    "sppEquivCol" = sppEquivCol,
     "whichModulesToPrepare" = c("fireSense_IgnitionPredict",
                                 "fireSense_EscapePredict",
                                 "fireSense_SpreadPredict"),
