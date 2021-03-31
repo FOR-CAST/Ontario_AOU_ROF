@@ -4,8 +4,11 @@
 #runName <- "AOU_CCSM4_RCP85_res250_rep03"; source("00-global.R")
 #runName <- "AOU_CCSM4_RCP85_res250_rep04"; source("00-global.R")
 #runName <- "AOU_CCSM4_RCP85_res250_rep05"; source("00-global.R")
-
-
+#runName <- "AOU_CCSM4_RCP85_res250_rep06"; source("00-global.R")
+#runName <- "AOU_CCSM4_RCP85_res250_rep07"; source("00-global.R")
+runName <- "AOU_CCSM4_RCP85_res250_rep08"; source("00-global.R")
+runName <- "AOU_CCSM4_RCP85_res250_rep09"; source("00-global.R")
+runName <- "AOU_CCSM4_RCP85_res250_rep10"; source("00-global.R")
 
 ## ROF
 #runName <- "ROF_CCSM4_RCP85_res125_rep01"; source("00-global.R")
@@ -13,3 +16,8 @@
 #runName <- "ROF_CCSM4_RCP85_res125_rep03"; source("00-global.R")
 #runName <- "ROF_CCSM4_RCP85_res125_rep04"; source("00-global.R")
 #runName <- "ROF_CCSM4_RCP85_res125_rep05"; source("00-global.R")
+#runName <- "ROF_CCSM4_RCP85_res125_rep06"; source("00-global.R")
+#runName <- "ROF_CCSM4_RCP85_res125_rep07"; source("00-global.R")
+runName <- "ROF_CCSM4_RCP85_res125_rep08"; source("00-global.R")
+runName <- "ROF_CCSM4_RCP85_res125_rep09"; source("00-global.R")
+runName <- "ROF_CCSM4_RCP85_res125_rep10"; source("00-global.R")
