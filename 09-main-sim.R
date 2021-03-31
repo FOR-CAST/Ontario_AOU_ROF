@@ -157,7 +157,8 @@ retry(quote(drive_upload(paste0(resultsDir, ".tar.gz"), as_id(gdriveSims[["resul
 if (requireNamespace("slackr") & file.exists("~/.slackr")) {
   slackr::slackr_setup()
   slackr::slackr_msg(
-    paste0("Simulation `", runName, "` completed on host `", Sys.info()[["nodename"]], "`."),
+    paste0("Simulation `", runName, "` completed on host `", Sys.info()[["nodename"]], "`",
+           if (nzchar(Sys.getenv("STY"))) paste0(" (screen `", Sys.getenv("STY"), "`)"), "."),
     channel = config::get("slackchannel"), preformatted = FALSE
   )
 }
