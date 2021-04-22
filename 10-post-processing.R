@@ -12,13 +12,13 @@ et_rof <- elapsedTime(sim_rof)
 
 #############
 
-
+library(googledrive)
 library(raster)
 library(SpaDES.tools)
 library(qs)
 
 lapply(1:9, function(rep) {
-  runName <- "ROF_CCSM4_RCP85_res125_rep10"
+  runName <- paste0("ROF_CCSM4_RCP85_res125_rep", rep)
   resultsDir <- file.path("outputs", runName)
 
   lapply(2011:2100, function(year) {
@@ -35,6 +35,8 @@ lapply(1:9, function(rep) {
   unlink(paste0(resultsDir, ".tar.gz"))
   utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip")
 
-  retry(quote(drive_upload(paste0(resultsDir, ".tar.gz"), as_id("1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"),
-                           overwrite = TRUE)), retries = 5, exponentialDecayBase = 2)
+  retry(quote(drive_upload(paste0(resultsDir, ".tar.gz"),
+                           as_id("1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"),
+                           overwrite = TRUE)),
+        retries = 5, exponentialDecayBase = 2)
 })
