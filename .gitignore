@@ -11,6 +11,7 @@
 # caches
 *_cache/
 /cache/
+cache
 cache/
 .channel_cache
 
@@ -20,4 +21,5 @@ packages/
 # simulation data and outputs
 data/
 inputs/
+outputs
 outputs/
