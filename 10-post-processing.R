@@ -17,8 +17,8 @@ library(raster)
 library(SpaDES.tools)
 library(qs)
 
-lapply(1:9, function(rep) {
-  runName <- paste0("ROF_CCSM4_RCP85_res125_rep", rep)
+lapply(1:9, function(rep) { ## TODO: change back to 1:10
+  runName <- sprintf("ROF_CCSM4_RCP85_res125_rep%02d", rep)
   resultsDir <- file.path("outputs", runName)
 
   lapply(2011:2100, function(year) {
