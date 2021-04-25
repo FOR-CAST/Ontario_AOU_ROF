@@ -3,21 +3,17 @@ library(SpaDES.core)
 sim <- loadSimList("outputs/AOU_CCSM4_RCP85_res250_rep02/AOU_CCSM4_RCP85_res250_rep02.qs")
 et <- elapsedTime(sim, units = "hours")
 
-
-
 sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
 et_rof <- elapsedTime(sim_rof)
 
-
-
-#############
+###############
 
 library(googledrive)
 library(raster)
 library(SpaDES.tools)
 library(qs)
 
-lapply(1:9, function(rep) { ## TODO: change back to 1:10
+lapply(1:10, function(rep) {
   runName <- sprintf("ROF_CCSM4_RCP85_res125_rep%02d", rep)
   resultsDir <- file.path("outputs", runName)
 
@@ -40,3 +36,5 @@ lapply(1:9, function(rep) { ## TODO: change back to 1:10
                            overwrite = TRUE)),
         retries = 5, exponentialDecayBase = 2)
 })
+
+###############

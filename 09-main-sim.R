@@ -154,11 +154,4 @@ utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip")
 retry(quote(drive_upload(paste0(resultsDir, ".tar.gz"), as_id(gdriveSims[["results"]]), overwrite = TRUE)),
       retries = 5, exponentialDecayBase = 2)
 
-if (requireNamespace("slackr") & file.exists("~/.slackr")) {
-  slackr::slackr_setup()
-  slackr::slackr_msg(
-    paste0("Simulation `", runName, "` completed on host `", Sys.info()[["nodename"]], "`",
-           if (nzchar(Sys.getenv("STY"))) paste0(" (screen `", Sys.getenv("STY"), "`)"), "."),
-    channel = config::get("slackchannel"), preformatted = FALSE
-  )
-}
+SpaDES.project::notify_slack(runName = runName, channel = config::get("slackchannel"))
