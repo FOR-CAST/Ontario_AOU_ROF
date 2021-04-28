@@ -274,7 +274,8 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
         cohortDataReduced <- cohortData[, list(sumBio = sum(B, na.rm = TRUE)), by = c("speciesCode", "pixelGroup")]
 
         biomassStack <- raster::stack(lapply(treeSpecies[["Species"]], function(tSp) {
-          message(paste0("Creating biomass map for ", tSp, " in year ", year, " [rep ", rep, "]"))
+          message(paste0("[", studyAreaName, "_", climateScenario, "]: creating biomass map for ",
+                         tSp, " in year ", year, " [rep ", rep, "]"))
           r <- SpaDES.tools::rasterizeReduced(reduced = cohortDataReduced[speciesCode == tSp, ],
                                               fullRaster = pixelGroupMap,
                                               newRasterCols = "sumBio",
