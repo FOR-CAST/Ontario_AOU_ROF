@@ -10,13 +10,13 @@ gdriveURL <- if (climateScenario == "CCSM4_RCP45") {
 gdriveSims <- if (grepl("AOU", runName)) {
   if (climateScenario == "CCSM4_RCP45") {
     list(
-      simOutPreamble = "",
+      simOutPreamble = "1qQZnwqtcZMYJ43MYN8QZBxtd0tHHBbha",
       simOutPreambleArchive = "",
       biomassMaps2001 = "1eAYoAKDOBkYvdIF5Txwy8FyBlmpL9s19", ## same for all climate scenarios
       biomassMaps2001Archive = "",
       biomassMaps2011 = "1UlOm5zx7wWvRvLIUoCoC4HQg188WwKHv", ## same for all climate scenarios
       biomassMaps2011Archive = "",
-      fSsimDataPrep = "",
+      fSsimDataPrep = "1zB0c__IYQiQfUguXaYkkC0Hzp1wRVSHh", ## TODO: why is this different for diff CC scenarios?
       fSsimDataPrepArchive = "",
       ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa", ## same for all climate scenarios
       ignitionOutArchive = "",
@@ -34,7 +34,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2001Archive = "",
       biomassMaps2011 = "1UlOm5zx7wWvRvLIUoCoC4HQg188WwKHv", ## same for all climate scenarios
       biomassMaps2011Archive = "",
-      fSsimDataPrep = "1t_4fap26_W9cRXbXaWzX22LUMBOvaySE",
+      fSsimDataPrep = "1t_4fap26_W9cRXbXaWzX22LUMBOvaySE", ## TODO: why is this different for diff CC scenarios?
       fSsimDataPrepArchive = "",
       ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa", ## same for all climate scenarios
       ignitionOutArchive = "",
@@ -54,7 +54,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2001Archive = "",
       biomassMaps2011 = "135tLgXpKzp-UA274A3KvXPg1M9BviACY", ## same for all climate scenarios
       biomassMaps2011Archive = "",
-      fSsimDataPrep = "1t623sGLj61PwUK2LPUpxpOyK64dMTdCn",
+      fSsimDataPrep = "1t623sGLj61PwUK2LPUpxpOyK64dMTdCn", ## TODO: why is this different for diff CC scenarios?
       fSsimDataPrepArchive = "",
       ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO", ## same for all climate scenarios
       ignitionOutArchive = "",
@@ -72,7 +72,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2001Archive = "",
       biomassMaps2011 = "135tLgXpKzp-UA274A3KvXPg1M9BviACY", ## same for all climate scenarios
       biomassMaps2011Archive = "",
-      fSsimDataPrep = "179z3eiBexZZraVkpSXfp-K0VjZzuNwSW",
+      fSsimDataPrep = "179z3eiBexZZraVkpSXfp-K0VjZzuNwSW", ## TODO: why is this different for diff CC scenarios?
       fSsimDataPrepArchive = "",
       ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO", ## same for all climate scenarios
       ignitionOutArchive = "",
