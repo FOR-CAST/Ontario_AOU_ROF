@@ -10,8 +10,8 @@ Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVi
 # Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9071)")
 
 climateScenarios <- c("CCSM4_RCP45", "CCSM4_RCP85")
-climateScenario <- climateScenarios[2]
-studyAreaName <- "ROF"
+#climateScenario <- climateScenarios[1]
+#studyAreaName <- "ROF"
 Nreps <- 10
 
 gdriveURL <- if (studyAreaName == "AOU") {
@@ -74,8 +74,6 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
                                 rep = as.integer(rep))
       burnSummary
     }))
-
-    ## TODO: update from NWT post hoc functions plotBurnSummaryReps()
 
     # totAreaBurned <- burnSummaryAllReps[, lapply(.SD, sum), by = c("year", "rep"), .SDcols = "areaBurnedHa"]
     # totAreaBurend <- totAreaBurned[, lapply(.SD, mean), by = "year", .SDcols = "areaBurnedHa"]
@@ -207,7 +205,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
 
     cumulBurnMap <- calc(stack(burnMapAllReps), fun = sum) / Nreps
 
-    myPal <- RColorBrewer::brewer.pal("Reds", n = maxValue(cumulBurnMap) * Nreps + 1) ## include 0
+    myPal <- RColorBrewer::brewer.pal("Reds", n = Nreps + 1) ## include 0
     myTheme <- rasterVis::rasterTheme(region = myPal)
 
     fburnMap <- file.path("outputs", studyAreaName, "figures",
@@ -216,7 +214,8 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
     rasterVis::levelplot(cumulBurnMap, margin = list(FUN = "mean"), ## median?
                          main = paste0("Cumulative burn map 2011-2100 under ", climateScenario),
                          colorkey = list(
-                           at = seq(0, maxValue(cumulBurnMap), by = 1 / Nreps),
+                           at = seq(0, maxValue(cumulBurnMap),
+                                    length.out = Nreps + 1),
                            space = "bottom",
                            axis.line = list(col = "black"),
                            width = 0.75
@@ -259,7 +258,6 @@ leadingPercentage <- 0.8
   return(colID)
 }
 
-names(treeType)[names(treeType) == "ID"] <- "leading"
 lapply(c("AOU", "ROF"), function(studyAreaName) {
   lapply(climateScenarios, function(climateScenario) {
     allReps <- lapply(1:10, function(rep) {
@@ -325,31 +323,29 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
     pal <- RColorBrewer::brewer.pal(11, "RdYlBu")
     pal[6] <- "#f7f4f2"
 
-    r1 <- levelplot(meanLeadingChange,
-                    sub = paste0("Proportional change in leading species\n",
-                                 " Red: conversion to conifer\n",
-                                 " Blue: conversion to deciduous."),
-                    margin = FALSE,
-                    maxpixels = 7e6,
-                    at = AT,
-                    colorkey = list(
-                      space = "bottom",
-                      axis.line = list(col = "black"),
-                      width = 0.75
-                    ),
-                    par.settings = list(
-                      strip.border = list(col = "transparent"),
-                      strip.background = list(col = "transparent"),
-                      axis.line = list(col = "transparent")
-                    ),
-                    scales = list(draw = FALSE),
-                    col.regions = pal,
-                    par.strip.text = list(cex = 0.8, lines = 1, col = "black"))
-
     fmeanLeadingChange_gg <- file.path("outputs", studyAreaName, "figures",
                                        paste0("leadingChange_", studyAreaName, "_", climateScenario, ".png"))
     png(filename = fmeanLeadingChange_gg, width = 1000, height = 1000, res = 300)
-    r1
+    levelplot(meanLeadingChange,
+              sub = paste0("Proportional change in leading species\n",
+                           " Red: conversion to conifer\n",
+                           " Blue: conversion to deciduous."),
+              margin = FALSE,
+              maxpixels = 7e6,
+              at = AT,
+              colorkey = list(
+                space = "bottom",
+                axis.line = list(col = "black"),
+                width = 0.75
+              ),
+              par.settings = list(
+                strip.border = list(col = "transparent"),
+                strip.background = list(col = "transparent"),
+                axis.line = list(col = "transparent")
+              ),
+              scales = list(draw = FALSE),
+              col.regions = pal,
+              par.strip.text = list(cex = 0.8, lines = 1, col = "black"))
     dev.off()
 
     drive_put(fmeanLeadingChange_gg, gdriveURL, basename(fmeanLeadingChange_gg), overwrite = TRUE)
