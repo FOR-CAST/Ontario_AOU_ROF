@@ -1,9 +1,9 @@
 ## Google Drive locations for pre-run simulation objects
 ## these are used when config option 'prerun' is true
 
-gdriveURL <- if (climateScenario == "CCSM4_RCP45") {
+gdriveURL <- if (grepl("AOU", runName)) {
   "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
-} else if (climateScenario == "CCSM4_RCP85") {
+} else if (grepl("ROF", runName)) {
   "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
 }
 
