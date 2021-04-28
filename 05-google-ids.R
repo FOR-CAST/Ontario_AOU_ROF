@@ -1,7 +1,11 @@
 ## Google Drive locations for pre-run simulation objects
 ## these are used when config option 'prerun' is true
 
-gdriveURL <- "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
+gdriveURL <- if (climateScenario == "CCSM4_RCP45") {
+  "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
+} else if (climateScenario == "CCSM4_RCP85") {
+  "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
+}
 
 gdriveSims <- if (grepl("AOU", runName)) {
   if (climateScenario == "CCSM4_RCP45") {
@@ -20,7 +24,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki" ## same for all climate scenarios
+      results = basename(gdriveURL)
     )
   } else if (climateScenario == "CCSM4_RCP85") {
     list(
@@ -38,7 +42,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki" ## same for all climate scenarios
+      results = basename(gdriveURL)
     )
   }
 } else if (grepl("ROF", runName)) {
@@ -58,7 +62,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4" ## same for all climate scenarios
+      results = basename(gdriveURL)
     )
   } else if (climateScenario == "CCSM4_RCP85") {
     list(
@@ -76,7 +80,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4" ## same for all climate scenarios
+      results = basename(gdriveURL)
     )
   }
 }
