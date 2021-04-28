@@ -20,7 +20,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = ""
+      results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki" ## same for all climate scenarios
     )
   } else if (climateScenario == "CCSM4_RCP85") {
     list(
@@ -38,7 +38,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"
+      results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki" ## same for all climate scenarios
     )
   }
 } else if (grepl("ROF", runName)) {
@@ -50,7 +50,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2001Archive = "",
       biomassMaps2011 = "135tLgXpKzp-UA274A3KvXPg1M9BviACY", ## same for all climate scenarios
       biomassMaps2011Archive = "",
-      fSsimDataPrep = "",
+      fSsimDataPrep = "1t623sGLj61PwUK2LPUpxpOyK64dMTdCn",
       fSsimDataPrepArchive = "",
       ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO", ## same for all climate scenarios
       ignitionOutArchive = "",
@@ -58,7 +58,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = ""
+      results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4" ## same for all climate scenarios
     )
   } else if (climateScenario == "CCSM4_RCP85") {
     list(
@@ -76,7 +76,7 @@ gdriveSims <- if (grepl("AOU", runName)) {
       escapeOutArchive = "",
       spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
-      results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"
+      results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4" ## same for all climate scenarios
     )
   }
 }
