@@ -31,8 +31,8 @@ objects2b <- list(
 
 amc::.gc()
 
-ffSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun)) {
+ffSsimDataPrep <- file.path(Paths$outputPath, paste0("simOutFireSenseDataPrep_", studyAreaName, "_", climateScenario, ".qs"))
+if (isTRUE(usePrerun)  && file.exists(ffSsimDataPrep)) {
   fSsimDataPrep <- loadSimList(ffSsimDataPrep)
 
   ## TODO: temporary until bug in qs is fixed
@@ -76,7 +76,7 @@ source("R/compareMDC.R") ## defines the compareMDC() function
 ggMDC <- compareMDC(historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
                     projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
                     flammableRTM = fSsimDataPrep$flammableRTM)
-fggMDC <- file.path(paths2b$outputPath, "figures", paste0("compareMDC_", studyAreaName, ".png"))
+fggMDC <- file.path(paths2b$outputPath, "figures", paste0("compareMDC_", studyAreaName, "_", climateScenario, ".png"))
 checkPath(dirname(fggMDC), create = TRUE)
 
 ggsave(plot = ggMDC, filename = fggMDC)

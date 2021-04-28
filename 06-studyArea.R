@@ -13,16 +13,16 @@ objects1 <- list(
 
 parameters1 <- list(
   Ontario_preamble = list(
+    "climateScenario" = climateScenario,  ## derived from runName
     ".plotInitialTime" = ifelse(usePlot, 0, NA),
-    ".useCache" = TRUE,
-    ".resolution" = resolution,
-    "runName" = runName
+    ".resolution" = resolution, ## derived from runName
+    "runName" = runName,
+    ".useCache" = TRUE
   )
 )
 
-fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName), Paths$outputPath, ext = "qs")
-
-if (isTRUE(usePrerun)) {
+fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName, "_", climateScenario), Paths$outputPath, ext = "qs")
+if (isTRUE(usePrerun) && file.exists(fsimOutPreamble)) {
   simOutPreamble <- loadSimList(fsimOutPreamble)
 
   ## TODO: temp until bug in qs resolved

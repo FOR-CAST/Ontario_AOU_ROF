@@ -74,7 +74,7 @@ parameters2a_2001 <- list(
 )
 
 fBiomassMaps2001 <- file.path(Paths$outputPath, paste0("simOutDataPrep_", studyAreaName, "_", year, ".qs"))
-if (isTRUE(usePrerun)) {
+if (isTRUE(usePrerun)  && file.exists(fBiomassMaps2001)) {
   simOutBiomassMaps2001 <- loadSimList(fBiomassMaps2001)
 
   ## TODO: temp until bug in qs resolved

@@ -11,6 +11,7 @@ Require(c("magrittr", "PredictiveEcology/quickPlot@development"))
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer()) ## TODO: temporary for Alex's testing
 
 cacheDir <- config::get("paths")[["cachedir"]]
+climateScenario <- substr(runName, 5, 15) ## TODO: adjust for other climate projections; gcm & rcp in config
 cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
 delayStart <- config::get("delaystart")
 deleteSpeciesLayers <- FALSE
