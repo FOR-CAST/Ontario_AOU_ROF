@@ -59,7 +59,7 @@ if (isTRUE(usePrerun)  && file.exists(ffSsimDataPrep)) {
     .plots = NA,
     userTags = c("fireSense_dataPrepFit", studyAreaName)
   )
-  saveSimList(fSsimDataPrep, fSsimDataPrep, fileBackend = 2)
+  saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
 }
 
 if (isTRUE(uplaod2GDrive)) {

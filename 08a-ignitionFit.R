@@ -33,7 +33,7 @@ ignitionFitObjects <- list(
 #  checkPath(create = TRUE)
 #aignitionOut <- paste0(dignitionOut, ".7z")
 fignitionOut <- file.path(Paths$outputPath, paste0("fS_IgnitionFit_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun)) {
+if (isTRUE(usePrerun) && file.exists(fignitionOut)) {
   ignitionOut <- loadSimList(fignitionOut)
 } else {
   ignitionOut <- Cache(

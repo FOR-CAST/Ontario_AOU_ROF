@@ -14,11 +14,11 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2011Archive = "",
       fSsimDataPrep = "",
       fSsimDataPrepArchive = "",
-      ignitionOut = "",
+      ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa", ## same for all climate scenarios
       ignitionOutArchive = "",
-      escapeOut = "",
+      escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J", ## same for all climate scenarios
       escapeOutArchive = "",
-      spreadOut = "",
+      spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
       results = ""
     )
@@ -32,11 +32,11 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2011Archive = "",
       fSsimDataPrep = "1t_4fap26_W9cRXbXaWzX22LUMBOvaySE",
       fSsimDataPrepArchive = "",
-      ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa",
+      ignitionOut = "1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa", ## same for all climate scenarios
       ignitionOutArchive = "",
-      escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J",
+      escapeOut = "1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J", ## same for all climate scenarios
       escapeOutArchive = "",
-      spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs",
+      spreadOut = "1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs", ## same for all climate scenarios
       spreadOutArchive = "",
       results = "1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"
     )
@@ -52,11 +52,11 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2011Archive = "",
       fSsimDataPrep = "",
       fSsimDataPrepArchive = "",
-      ignitionOut = "",
+      ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO", ## same for all climate scenarios
       ignitionOutArchive = "",
-      escapeOut = "",
+      escapeOut = "10v5bXiRxPoTgINZBv70uxb-zNr1HTlUi", ## same for all climate scenarios
       escapeOutArchive = "",
-      spreadOut = "",
+      spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
       results = ""
     )
@@ -70,11 +70,11 @@ gdriveSims <- if (grepl("AOU", runName)) {
       biomassMaps2011Archive = "",
       fSsimDataPrep = "179z3eiBexZZraVkpSXfp-K0VjZzuNwSW",
       fSsimDataPrepArchive = "",
-      ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO",
+      ignitionOut = "1AbWVAZVvwIm-L--qx__EnNswHMT6CJTO", ## same for all climate scenarios
       ignitionOutArchive = "",
-      escapeOut = "10v5bXiRxPoTgINZBv70uxb-zNr1HTlUi",
+      escapeOut = "10v5bXiRxPoTgINZBv70uxb-zNr1HTlUi", ## same for all climate scenarios
       escapeOutArchive = "",
-      spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM",
+      spreadOut = "1aEqMNXiI9h25fd5LoH-PtoDrwm8xuDtM", ## same for all climate scenarios
       spreadOutArchive = "",
       results = "1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"
     )

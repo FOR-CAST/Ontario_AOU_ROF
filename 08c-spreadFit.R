@@ -81,7 +81,7 @@ spreadFitObjects <- list(
 #  checkPath(create = TRUE)
 #aspreadOut <- paste0(dspreadOut, ".7z")
 fspreadOut <- file.path(Paths$outputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun)) {
+if (isTRUE(usePrerun) && file.exists(fspreadOut)) {
   spreadOut <- loadSimList(fspreadOut)
 } else {
   spreadOut <- Cache(

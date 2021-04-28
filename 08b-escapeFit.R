@@ -17,7 +17,7 @@ escapeFitObjects <- list(
 #  checkPath(create = TRUE)
 #aescapeOut <- paste0(descapeOut, ".7z")
 fescapeOut <- file.path(Paths$outputPath, paste0("fS_EscapeFit_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun)) {
+if (isTRUE(usePrerun) && file.exists(fescapeOut)) {
   escapeOut <- loadSimList(fescapeOut)
 } else {
   escapeOut <- simInitAndSpades(
