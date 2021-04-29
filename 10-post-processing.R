@@ -9,6 +9,7 @@ Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVi
 # Require("PredictiveEcology/LandR@development (>= 1.0.0.9004)")
 # Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9071)")
 
+studyAreaNames <- c("AOU", "ROF")
 climateScenarios <- c("CCSM4_RCP45", "CCSM4_RCP85")
 #climateScenario <- climateScenarios[1]
 #studyAreaName <- "ROF"
@@ -32,7 +33,7 @@ et_rof <- elapsedTime(sim_rof)
 
 ###############
 
-lapply(c("AOU", "ROF"), function(studyAreaName) {
+lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(climateScenario) {
     lapply(1:10, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
@@ -62,8 +63,13 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
 # summary figures -----------------------------------------------------------------------------
 
 ## BURN SUMMARIES
-lapply(c("AOU", "ROF"), function(studyAreaName) {
+lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(climateScenario) {
+    sim <- loadSimList(file.path("outputs", studyAreaName,
+                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+    rasterToMatch <- sim$rasterToMatchReporting
+    rm(sim)
+
     burnSummaryAllReps <- rbindlist(lapply(1:Nreps, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
       runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
@@ -74,7 +80,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
                                 N = burnDT[["N"]],
                                 areaBurnedHa = burnDT[["areaBurnedHa"]],
                                 rep = as.integer(rep))
-      burnSummary
+      burnSummary ## TODO: this is the BUFFERED studyARea, not the REPORTING one!!!!
     }))
 
     # totAreaBurned <- burnSummaryAllReps[, lapply(.SD, sum), by = c("year", "rep"), .SDcols = "areaBurnedHa"]
@@ -132,13 +138,13 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
     coefYS <- round(coeffS[1], 1)
 
     replacementNames <- c(
-      paste0("Area burned: ",
+      paste0("Area burned:\n",
              "y = ", ifelse(coefXA < 10000, coefXA, formatC(coefXA, format = "e", digits = 2)),
              "x + ", ifelse(coefYA < 10000, coefYA, formatC(coefYA, format = "e", digits = 2)), pValueA),
-      paste0("No fires: ",
+      paste0("No fires:\n",
              "y = ", ifelse(coefXF < 10000, coefXF, formatC(coefXF, format = "e", digits = 2)),
              "x + ", ifelse(coefYF < 10000, coefYF, formatC(coefYF, format = "e", digits = 2)), pValueF),
-      paste0("Mean fire size: ",
+      paste0("Mean fire size:\n",
              "y = ", ifelse(coefXS < 10000, coefXS, formatC(coefXS, format = "e", digits = 2)),
              "x + ", ifelse(coefYS < 10000, coefYS, formatC(coefYS, format = "e", digits = 2)), pValueS)
     )
@@ -195,8 +201,13 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
 
 ## CUMULATIVE BURN MAPS
 
-lapply(c("AOU", "ROF"), function(studyAreaName) {
+lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(climateScenario) {
+    sim <- loadSimList(file.path("outputs", studyAreaName,
+                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+    rasterToMatch <- sim$rasterToMatchReporting
+    rm(sim)
+
     burnMapAllReps <- lapply(1:Nreps, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
       runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
@@ -206,6 +217,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
     })
 
     cumulBurnMap <- calc(stack(burnMapAllReps), fun = sum) / Nreps
+    cumulBurnMap <- mask(crop(cumulBurnMap, rasterToMatch), rasterToMatch)
 
     myPal <- RColorBrewer::brewer.pal("Reds", n = Nreps + 1) ## include 0
     myTheme <- rasterVis::rasterTheme(region = myPal)
@@ -246,7 +258,8 @@ treeType <- data.frame(
   leadingType = c(tolower(treeSpecies[["Type"]]), rep("mixed", length(treeSpecies[["Species"]]))),
   stringsAsFactors = FALSE
 )
-treeType$newClass <- ifelse(treeType$leadingType == "deciduous", 1, ifelse(treeType$leadingType == "conifer", 0, 0.5))
+treeType$newClass <- ifelse(treeType$leadingType == "deciduous", 1,
+                            ifelse(treeType$leadingType == "conifer", 0, 0.5))
 
 leadingPercentage <- 0.8
 .defineLeading <- function(x, leadingPercentage = 0.8, totalCol) {
@@ -260,8 +273,13 @@ leadingPercentage <- 0.8
   return(colID)
 }
 
-lapply(c("AOU", "ROF"), function(studyAreaName) {
+lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(climateScenario) {
+    sim <- loadSimList(file.path("outputs", studyAreaName,
+                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+    rasterToMatch <- sim$rasterToMatchReporting
+    rm(sim)
+
     allReps <- lapply(1:10, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
       runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
@@ -307,7 +325,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
       leadingStackChange <- raster::calc(raster::stack(bothYears[[2]], -bothYears[[1]]),
                                          fun = sum, na.rm = TRUE)
       assertthat::assert_that(all(minValue(leadingStackChange) >= -1, maxValue(leadingStackChange) <= 1))
-      leadingStackChange[is.na(pixelGroupMap)] <- NA
+      leadingStackChange[is.na(rasterToMatch)] <- NA
       names(leadingStackChange) <- paste("leadingMapChange", studyAreaName, climateScenario, rep, sep = "_")
 
       leadingStackChange
