@@ -14,10 +14,12 @@ climateScenarios <- c("CCSM4_RCP45", "CCSM4_RCP85")
 #studyAreaName <- "ROF"
 Nreps <- 10
 
-gdriveURL <- if (studyAreaName == "AOU") {
-  "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
-} else if (studyAreaName == "ROF") {
-  "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
+gdriveURL <- function(studyAreaName) {
+  if (studyAreaName == "AOU") {
+    "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
+  } else if (studyAreaName == "ROF") {
+    "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
+  }
 }
 
 ###############
@@ -51,7 +53,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
       unlink(paste0(resultsDir, ".tar.gz"))
       utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip")
 
-      retry(quote(drive_put(paste0(resultsDir, ".tar.gz"), as_id(gdriveURL), overwrite = TRUE)),
+      retry(quote(drive_put(paste0(resultsDir, ".tar.gz"), as_id(gdriveURL(studyAreaName)), overwrite = TRUE)),
             retries = 5, exponentialDecayBase = 2)
     })
   })
@@ -187,7 +189,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
     gg <- plot_grid(title, p, ncol = 1, rel_heights = c(0.1, 1))
     ggsave(gg, filename = fgg, height = 8, width = 11)
 
-    drive_put(fgg, gdriveURL, basename(fgg), overwrite = TRUE)
+    drive_put(fgg, gdriveURL(studyAreaName), basename(fgg), overwrite = TRUE)
   })
 })
 
@@ -223,7 +225,7 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
                          par.settings = myTheme)
     dev.off()
 
-    drive_put(fburnMap, gdriveURL, basename(fburnMap), overwrite = TRUE)
+    drive_put(fburnMap, gdriveURL(studyAreaName), basename(fburnMap), overwrite = TRUE)
   })
 })
 
@@ -244,7 +246,7 @@ treeType <- data.frame(
   leadingType = c(tolower(treeSpecies[["Type"]]), rep("mixed", length(treeSpecies[["Species"]]))),
   stringsAsFactors = FALSE
 )
-treeType$newClass <- ifelse(treeType$leadingType == "conifer", 1, ifelse(treeType$leadingType == "deciduous", 0, 0.5))
+treeType$newClass <- ifelse(treeType$leadingType == "deciduous", 1, ifelse(treeType$leadingType == "conifer", 0, 0.5))
 
 leadingPercentage <- 0.8
 .defineLeading <- function(x, leadingPercentage = 0.8, totalCol) {
@@ -348,6 +350,6 @@ lapply(c("AOU", "ROF"), function(studyAreaName) {
               par.strip.text = list(cex = 0.8, lines = 1, col = "black"))
     dev.off()
 
-    drive_put(fmeanLeadingChange_gg, gdriveURL, basename(fmeanLeadingChange_gg), overwrite = TRUE)
+    drive_put(fmeanLeadingChange_gg, gdriveURL(studyAreaName), basename(fmeanLeadingChange_gg), overwrite = TRUE)
   })
 })
