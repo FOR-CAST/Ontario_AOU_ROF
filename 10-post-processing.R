@@ -11,7 +11,7 @@ Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVi
 
 studyAreaNames <- c("AOU", "ROF")
 climateScenarios <- c("CCSM4_RCP45", "CCSM4_RCP85")
-#climateScenario <- climateScenarios[1]
+#cs <- climateScenarios[1]
 #studyAreaName <- "ROF"
 Nreps <- 10
 
@@ -34,10 +34,10 @@ et_rof <- elapsedTime(sim_rof)
 ###############
 
 lapply(studyAreaNames, function(studyAreaName) {
-  lapply(climateScenarios, function(climateScenario) {
+  lapply(climateScenarios, function(cs) {
     lapply(1:10, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
+      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
       resultsDir <- file.path("outputs", runName)
 
       lapply(2011:2100, function(year) {
@@ -64,15 +64,15 @@ lapply(studyAreaNames, function(studyAreaName) {
 
 ## BURN SUMMARIES
 lapply(studyAreaNames, function(studyAreaName) {
-  lapply(climateScenarios, function(climateScenario) {
+  lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
     burnSummaryAllReps <- rbindlist(lapply(1:Nreps, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
+      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
       resultsDir <- file.path("outputs", runName)
 
       burnDT <- qs::qload(file.path(resultsDir, "burnSummary_year2100.qs"))
@@ -186,12 +186,12 @@ lapply(studyAreaNames, function(studyAreaName) {
       labs(y = "mean fire size (ha)")
 
     title <- ggdraw() +
-      draw_label(paste("Fires in the", studyAreaName, "study area under", climateScenario))
+      draw_label(paste("Fires in the", studyAreaName, "study area under", cs))
 
     p <- plot_grid(p1, p2, p3, align = "h", nrow = 3, labels = "AUTO")
 
     fgg <- file.path("outputs", studyAreaName, "figures",
-                     paste0("burnSummary_", studyAreaName, "_", climateScenario, ".png"))
+                     paste0("burnSummary_", studyAreaName, "_", cs, ".png"))
     gg <- plot_grid(title, p, ncol = 1, rel_heights = c(0.1, 1))
     ggsave(gg, filename = fgg, height = 8, width = 11)
 
@@ -202,15 +202,15 @@ lapply(studyAreaNames, function(studyAreaName) {
 ## CUMULATIVE BURN MAPS
 
 lapply(studyAreaNames, function(studyAreaName) {
-  lapply(climateScenarios, function(climateScenario) {
+  lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
     burnMapAllReps <- lapply(1:Nreps, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
+      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
       resultsDir <- file.path("outputs", runName)
 
       burnMap <- raster(file.path(resultsDir, "burnMap_2100_year2100.tif"))
@@ -219,14 +219,14 @@ lapply(studyAreaNames, function(studyAreaName) {
     cumulBurnMap <- calc(stack(burnMapAllReps), fun = sum) / Nreps
     cumulBurnMap <- mask(crop(cumulBurnMap, rasterToMatch), rasterToMatch)
 
-    myPal <- RColorBrewer::brewer.pal("Reds", n = Nreps + 1) ## include 0
+    myPal <- RColorBrewer::brewer.pal("Reds", n = Nreps + 1) ## include 0 ## TODO: max 9 cols!
     myTheme <- rasterVis::rasterTheme(region = myPal)
 
     fburnMap <- file.path("outputs", studyAreaName, "figures",
-                          paste0("cumulBurnMap_", studyAreaName, "_", climateScenario, ".png"))
+                          paste0("cumulBurnMap_", studyAreaName, "_", cs, ".png"))
     png(filename = fburnMap, height = 800, width = 800)
     rasterVis::levelplot(cumulBurnMap, margin = list(FUN = "mean"), ## median?
-                         main = paste0("Cumulative burn map 2011-2100 under ", climateScenario),
+                         main = paste0("Cumulative burn map 2011-2100 under ", cs),
                          colorkey = list(
                            at = seq(0, maxValue(cumulBurnMap),
                                     length.out = Nreps + 1),
@@ -274,15 +274,15 @@ leadingPercentage <- 0.8
 }
 
 lapply(studyAreaNames, function(studyAreaName) {
-  lapply(climateScenarios, function(climateScenario) {
+  lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", climateScenario, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
     allReps <- lapply(1:10, function(rep) {
       res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, climateScenario, res, rep)
+      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
       resultsDir <- file.path("outputs", runName)
 
       bothYears <- lapply(c(2011, 2100), function(year) {
@@ -292,7 +292,7 @@ lapply(studyAreaNames, function(studyAreaName) {
         cohortDataReduced <- cohortData[, list(sumBio = sum(B, na.rm = TRUE)), by = c("speciesCode", "pixelGroup")]
 
         biomassStack <- raster::stack(lapply(treeSpecies[["Species"]], function(tSp) {
-          message(paste0("[", studyAreaName, "_", climateScenario, "]: creating biomass map for ",
+          message(paste0("[", studyAreaName, "_", cs, "]: creating biomass map for ",
                          tSp, " in year ", year, " [rep ", rep, "]"))
           r <- SpaDES.tools::rasterizeReduced(reduced = cohortDataReduced[speciesCode == tSp, ],
                                               fullRaster = pixelGroupMap,
@@ -316,7 +316,7 @@ lapply(studyAreaNames, function(studyAreaName) {
         allPixels <- data.table(pixelID = 1:raster::ncell(biomassStack))
         biomassDTfilled <- merge(allPixels, biomassDT, all.x = TRUE, by = "pixelID")
         leadingSpeciesRaster <- raster::setValues(raster(biomassStack), biomassDTfilled[["newClass"]])
-        names(leadingSpeciesRaster) <- paste("biomassMap", studyAreaName, climateScenario, sep = "_")
+        names(leadingSpeciesRaster) <- paste("biomassMap", studyAreaName, cs, sep = "_")
 
         leadingSpeciesRaster
       })
@@ -326,16 +326,17 @@ lapply(studyAreaNames, function(studyAreaName) {
                                          fun = sum, na.rm = TRUE)
       assertthat::assert_that(all(minValue(leadingStackChange) >= -1, maxValue(leadingStackChange) <= 1))
       leadingStackChange[is.na(rasterToMatch)] <- NA
-      names(leadingStackChange) <- paste("leadingMapChange", studyAreaName, climateScenario, rep, sep = "_")
+      names(leadingStackChange) <- paste("leadingMapChange", studyAreaName, cs, rep, sep = "_")
 
       leadingStackChange
     })
     names(allReps) <- paste0("rep", 1:10)
 
     fmeanLeadingChange <- file.path("outputs", studyAreaName,
-                                    paste0("leadingChange_", studyAreaName, "_", climateScenario, ".tif"))
-    meanLeadingChange <- raster::calc(raster::stack(allReps), mean, na.rm = TRUE,
-                                      filename = fmeanLeadingChange, overwrite = TRUE)
+                                    paste0("leadingChange_", studyAreaName, "_", cs, ".tif"))
+    meanLeadingChange <- raster::calc(raster::stack(allReps), mean, na.rm = TRUE)
+    meanLeadingChange <- mask(crop(meanLeadingChange, rasterToMatch), rasterToMatch)
+    writeRaster(meanLeadingChange, filename = fmeanLeadingChange, overwrite = TRUE)
 
     maxV <- max(abs(round(minValue(meanLeadingChange), 1)), abs(round(maxValue(meanLeadingChange), 1)))
     AT <- seq(-maxV, maxV, length.out = 12)
@@ -343,29 +344,32 @@ lapply(studyAreaNames, function(studyAreaName) {
     pal <- RColorBrewer::brewer.pal(11, "RdYlBu")
     pal[6] <- "#f7f4f2"
 
+    b <- levelplot(meanLeadingChange,
+                   sub = paste0("Proportional change in leading species\n",
+                                " Red: conversion to conifer\n",
+                                " Blue: conversion to deciduous."),
+                   margin = FALSE,
+                   maxpixels = 7e6,
+                   at = AT,
+                   colorkey = list(
+                     space = "bottom",
+                     axis.line = list(col = "black"),
+                     width = 0.75
+                   ),
+                   par.settings = list(
+                     strip.border = list(col = "transparent"),
+                     strip.background = list(col = "transparent"),
+                     axis.line = list(col = "transparent")
+                   ),
+                   scales = list(draw = FALSE),
+                   col.regions = pal,
+                   par.strip.text = list(cex = 0.8, lines = 1, col = "black"))
+
     fmeanLeadingChange_gg <- file.path("outputs", studyAreaName, "figures",
-                                       paste0("leadingChange_", studyAreaName, "_", climateScenario, ".png"))
-    png(filename = fmeanLeadingChange_gg, width = 1000, height = 1000, res = 300)
-    levelplot(meanLeadingChange,
-              sub = paste0("Proportional change in leading species\n",
-                           " Red: conversion to conifer\n",
-                           " Blue: conversion to deciduous."),
-              margin = FALSE,
-              maxpixels = 7e6,
-              at = AT,
-              colorkey = list(
-                space = "bottom",
-                axis.line = list(col = "black"),
-                width = 0.75
-              ),
-              par.settings = list(
-                strip.border = list(col = "transparent"),
-                strip.background = list(col = "transparent"),
-                axis.line = list(col = "transparent")
-              ),
-              scales = list(draw = FALSE),
-              col.regions = pal,
-              par.strip.text = list(cex = 0.8, lines = 1, col = "black"))
+                                       paste0("leadingChange_", studyAreaName, "_", cs, ".png"))
+
+    png(filename = fmeanLeadingChange_gg, width = 1000, height = 1000, res = 300) ## TODO: fails in lapply
+    b
     dev.off()
 
     drive_put(fmeanLeadingChange_gg, gdriveURL(studyAreaName), basename(fmeanLeadingChange_gg), overwrite = TRUE)
