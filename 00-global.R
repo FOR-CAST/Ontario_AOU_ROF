@@ -14,8 +14,12 @@ if (!suppressWarnings(require("Require"))) {
 }
 
 if (FALSE) {
-  install.packages(c("lwgeom", "rgdal", "rgeos", "sf", "sp", "raster", "terra"),
-                   repos = "https://cran.rstudio.com")
+  install.packages(
+    #c("lwgeom", "rgdal", "rgeos", "sf", "sp", "raster", "terra"),
+    c("lwgeom", "rgdal", "rgeos", "sf", "sp"), ## terra & raster conflicts require devel versions
+    repos = "https://cran.rstudio.com"
+  )
+  install.packages(c("raster", "terra"), repos = "https://rspatial.r-universe.dev")
   sf::sf_extSoftVersion() ## want GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
 
   Require::Require("PredictiveEcology/reproducible@development (>= 1.2.7.9011)") ## 2021-Aug
