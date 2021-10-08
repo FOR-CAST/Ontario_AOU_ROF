@@ -1,9 +1,9 @@
 do.call(setPaths, ignitionFitPaths)
 
-source("05-google-ids.R")
-newGoogleIDs <- gdriveSims[["ignitionOut"]] == ""
+gid_ignitionOut <- gdriveSims[studyArea == studyAreaName & simObject == "ignitionOut", gid]
+upload_ignitionOut <- reupload | length(gid_ignitionOut) == 0
 
-#ub and lb have to be provided for now
+## ub and lb have to be provided for now
 
 biggestObj <- as.numeric(object.size(fSsimDataPrep[["fireSense_ignitionCovariates"]]))/1e6 * 1.2
 
@@ -12,28 +12,32 @@ form <- fSsimDataPrep[["fireSense_ignitionFormula"]]
 nCores <- pmin(14, pemisc::optimalClusterNum(biggestObj)/2 - 6)
 ignitionFitParams <- list(
   fireSense_IgnitionFit = list(
+    # .plotInitialTime = 1,
+    .plots = "png",
     cores = nCores,
     fireSense_ignitionFormula = form,
+    ## if using binomial need to pass theta to lb and ub
     lb = list(coef = 0,
-              knots = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.05), digits = 0)),
-    ## Ian: I don't know if this is the MDC value of the knot....
-    ##      if using binomial need to pass theta to lb and ub
-    ub = list(coef = 4,
-              knots = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC, probs = 0.8), digits = 0)),
+              knots = list('MDC' = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC,
+                                                  probs = 0.05), digits = 0))),
+    ub = list(coef = 20,
+              knots = list('MDC' = round(quantile(fSsimDataPrep$fireSense_ignitionCovariates$MDC,
+                                                  probs = 0.8), digits = 0))),
     family = quote(MASS::negative.binomial(theta = 1, link = "identity")),
     iterDEoptim = 300
   )
 )
 
 ignitionFitObjects <- list(
-  fireSense_ignitionCovariates = fSsimDataPrep$fireSense_ignitionCovariates
+  fireSense_ignitionCovariates = fSsimDataPrep[["fireSense_ignitionCovariates"]],
+  ignitionFitRTM = fSsimDataPrep[["ignitionFitRTM"]]
 )
 
-#dignitionOut <- file.path(Paths$outputPath, paste0("fS_IgnitionFit_", studyAreaName)) %>%
-#  checkPath(create = TRUE)
-#aignitionOut <- paste0(dignitionOut, ".7z")
-fignitionOut <- file.path(Paths$outputPath, paste0("fS_IgnitionFit_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun) && file.exists(fignitionOut)) {
+fignitionOut <- file.path(Paths$outputPath, paste0("ignitionOut_", studyAreaName, ".qs"))
+if (isTRUE(usePrerun) & isFALSE(upload_ignitionOut)) {
+  if (!file.exists(fignitionOut)) {
+    googledrive::drive_download(file = as_id(gid_ignitionOut), path = fignitionOut)
+  }
   ignitionOut <- loadSimList(fignitionOut)
 } else {
   ignitionOut <- Cache(
@@ -46,29 +50,28 @@ if (isTRUE(usePrerun) && file.exists(fignitionOut)) {
     objects = ignitionFitObjects,
     userTags = c("ignitionFit")
   )
-  saveSimList(
-    sim = ignitionOut,
-    filename = fignitionOut,
-    #filebackedDir = dignitionOut,
-    fileBackend = 2 ## TODO use fileBackend = 1
-  )
-  #archive::archive_write_dir(archive = aignitionOut, dir = dignitionOut)
+  saveSimList(sim = ignitionOut, filename = fignitionOut, fileBackend = 2)
+
+  if (isTRUE(upload_ignitionOut)) {
+    fdf <- googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut))
+    gid_ignitionOut <- fdf$id
+    rm(fdf)
+    gdriveSims <- update_googleids(
+      data.table(studyArea = studyAreaName, simObject = "ignitionOut", run = NA, gid = gid_ignitionOut),
+      gdriveSims
+    )
+  }
+
+  if (isTRUE(firstRunIgnitionFit)) {
+    source("R/upload_ignitionFit.R")
+  }
 
   if (requireNamespace("slackr") & file.exists("~/.slackr")) {
     slackr::slackr_setup()
     slackr::slackr_msg(
-      paste0("`fireSense_IgnitionFit` for ", runName, " completed on host `", Sys.info()[["nodename"]], "`."),
+      paste0("`fireSense_IgnitionFit` for ", studyAreaName, " completed on host `", Sys.info()[["nodename"]], "`."),
       channel = config::get("slackchannel"), preformatted = FALSE
     )
   }
 }
 
-if (isTRUE(uplaod2GDrive)) {
-  if (isTRUE(newGoogleIDs)) {
-    googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut), verbose = TRUE)
-    #googledrive::drive_put(media = aignitionOut, path = gdriveURL, name = basename(aignitionOut), verbose = TRUE)
-  } else {
-    googledrive::drive_update(file = as_id(gdriveSims[["ignitionOut"]]), media = fignitionOut)
-    #googledrive::drive_update(file = as_id(gdriveSims[["ignitionOutArchive"]]), media = aignitionOut)
-  }
-}

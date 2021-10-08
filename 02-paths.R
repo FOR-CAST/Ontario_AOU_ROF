@@ -2,65 +2,31 @@
 ## Set paths for each part of the simulation
 ################################################################################
 
-## preamble
-paths1 <- list(
-  ## use same cachePath for all data-prep steps before dynamic simulation
-  cachePath = file.path(cacheDir, "dataPrepGIS", "preamble"),
+defaultPaths <- list(
+  cachePath = cacheDir,
   modulePath = "modules",
   inputPath = "inputs",
   outputPath = file.path("outputs", studyAreaName)
 )
 
-## species layers + borealDataPrep
-paths2a <- list(
-  ## use same cachePath for all data-prep steps before dynamic simulation
-  cachePath = file.path(cacheDir, "dataPrepGIS", "biomassMaps"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
-)
-
-## fireSense data prep
-paths2b <- list(
-  ## use same cachePath for all data-prep steps before dynamic simulation
-  cachePath = file.path(cacheDir, "dataPrepGIS", "fireSenseDataPrep"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
-)
-
-ignitionFitPaths <- list(
-  cachePath = file.path(cacheDir, "fireSenseIgnitionFit"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
-)
-
-escapeFitPaths <- list(
-  cachePath = file.path(cacheDir, "fireSenseEscapeFit"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
-)
-
-spreadFitPaths <- list(
-  cachePath = file.path(cacheDir, "fireSenseSpreadFit"),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
-)
-
-## main simulation
-paths3 <- list(
-  ## NOTE: use separate cachePath for each dynamic simulation
-  cachePath = file.path(cacheDir, runName),
-  modulePath = "modules",
-  inputPath = "inputs",
-  outputPath = file.path("outputs", runName)
-)
-
-## scratch
 scratchDir <- checkPath(scratchDir, create = TRUE) ## from config
 
-## tile path (same for all)
-tilePath <- checkPath(file.path(paths1$outputPath, "tiles"), create = TRUE)
+preamblePaths <- defaultPaths
+preamblePaths[["cachePath"]] <- file.path(cacheDir, "cache_preamble")
+
+dataPrepPaths <- defaultPaths
+dataPrepPaths[["cachePath"]] <- file.path(cacheDir, "cache_dataPrep")
+
+ignitionFitPaths <- defaultPaths
+ignitionFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_ignitionFit")
+
+escapeFitPaths <- defaultPaths
+escapeFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_escapeFit")
+
+spreadFitPaths <- defaultPaths
+spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit")
+
+## main (dynamic) simulation
+dynamicPaths <-  defaultPaths
+dynamicPaths$cachePath <- file.path(cacheDir, "cache_sim")
+dynamicPaths$outputPath <- file.path("outputs", runName)

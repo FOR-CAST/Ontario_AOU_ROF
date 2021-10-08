@@ -1,28 +1,29 @@
-################################################################################
-## Preamble (creates study areas, etc.)
-################################################################################
+do.call(setPaths, preamblePaths)
 
-do.call(SpaDES.core::setPaths, paths1) # Set them here so that we don't have to specify at each call to Cache
+gid_preamble <- gdriveSims[studyArea == studyAreaName & simObject == "simOutPreamble", gid]
+upload_preamble <- reupload | length(gid_preamble) == 0
 
-source("05-google-ids.R")
-newGoogleIDs <- gdriveSims[["simOutPreamble"]] == ""
-
-objects1 <- list(
-  ".runName" = runName
+preambleObjects <- list(
+  .runName = runName
 )
 
-parameters1 <- list(
+preambleParams <- list(
   Ontario_preamble = list(
-    "climateScenario" = climateScenario,  ## derived from runName
     ".plotInitialTime" = ifelse(usePlot, 0, NA),
     ".resolution" = resolution, ## derived from runName
-    "runName" = runName,
-    ".useCache" = TRUE
+    ".useCache" = TRUE,
+    "climateGCM" = climateGCM,
+    "climateSSP" = climateSSP,
+    "historicalFireYears" = 1991:2020,
+    "studyAreaName" = studyAreaName
   )
 )
 
-fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName, "_", climateScenario), Paths$outputPath, ext = "qs")
-if (isTRUE(usePrerun) && file.exists(fsimOutPreamble)) {
+fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName, "_", climateGCM, "_", climateSSP), Paths$outputPath, ext = "qs")
+if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
+  if (!file.exists(fsimOutPreamble)) {
+    googledrive::drive_download(file = as_id(gid_preamble), path = fsimOutPreamble)
+  }
   simOutPreamble <- loadSimList(fsimOutPreamble)
 
   ## TODO: temp until bug in qs resolved
@@ -31,24 +32,27 @@ if (isTRUE(usePrerun) && file.exists(fsimOutPreamble)) {
 } else {
   simOutPreamble <- Cache(simInitAndSpades,
                           times = list(start = 0, end = 1),
-                          params = parameters1,
+                          params = preambleParams,
                           modules = c("Ontario_preamble"),
-                          objects = objects1,
-                          paths = paths1,
-                          debug = 1,
-                          omitArgs = c("debug", "paths"),
+                          objects = preambleObjects,
+                          paths = preamblePaths,
                           #useCache = "overwrite",
-                          useCloud = useCloudCache,
-                          cloudFolderID = cloudCacheFolderID)
-  saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2) ## TODO: use fileBackend = 1 ?
-}
+                          #useCloud = useCloudCache,
+                          #cloudFolderID = cloudCacheFolderID,
+                          userTags = c("Ontario_preamble", studyAreaName)
+  )
+  saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
 
-if (isTRUE(uplaod2GDrive)) {
-  if (isTRUE(newGoogleIDs)) {
-    googledrive::drive_put(media = fsimOutPreamble, path = gdriveURL, name = basename(fsimOutPreamble), verbose = TRUE)
-    #googledrive::drive_put(media = asimOutPreamble, path = gdriveURL, name = basename(asimOutPreamble), verbose = TRUE)
-  } else {
-    googledrive::drive_update(file = as_id(gdriveSims[["simOutPreamble"]]), media = fsimOutPreamble)
-    #googledrive::drive_update(file = as_id(gdriveSims[["simOutPreambleArchive"]]), media = asimOutPreamble)
+  if (isTRUE(upload_preamble)) {
+    fdf <- googledrive::drive_put(media = fsimOutPreamble, path = gdriveURL, name = basename(fsimOutPreamble))
+    gid_preamble <- fdf$id
+    rm(fdf)
+    gdriveSims <- update_googleids(
+      data.table(studyArea = studyAreaName, simObject = "simOutPreamble", run = NA,
+                 gcm = climateGCM, ssp = climateSSP, gid = gid_preamble),
+      gdriveSims
+    )
   }
 }
+
+nSpecies <- length(unique(simOutPreamble$sppEquiv$LandR))

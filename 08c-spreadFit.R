@@ -1,7 +1,7 @@
 do.call(setPaths, spreadFitPaths)
 
-source("05-google-ids.R")
-newGoogleIDs <- gdriveSims[["spreadOut"]] == ""
+gid_spreadOut <- gdriveSims[studyArea == studyAreaName & simObject == "spreadOut" & runID == run, gid]
+upload_spreadOut <- reupload | length(gid_spreadOut) == 0
 
 extremeVals <- 4
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
@@ -43,7 +43,7 @@ spreadFitParams <- list(
     "iterThresh" = 396L,
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
-    "mode" = if (isTRUE(firstRunSpreadFit)) c("fit", "visualize") else "fit", ##  "debug", or combo of "fit", "visualize"
+    "mode" = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,
@@ -52,7 +52,7 @@ spreadFitParams <- list(
     "trace" = 1,
     "SNLL_FS_thresh" = NULL, # NULL means 'autocalibrate' to find suitable threshold value
     "upper" = upper,
-    #"urlDEOptimObject" = "spreadOut_2021-02-10_Limit3_150_SNLL_FS_thresh_cNG42y", ## TODO: by studyArea
+    #"urlDEOptimObject" = NULL,
     "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,
     "visualizeDEoptim" = FALSE,
@@ -74,14 +74,11 @@ spreadFitObjects <- list(
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-#add tags when it stabilizes
-# rm(biomassMaps2001, biomassMaps2011)
-
-#dspreadOut <- file.path(Paths$outputPath, paste0("ignitionOut_", studyAreaName)) %>%
-#  checkPath(create = TRUE)
-#aspreadOut <- paste0(dspreadOut, ".7z")
-fspreadOut <- file.path(Paths$outputPath, paste0("fS_SpreadFit_", studyAreaName, ".qs"))
-if (isTRUE(usePrerun) && file.exists(fspreadOut)) {
+fspreadOut <- file.path(Paths$outputPath, paste0("spreadOut_", studyAreaName, ".qs"))
+if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
+  if (!file.exists(fspreadOut)) {
+    googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
+  }
   spreadOut <- loadSimList(fspreadOut)
 } else {
   spreadOut <- Cache(
@@ -90,15 +87,24 @@ if (isTRUE(usePrerun) && file.exists(fspreadOut)) {
     params = spreadFitParams,
     modules = "fireSense_SpreadFit",
     paths = spreadFitPaths,
-    objects = spreadFitObjects
+    objects = spreadFitObjects,
+    #useCloud = useCloudCache,
+    #cloudFolderID = cloudCacheFolderID,
+    userTags = c("fireSense_SpreadFit", studyAreaName)
   )
-  saveSimList(
-    spreadOut,
-    fspreadOut,
-    #filebackedDir = dspreadOut,
-    fileBackend = 2 ## TODO use fileBackend = 1
-  )
-  #archive::archive_write_dir(archive = aspreadOut, dir = dspreadOut)
+  saveSimList(spreadOut, fspreadOut, fileBackend = 2)
+
+  if (isTRUE(upload_spreadOut)) {
+    fdf <- googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut))
+    gid_spreadOut <- fdf$id
+    rm(fdf)
+    gdriveSims <- update_googleids(
+      data.table(studyArea = studyAreaName, simObject = "spreadOut", run = run, gid = gid_spreadOut),
+      gdriveSims
+    )
+  }
+
+  source("R/upload_spreadFit.R")
 
   if (requireNamespace("slackr") & file.exists("~/.slackr")) {
     slackr::slackr_setup()
@@ -109,14 +115,4 @@ if (isTRUE(usePrerun) && file.exists(fspreadOut)) {
   }
 }
 
-if (isTRUE(uplaod2GDrive)) {
-  source("R/upload_spreadFit.R")
 
-  if (isTRUE(newGoogleIDs)) {
-    googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut), verbose = TRUE)
-    #googledrive::drive_put(media = aspreadOut, path = gdriveURL, name = basename(aspreadOut), verbose = TRUE)
-  } else {
-    googledrive::drive_update(file = as_id(gdriveSims[["spreadOut"]]), media = fspreadOut)
-    #googledrive::drive_update(file = as_id(gdriveSims[["spreadOutArchive"]]), media = aspreadOut)
-  }
-}

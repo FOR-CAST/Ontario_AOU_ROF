@@ -1,25 +1,22 @@
-################################################################################
-## Initialization parameters and settings
-################################################################################
-
 .starttime <- Sys.time()
 
 if (file.exists(".Renviron")) readRenviron(".Renviron")
 
-Require(c("magrittr", "PredictiveEcology/quickPlot@development"))
-
-quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer()) ## TODO: temporary for Alex's testing
+Require::Require("config")
 
 cacheDir <- config::get("paths")[["cachedir"]]
-climateScenario <- substr(runName, 5, 15) ## TODO: adjust for other climate projections; gcm & rcp in config
+cacheFormat <- config::get("cacheformat")
+climateGCM <- config::get("climategcm")
+climateSSP <- as.numeric(config::get("climatessp"))
 cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
+codeChecks <- config::get("codechecks")
 delayStart <- config::get("delaystart")
-deleteSpeciesLayers <- FALSE
-eventCaching <- c(".inputObjects", "init")
-firstRunSpreadFit <- FALSE
-mapParallel <- FALSE
-rep <- as.numeric(substr(runName, nchar(runName) - 1, nchar(runName)))
+messagingNumCharsModule <- config::get("messagingNumCharsModule")
+newGoogleIDs <- FALSE ## gets rechecked/updated for each script (06, 07x, 08x) based on script 05
+reproducibleAlgorithm <- config::get("reproduciblealgorithm")
 resolution <- as.integer(config::get("resolution"))
+reupload <- config::get("reupload")
+run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
 sppEquivCol <- "ON"
 studyAreaName <- if (grepl("AOU", runName)) {
@@ -37,11 +34,24 @@ studyAreaName <- if (grepl("AOU", runName)) {
 } else {
   stop("runName must contain one of 'AOU' or 'ROF'.")
 }
-successionTimestep <- 10
-uplaod2GDrive <- config::get("upload")
 useCloudCache <- config::get("cloud")[["usecloud"]]
+useLandR.CS <- config::get("uselandrcs")
+useMemoise <- config::get("usememoise")
 usePlot <- config::get("plot")
-usePrerun <- TRUE
-.plotInitialTime <- if (isTRUE(usePlot)) 0 else NA
+userInputPaths <- config::get("inputpaths")
+usePrerun <- config::get("useprerun")
+useRequire <- config::get("userequire")
+.plotInitialTime <- if (isTRUE(usePlot)) 2011 else NA
 
-firstRunMDCplots <- if (rep == 1) TRUE else FALSE
+if (!exists("runName")) {
+  runName <- sprintf("%s_%s_SSP%03d_run%02d", studyAreaName, climateGCM, climateSSP, run)
+} else {
+  chunks <- strsplit(runName, "_")[[1]]
+  climateSSP <- substr(chunks[length(chunks) - 1], 4, 6)
+  climateGCM <- if (grepl("ensemble", runName)) paste0(chunks[2], "_", chunks[3]) else chunks[2]
+  studyAreaName <- chunks[1]
+  run <- as.numeric(substr(chunks[length(chunks)], 4, 5))
+}
+
+firstRunMDCplots <- if (run == 1) TRUE else FALSE
+firstRunIgnitionFit <- if (run == 1) TRUE else FALSE

@@ -1,44 +1,9 @@
-####################################################################################################
-## Packages for global.R
-## don't need to load packages for modules; done automatically, but ensure they are installed
-####################################################################################################
+Require(c("data.table", "plyr", "pryr")) ## ensure plyr loaded before dplyr or there will be problems
+Require("PredictiveEcology/SpaDES.install (>= 0.0.4)")
+Require("PredictiveEcology/SpaDES.core@development (>= 1.0.6.9023)",
+        which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core
 
-Require("data.table")
-Require(c("plyr", "dplyr"), upgrade = FALSE) ## ensure plyr loaded before dplyr or there will be problems
+Require("achubaty/amc (>= 0.2.0)", require = FALSE, which = c("Suggests", "Imports", "Depends"))
+Require(c("jimhester/archive", "slackr"), upgrade = FALSE)
 
-Require("PredictiveEcology/reproducible@development (>= 1.2.6.9014)")
-Require("PredictiveEcology/SpaDES.core@development (>= 1.0.6.9025)",
-        which = c("Suggests", "Imports", "Depends"), upgrade = FALSE) # need Suggests in SpaDES.core)
-
-Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9052)", require = FALSE) ## force pemisc and others to be installed correctly
-
-if (FALSE) {
-  Require::Require("PredictiveEcology/SpaDES.install (>= 0.0.2)")
-  out <- makeSureAllPackagesInstalled(modulePath = "modules")
-}
-
-Require(c("achubaty/amc@development", "jimhester/archive"))
-Require("PredictiveEcology/SpaDES.project@development", require = FALSE, which = c("Suggests", "Imports", "Depends"))
-
-moduleRqdPkgs <- lapply(basename(dir(paths1$modulePath)), function(m) {
-  packages(modules = m, paths = paths1$modulePath)
-}) %>%
-  unlist() %>%
-  unname() %>%
-  unique() %>%
-  sort()
-
-fromCRAN <- names(which(!pemisc::isGitHubPkg(moduleRqdPkgs))) %>%
-  sapply(., function(x) strsplit(x, " ")[[1]][[1]]) %>%
-  unname() %>%
-  unique()
-
-fromGitHub <- names(which(pemisc::isGitHubPkg(moduleRqdPkgs))) %>%
-  sapply(., function(x) strsplit(x, " ")[[1]][[1]]) %>%
-  unname() %>%
-  gsub(pattern = "fireSenseUtils@development", replacement = "fireSenseUtils", x = .) %>%
-  gsub(pattern = "fireSenseUtils", replacement = "fireSenseUtils@development", x = .) %>%
-  unique()
-
-Require(fromCRAN, upgrade = FALSE, require = FALSE)
-Require(fromGitHub, upgrade = FALSE, require = FALSE)
+out <- makeSureAllPackagesInstalled(modulePath = "modules")

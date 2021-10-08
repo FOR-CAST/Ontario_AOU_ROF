@@ -1,26 +1,37 @@
-library(Require)
-Require(c(
-  "config", "crayon", "PredictiveEcology/peutils@development"
-))
+if (!exists("pkgDir")) {
+  pkgDir <- file.path("packages", version$platform, paste0(version$major, ".",
+                                                           strsplit(version$minor, "[.]")[[1]][1]))
 
-switch(peutils::user(),
+  if (!dir.exists(pkgDir)) {
+    dir.create(pkgDir, recursive = TRUE)
+  }
+  .libPaths(pkgDir)
+}
+
+if (!suppressWarnings(require("Require"))) {
+  install.packages("Require")
+  library(Require)
+}
+
+if (FALSE) {
+  install.packages(c("lwgeom", "rgdal", "rgeos", "sf", "sp", "raster", "terra"),
+                   repos = "https://cran.rstudio.com")
+  sf::sf_extSoftVersion() ## want GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+
+  Require::Require("PredictiveEcology/reproducible@development (>= 1.2.7.9011)") ## 2021-Aug
+  Require::Require("PredictiveEcology/SpaDES.core@development (>= 1.0.8.9014)") ## 2021-Aug
+
+  Require::Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9052)", require = FALSE) ## force pemisc and others to be installed correctly
+
+  Require::Require("PredictiveEcology/SpaDES.install (>= 0.0.2)")
+  out <- makeSureAllPackagesInstalled(modulePath = "modules")
+}
+
+switch(Sys.info()[["user"]],
        "achubaty" = Sys.setenv(R_CONFIG_ACTIVE = "alex"),
        Sys.setenv(R_CONFIG_ACTIVE = "test")
 )
 #Sys.getenv("R_CONFIG_ACTIVE") ## verify
-
-if (isFALSE(config::get("batchmode"))) {
-  runName <- paste0(
-    config::get("studyarea"),
-    sprintf("_CCSM4_RCP%02g", config::get("rcp")),
-    "_res", config::get("resolution"),
-    if (isTRUE(config::is_active("test"))) "_test" else "",
-    sprintf("_rep%02g", config::get("rep"))
-  )
-}
-stopifnot(exists("runName", envir = .GlobalEnv)) ## run name should be set: e.g., see batch_runs.R
-
-message(crayon::red(runName))
 
 source("01-init.R")
 source("02-paths.R")
@@ -28,19 +39,18 @@ source("03-packages.R")
 source("04-options.R")
 source("05-google-ids.R")
 
-message(crayon::red(runName))
-
 if (delayStart > 0) {
-  message(crayon::green("\nStaggered job start: delaying by", delayStart, "minutes."))
+  message(crayon::green("\nStaggered job start: delaying", runName, "by", delayStart, "minutes."))
   Sys.sleep(delayStart*60)
 }
 
 source("06-studyArea.R")
-source("07a-dataPrep2001.R")
-source("07b-dataPrep2011.R")
-source("07c-dataPrepFS.R")
 
-message(crayon::red(runName))
+source("07a-dataPrep_2001.R")
+source("07b-dataPrep_2011.R")
+source("07c-dataPrep_fS.R")
+
+message(crayon::red("Data prep", runName, "complete"))
 
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
@@ -48,4 +58,4 @@ source("08c-spreadFit.R")
 
 source("09-main-sim.R")
 
-message(crayon::red(runName))
+message(crayon::red("Simulation", runName, "complete"))
