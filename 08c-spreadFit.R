@@ -96,10 +96,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
 
   if (isTRUE(upload_spreadOut)) {
     fdf <- googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut))
-    gid_spreadOut <- fdf$id
+    gid_spreadOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "spreadOut", run = run, gid = gid_spreadOut),
+      data.table(studyArea = studyAreaName, simObject = "spreadOut", runID = run,
+                 gcm = NA, ssp = NA, gid = gid_spreadOut),
       gdriveSims
     )
   }

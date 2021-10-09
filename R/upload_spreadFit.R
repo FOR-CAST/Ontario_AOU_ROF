@@ -5,17 +5,22 @@ source("05-google-ids.R")
 
 file.move(
   file.path("outputs", studyAreaName, "figures", "spreadFit_coeffs.png"),
-  file.path("outputs", studyAreaName, "figures", paste0("spreadFit_coeffs_", studyAreaName, ".png"))
+  file.path("outputs", studyAreaName, "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png", studyAreaName, run))
+)
+
+file.move(
+  file.path("outputs", studyAreaName, paste0("fireSense_SpreadFit_veg_coeffs_", studyAreaName, ".txt")),
+  file.path("outputs", studyAreaName, sprintf("fireSense_SpreadFit_veg_coeffs_%s_run_%02d.txt", studyAreaName, run))
 )
 
 filesToUpload <- c(
-  list.files(file.path("outputs", studyAreaName),
-             pattern = paste0("^fireSense_SpreadFit_veg_coeffs_", studyAreaName, "[.]txt$")),
+  sprintf("fireSense_SpreadFit_veg_coeffs_%s_run_%02d.txt", studyAreaName, run),
   paste0("figures/PCAcoeffLoadings_", studyAreaName, ".png"),
-  paste0("figures/spreadFit_coeffs_", studyAreaName, ".png")
+  file.path("figures", sprintf("fireSense_SpreadFit_veg_coeffs_%s_run_%02d.txt", studyAreaName, run))
 )
 
+gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
 lapply(filesToUpload, function(f) {
-  retry(quote(drive_upload(file.path("outputs", studyAreaName, f), as_id(gdriveSims[["results"]]), overwrite = TRUE)),
+  retry(quote(drive_put(file.path("outputs", studyAreaName, f), as_id(gid_results))),
         retries = 5, exponentialDecayBase = 2)
 })

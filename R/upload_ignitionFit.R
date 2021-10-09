@@ -18,7 +18,8 @@ filesToUpload <- c(
   paste0("figures/IgnitionRatePer100_", studyAreaName, ".png")
 )
 
+gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
 lapply(filesToUpload, function(f) {
-  retry(quote(drive_upload(file.path("outputs", studyAreaName, f), as_id(gdriveSims[["results"]]), overwrite = TRUE)),
+  retry(quote(drive_put(file.path("outputs", studyAreaName, f), as_id(gid_results))),
         retries = 5, exponentialDecayBase = 2)
 })
