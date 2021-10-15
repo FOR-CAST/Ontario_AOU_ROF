@@ -15,8 +15,7 @@ file.move(
 
 filesToUpload <- c(
   sprintf("fireSense_SpreadFit_veg_coeffs_%s_run_%02d.txt", studyAreaName, run),
-  paste0("figures/PCAcoeffLoadings_", studyAreaName, ".png"),
-  file.path(sprintf("fireSense_SpreadFit_veg_coeffs_%s_run_%02d.txt", studyAreaName, run))
+  paste0("figures/PCAcoeffLoadings_", studyAreaName, ".png")
 )
 
 gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]

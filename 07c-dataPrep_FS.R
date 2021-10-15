@@ -71,10 +71,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
 
   if (isTRUE(upload_fSsimDataPrep)) {
     fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep))
-    gid_fSsimDataPrep <- fdf$id
+    gid_fSsimDataPrep <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "fSsimDataPrep", run = NA, gid = gid_fSsimDataPrep),
+      data.table(studyArea = studyAreaName, simObject = "fSsimDataPrep",  runID = NA,
+                 gcm = NA, ssp = NA, gid = gid_fSsimDataPrep),
       gdriveSims
     )
   }
@@ -91,7 +92,7 @@ if (isTRUE(firstRunMDCplots)) {
                                                                   climateGCM, "_", climateSSP, ".png"))
   checkPath(dirname(fggMDC), create = TRUE)
 
-  ggsave(plot = ggMDC, filename = fggMDC)
+  ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
 
   googledrive::drive_put(
     media = fggMDC,

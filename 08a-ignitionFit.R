@@ -54,10 +54,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_ignitionOut)) {
 
   if (isTRUE(upload_ignitionOut)) {
     fdf <- googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut))
-    gid_ignitionOut <- fdf$id
+    gid_ignitionOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "ignitionOut", run = NA, gid = gid_ignitionOut),
+      data.table(studyArea = studyAreaName, simObject = "ignitionOut", runID = NA,
+                 gcm = NA, ssp = NA, gid = gid_ignitionOut),
       gdriveSims
     )
   }

@@ -32,10 +32,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
 
   if (isTRUE(upload_escapeOut)) {
     fdf <- googledrive::drive_put(media = fescapeOut, path = gdriveURL, name = basename(fescapeOut))
-    gid_escapeOut <- fdf$id
+    gid_escapeOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "escapeOut", run = NA, gid = gid_escapeOut),
+      data.table(studyArea = studyAreaName, simObject = "escapeOut",  runID = NA,
+                 gcm = NA, ssp = NA, gid = gid_escapeOut),
       gdriveSims
     )
   }
