@@ -10,13 +10,14 @@ preambleObjects <- list(
 
 preambleParams <- list(
   Ontario_preamble = list(
-    ".plotInitialTime" = ifelse(usePlot, 0, NA),
-    ".resolution" = resolution, ## derived from runName
-    ".useCache" = TRUE,
-    "climateGCM" = climateGCM,
-    "climateSSP" = climateSSP,
-    "historicalFireYears" = 1991:2020,
-    "studyAreaName" = studyAreaName
+    .plotInitialTime = ifelse(usePlot, 0, NA),
+    .resolution = resolution, ## derived from runName
+    .useCache = TRUE,
+    climateGCM = climateGCM,
+    climateSSP = climateSSP,
+    historicalFireYears = 1991:2020,
+    runName = runName,
+    studyAreaName = studyAreaName
   )
 )
 

@@ -27,7 +27,7 @@ studyAreaName <- if (grepl("AOU", runName)) {
   }
 } else if (grepl("ROF", runName)) {
   if (grepl("test", runName)) {
-    "ROF_test" ## TODO: enable test area in preamble for RoF
+    "ROF_test" ## TODO: enable test areas in preamble for RoF
   } else {
     "ROF"
   }
@@ -35,7 +35,7 @@ studyAreaName <- if (grepl("AOU", runName)) {
   stop("runName must contain one of 'AOU' or 'ROF'.")
 }
 useCloudCache <- config::get("cloud")[["usecloud"]]
-useLandR.CS <- config::get("uselandrcs")
+useLandR.CS <- if (grepl("ROF", studyAreaName)) FALSE else config::get("uselandrcs")
 useMemoise <- config::get("usememoise")
 usePlot <- config::get("plot")
 userInputPaths <- config::get("inputpaths")
@@ -47,7 +47,7 @@ if (!exists("runName")) {
   runName <- sprintf("%s_%s_SSP%03d_run%02d", studyAreaName, climateGCM, climateSSP, run)
 } else {
   chunks <- strsplit(runName, "_")[[1]]
-  climateSSP <- substr(chunks[length(chunks) - 1], 4, 6)
+  climateSSP <- substr(chunks[length(chunks) - 2], 4, 6)
   climateGCM <- if (grepl("ensemble", runName)) paste0(chunks[2], "_", chunks[3]) else chunks[2]
   studyAreaName <- chunks[1]
   run <- as.numeric(substr(chunks[length(chunks)], 4, 5))

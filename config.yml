@@ -20,7 +20,7 @@ default:
   reupload: false
   resolution: 250  ## 250 for AOU; 125 for ROF
   studyarea: "ROF" ## "AOU" or "ROF"
-  uselandrcs: true
+  uselandrcs: false ## hardcoded FALSE if studyArea is "ROF"
   usememoise: false
   useprerun: true
   userequire: true
@@ -43,7 +43,7 @@ alex:
     usecloud: false
   codechecks: true ## TODO: set 'false' once working
   paths:
-    scratchdir: !expr if (grepl("forcast(01|02)", Sys.info()[["nodename"]])) "/mnt/scratch/ON" else "/tmp/scratch/ON"
-  reupload: !expr if (grepl("forcast02", Sys.info()[["nodename"]])) TRUE else FALSE
+    scratchdir: !expr if (grepl("for-cast.ca", Sys.info()[["nodename"]])) "/mnt/scratch/ON" else "/tmp/scratch/ON"
+  reupload: !expr if (grepl("picea.for-cast.ca", Sys.info()[["nodename"]])) TRUE else FALSE
   slackchannel: "@alex.chubaty"
   useprerun: false

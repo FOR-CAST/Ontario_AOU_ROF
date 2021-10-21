@@ -9,7 +9,8 @@ fSdataPrepParams <- list(
     ".useCache" = ".inputObjects",
     "climateGCM" = climateGCM,
     "climateSSP" = climateSSP,
-    "fireYears" = 2001:2020, # this will be fixed to post kNN only
+    "fireYears" = 2001:2020,
+    "nonflammableLCC" = if (grepl("AOU", studyAreaName)) c(LCC2005_nonFlam) else LCC_FN_nonFlam, ## TODO: what are non-flammable FN classes?
     "sppEquivCol" = simOutPreamble$sppEquivCol,
     "useCentroids" = TRUE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")

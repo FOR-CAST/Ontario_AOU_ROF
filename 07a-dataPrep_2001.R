@@ -34,8 +34,8 @@ dataPrepParams2001 <- list(
     "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
     "exportModels" = "all",
     "fixModelBiomass" = TRUE,
-    "forestedLCCClasses" = 1:6, ## using LCC2010
-    "LCCClassesToReplaceNN" = numeric(0), ## using LCC2010
+    "forestedLCCClasses" = simOutPreamble[["treeClasses"]],
+    "LCCClassesToReplaceNN" = numeric(0),
     "pixelGroupAgeClass" = dataPrep$pixelGroupAgeClass,
     "speciesTableAreas" = c("WestON"),
     "speciesUpdateFunction" = list(
@@ -43,7 +43,7 @@ dataPrepParams2001 <- list(
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
     "sppEquivCol" = sppEquivCol,
-    "subsetDataBiomassModel" = dataPrep$subsetDataBiomassModel,
+    "subsetDataBiomassModel" = dataPrep[["subsetDataBiomassModel"]],
     "useCloudCacheForStats" = useCloudCache,
     ".plots" = c("object", "png", "raw"),
     ".studyAreaName" = paste0(studyAreaName, 2001),
@@ -51,7 +51,7 @@ dataPrepParams2001 <- list(
   ),
   Biomass_speciesData = list(
     #"dataYear" = 2001, ## passed globally
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
+    "sppEquivCol" = sppEquivCol,
     "types" = c("KNN", "ONFRI"), ## TODO: use CASFRIv5?
     ".plotInitialTime" = .plotInitialTime,
     ".studyAreaName" = paste0(studyAreaName, 2001),

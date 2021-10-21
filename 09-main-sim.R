@@ -10,7 +10,7 @@ dynamicModules <- list("fireSense_dataPrepPredict",
                        "fireSense_EscapePredict",
                        "fireSense_SpreadPredict",
                        "Biomass_core",
-                       "Biomass_regeneration")
+                       "Biomass_regeneration") ## TODO: add CSmodules when useLandRCS == TRUE
 
 ## TODO: remove as.data.table where appropriate
 dynamicObjects <- list(
