@@ -54,8 +54,7 @@ dataPrepParams2001 <- list(
     "sppEquivCol" = sppEquivCol,
     "types" = c("KNN", "ONFRI"), ## TODO: use CASFRIv5?
     ".plotInitialTime" = .plotInitialTime,
-    ".studyAreaName" = paste0(studyAreaName, 2001),
-    #".useCache" = FALSE
+    ".studyAreaName" = paste0(studyAreaName, 2001)
   ),
   Biomass_speciesParameters = list(
     constrainGrowthCurve = c(0, 1),
