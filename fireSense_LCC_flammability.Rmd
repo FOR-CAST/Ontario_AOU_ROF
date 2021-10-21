@@ -70,6 +70,7 @@ g1 <- ggplot(data = burnCalcLCC2005, aes(x = lcc, y = percentBurned)) +
    theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   ylab("percent burned (%)") + 
   scale_x_continuous("LCC", labels = as.character(burnCalcLCC2005$lcc), breaks = burnCalcLCC2005$lcc) + 
+  geom_hline(yintercept = 1, col = "darkgrey") +
   theme_bw()
 
 gfile1 <- "outputs/AOU/figures/LCC_flammability.png"
@@ -77,6 +78,13 @@ ggsave(g1, filename = gfile1)
 googledrive::drive_put(gfile1, googledrive::as_id("1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"))
 
 g1
+```
+
+#### LCC2005 Results
+
+```{r LCC2005_nonFlamm, eval = FALSE}
+## original fireSense_dataPrepFit defaults
+LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39)
 ```
 
 ### Far North LCC
@@ -153,11 +161,41 @@ g2 <- ggplot(data = burnCalcFN, aes(x = lcc, y = percentBurned)) +
    theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   ylab("percent burned (%)") + 
   scale_x_continuous("LCC", labels = as.character(burnCalcFN$lcc), breaks = burnCalcFN$lcc) + 
+  geom_hline(yintercept = 1, col = "darkgrey") +
   theme_bw()
 
 gfile2 <- "outputs/ROF/figures/LCC_flammability.png"
 ggsave(g2, filename = gfile2)
-googledrive::drive_upload(gfile2, googledrive::as_id("1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"))
+googledrive::drive_put(gfile2, googledrive::as_id("1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"))
 
 g2
 ```
+
+#### Far North LCC Results
+
+| LCC | Description                      | Flammable? |
+|-----|----------------------------------|------------|
+| 1   | clear open water                 | N          |
+| 2   | turbid water                     | N          |
+| 3   | intertidal mudflat               | N          |
+| 4   | intertidal marsh                 | N          |
+| 5   | supertidal marsh                 | N          |
+| 6   | freshwater marsh                 | N          |
+| 7   | heath                            | N          |
+| 8   | thicket swamp                    | Y          |
+| 9   | conifer swamp                    | Y          |
+| 10  | deciduous swamp                  | N          |
+| 11  | open fen                         | N          |
+| 12  | treed fen                        | Y\*        |
+| 13  | open bog                         | Y\*        |
+| 14  | treed bog                        | Y\*        |
+| 15  | sparse treed                     | Y          |
+| 16  | deciduous treed                  | Y          |
+| 17  | mixed treed                      | Y          |
+| 18  | conifer treed                    | Y          |
+| 19  | disturbance non and sparse woody | Y          |
+| 20  | disturbance tree/shrub           | Y          |
+| 21  | sand/gravel/mine tailings        | N\*        |
+| 22  | bedrock                          | N\*        |
+| 23  | community/infrastructure         | N          |
+| 24  | agriculture                      | N          |
