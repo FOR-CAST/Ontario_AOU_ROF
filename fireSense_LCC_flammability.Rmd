@@ -1,0 +1,163 @@
+---
+title: "fireSense LCC flammability"
+author: "Alex Chubaty and Ian Eddy"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- based on similar vignette in 'fireSenseUtils' package -->
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  eval = FALSE
+)
+```
+
+## Packages
+
+```{r init}
+library(data.table)
+library(fasterize)
+library(ggplot2)
+library(raster)
+library(reproducible)
+library(sf)
+
+dPath <- file.path("inputs")
+```
+
+```{r fire_polys}
+fireUrl <- "https://cwfis.cfs.nrcan.gc.ca/downloads/nfdb/fire_poly/current_version/NFDB_poly.zip"
+firePolygons <- prepInputs(url = fireUrl, destinationPath = dPath, fun = "sf::read_sf")
+```
+
+## Compare LCC and fire data
+
+### LCC2005
+
+```{r LCC2005}
+lcc2005Url <- paste0("ftp://ftp.ccrs.nrcan.gc.ca/ad/NLCCLandCover/",
+                     "LandcoverCanada2005_250m/LandCoverOfCanada2005_V1_4.zip")
+lcc2005 <- prepInputs(url = lcc2005Url, destinationPath = dPath,
+                      targetFile = "LCC2005_V1_4a.tif", alsoExtract = NA)
+firePolygonsLCC2005 <- sf::st_transform(firePolygons, crs = crs(lcc2005))
+
+## rasterize firePolygons
+firePolygonsLCC2005$dummyVar <- 1
+firePolygonsLCC2005 <- firePolygonsLCC2005[firePolygonsLCC2005$YEAR > 2004, ]
+fireRasterLCC2005 <- fasterize(sf = firePolygonsLCC2005, raster = lcc2005, field = "dummyVar")
+fireLoc2005 <- 1:ncell(lcc2005)
+fireLoc2005 <- fireLoc2005[!is.na(getValues(fireRasterLCC2005))]
+
+burnedLCC2005 <- data.table(pixelID = 1:ncell(lcc2005), lcc = getValues(lcc2005))
+burnedLCC2005[pixelID %in% fireLoc2005, burn := 1]
+
+burnCalcLCC2005 <- burnedLCC2005[, .(available = .N, burned = sum(burn, na.rm = TRUE)), .(lcc)]
+burnCalcLCC2005[, "percentBurned" := round(burned/available * 100, digits = 3)]
+setkey(burnCalcLCC2005, lcc)
+burnCalcLCC2005
+```
+
+```{r LCC2005_plot, echo=FALSE}
+g1 <- ggplot(data = burnCalcLCC2005, aes(x = lcc, y = percentBurned)) + 
+  geom_bar(stat = "identity") + 
+   theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  ylab("percent burned (%)") + 
+  scale_x_continuous("LCC", labels = as.character(burnCalcLCC2005$lcc), breaks = burnCalcLCC2005$lcc) + 
+  theme_bw()
+
+gfile1 <- "outputs/AOU/figures/LCC_flammability.png"
+ggsave(g1, filename = gfile1)
+googledrive::drive_put(gfile1, googledrive::as_id("1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki"))
+
+g1
+```
+
+### Far North LCC
+
+```{r LCC_FN}
+## FAR NORTH LANDCOVER (620 MB)
+## unable to download directly b/c of SSL, time outs, and other server problems
+##   https://ws.gisetl.lrc.gov.on.ca/fmedatadownload/Packages/FarNorthLandCover.zip
+##
+
+FarNorthLandCoverZip <- file.path(dPath, "FarNorthLandCover.zip")
+rFiles <- c("New folder/Class/FarNorth_LandCover_Class_UTM15.tif",
+            "New folder/Class/FarNorth_LandCover_Class_UTM16.tif",
+            "New folder/Class/FarNorth_LandCover_Class_UTM17.tif")
+
+if (!file.exists(FarNorthLandCoverZip)) {
+  googledrive::drive_download(file = as_id("1_QeOAeSHjOjEU1iTqACRj8BYo3ysQKUi"),
+                              path = FarNorthLandCoverZip)
+  archive::archive_extract(
+    archive = file.path(dPath, "FarNorthLandCover.zip"),
+    dir = file.path(dPath, "FarNorthLandCover"),
+    files = "Version 1.4/TIF Format/ab1da0f2-7bba-430b-af11-d503865ff130-TIF.zip"
+  )
+
+  archive::archive_extract(
+    archive = file.path(dPath, "FarNorthLandCover", "Version 1.4", "TIF Format",
+                        "ab1da0f2-7bba-430b-af11-d503865ff130-TIF.zip"),
+    dir = file.path(dPath, "FarNorthLandCover"),
+    files = rFiles
+  )
+
+  vapply(file.path(dPath, "FarNorthLandCover", rFiles), file.copy, logical(1),
+         to = file.path(dPath, "FarNorthLandCover"))
+  unlink(file.path(dPath, "FarNorthLandCover", "New folder"), recursive = TRUE)
+  unlink(file.path(dPath, "FarNorthLandCover", "Version 1.4"), recursive = TRUE)
+}
+
+r15 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[1])
+r16 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[2])
+r17 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[3])
+
+burnCalcFN <- lapply(list(r15, r16, r17), function(r) {
+  r[r[] > 24] <- NA_integer_ ## a few pixels have values >24, so make them NA
+  
+  firePolygons2 <- sf::st_transform(firePolygons, crs = crs(r))
+  
+  ## rasterize firePolygons
+  firePolygons2$dummyVar <- 1
+  firePolygons2 <- firePolygons2[firePolygons2$YEAR > 2004, ]
+  fireRaster <- fasterize(sf = firePolygons2, raster = r, field = "dummyVar")
+  fireLoc <- 1:ncell(r)
+  fireLoc <- fireLoc[!is.na(getValues(fireRaster))]
+  
+  burned <- data.table(pixelID = 1:ncell(r), lcc = getValues(r))
+  burned[pixelID %in% fireLoc, burn := 1]
+  
+  burnCalc <- burned[, .(available = .N, burned = sum(burn, na.rm = TRUE)), .(lcc)]
+  setkey(burnCalc, lcc)
+  burnCalc <- na.omit(burnCalc)
+  burnCalc
+}) %>%
+  rbindlist()
+
+burnCalcFN <- burnCalcFN[, lapply(.SD, sum), by = lcc]
+setkey(burnCalc, lcc)
+
+burnCalcFN[, "percentBurned" := round(burned/available * 100, digits = 3)]
+burnCalcFN
+```
+
+```{r LCCFN_plot, echo=FALSE}
+g2 <- ggplot(data = burnCalcFN, aes(x = lcc, y = percentBurned)) + 
+  geom_bar(stat = "identity") + 
+   theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  ylab("percent burned (%)") + 
+  scale_x_continuous("LCC", labels = as.character(burnCalcFN$lcc), breaks = burnCalcFN$lcc) + 
+  theme_bw()
+
+gfile2 <- "outputs/ROF/figures/LCC_flammability.png"
+ggsave(g2, filename = gfile2)
+googledrive::drive_upload(gfile2, googledrive::as_id("1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"))
+
+g2
+```
