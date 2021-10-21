@@ -52,7 +52,7 @@ dataPrepParams2001 <- list(
   Biomass_speciesData = list(
     #"dataYear" = 2001, ## passed globally
     "sppEquivCol" = sppEquivCol,
-    "types" = c("KNN", "ONFRI"), ## TODO: use CASFRIv5?
+    "types" = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN", ## TODO: issue with raster extent mismatch with ROF FRI
     ".plotInitialTime" = .plotInitialTime,
     ".studyAreaName" = paste0(studyAreaName, 2001)
   ),
