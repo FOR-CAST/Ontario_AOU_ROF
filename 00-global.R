@@ -52,7 +52,7 @@ source("06-studyArea.R")
 
 source("07a-dataPrep_2001.R")
 source("07b-dataPrep_2011.R")
-source("07c-dataPrep_fS.R")
+source("07c-dataPrep_FS.R")
 
 message(crayon::red("Data prep", runName, "complete"))
 

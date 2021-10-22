@@ -3,9 +3,19 @@
 gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 
-## see
-LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39) ## original fireSense_dataPrepFit defaults
-LCC_FN_nonFlam <- c(0:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
+LCC2005_nonFlam <- c(0, 25, 30, 33, 36:39) ## original fireSense_dataPrepFit defaults
+LCC_FN_nonFlam <- c(1:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
+
+LCC2005_groups <- list(
+  nonForest_highFlam = c(16:19, 22),
+  nonForest_lowFlam = c(21, 23:24, 26:29, 31)
+  ## nonForest_nonFlam = c(0, 25, 30, 33, 36:39)
+)
+LCC_FN_groups <- list(
+  nonForest_highFlam = NULL, ## none
+  nonForest_lowFlam = c(8, 13)
+  ## nonForest_nonFlam = c(1:7, 11, 21:14)
+)
 
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
@@ -14,8 +24,10 @@ fSdataPrepParams <- list(
     "climateGCM" = climateGCM,
     "climateSSP" = climateSSP,
     "fireYears" = 2001:2020,
+    "missingLCCgroup" = if (grepl("AOU", studyAreaName)) "nonForest_highFlam" else "nonForest_lowFlam",
     "nonflammableLCC" = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
+    "nonForestedLCCgroups" = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
+    "sppEquivCol" = sppEquivCol,
     "useCentroids" = TRUE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
   )
@@ -29,8 +41,8 @@ fSdataPrepObjects <- list(
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
-  rasterToMatch = simOutPreamble[["rasterToMatch"]], #this needs to be masked
-  rstLCC = biomassMaps2011[["rstLCC"]],
+  rasterToMatch = simOutPreamble[["rasterToMatch"]], ## this needs to be masked
+  rstLCC = postProcess(biomassMaps2011[["rstLCC"]], studyArea = simOutPreamble[["studyArea"]]),
   sppEquiv = as.data.table(simOutPreamble[["sppEquiv"]]),
   standAgeMap2001 = biomassMaps2001[["standAgeMap"]],
   standAgeMap2011 = biomassMaps2011[["standAgeMap"]],
