@@ -23,8 +23,8 @@ dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
-cores <- if (peutils::user("achubaty") && Sys.info()["nodename"] == "forcast02") {
-  c(rep("localhost", 68), rep("forcast01.local", 32))
+cores <- if (peutils::user("achubaty") && Sys.info()["nodename"] == "picea.for-cast.ca") {
+  c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
 } else {
   stop("please specify number of cores to use for spreadFit")
 }
