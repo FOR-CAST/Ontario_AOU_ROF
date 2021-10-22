@@ -113,7 +113,7 @@ if (isTRUE(firstRunMDCplots)) {
 
   googledrive::drive_put(
     media = fggMDC,
-    path = as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid]),
+    path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
     name = basename(fggMDC)
   )
 }
