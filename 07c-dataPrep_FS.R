@@ -3,6 +3,10 @@
 gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 
+## see
+LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39) ## original fireSense_dataPrepFit defaults
+LCC_FN_nonFlam <- c(0:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
+
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
     ".studyAreaName" = studyAreaName,
@@ -10,7 +14,7 @@ fSdataPrepParams <- list(
     "climateGCM" = climateGCM,
     "climateSSP" = climateSSP,
     "fireYears" = 2001:2020,
-    "nonflammableLCC" = if (grepl("AOU", studyAreaName)) c(LCC2005_nonFlam) else LCC_FN_nonFlam, ## TODO: what are non-flammable FN classes?
+    "nonflammableLCC" = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
     "sppEquivCol" = simOutPreamble$sppEquivCol,
     "useCentroids" = TRUE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
