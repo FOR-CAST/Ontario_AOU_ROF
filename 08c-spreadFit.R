@@ -74,7 +74,7 @@ spreadFitObjects <- list(
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-fspreadOut <- file.path(Paths$outputPath, paste0("spreadOut_", studyAreaName, ".qs"))
+fspreadOut <- file.path(Paths$outputPath, paste0("spreadOut_", studyAreaName, "_", run, ".qs"))
 if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
     googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
