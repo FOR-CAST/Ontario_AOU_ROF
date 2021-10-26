@@ -1,4 +1,4 @@
-## AOU
+## AOU - CNRM-ESM2-1 ------------------------------------------------##
 runName <- "AOU_CNRM-ESM2-1_SSP245_res250_rep01"; source("00-global.R")
 runName <- "AOU_CNRM-ESM2-1_SSP245_res250_rep02"; source("00-global.R")
 runName <- "AOU_CNRM-ESM2-1_SSP245_res250_rep03"; source("00-global.R")
@@ -32,7 +32,7 @@ runName <- "AOU_CNRM-ESM2-1_SSP585_res250_rep08"; source("00-global.R")
 runName <- "AOU_CNRM-ESM2-1_SSP585_res250_rep09"; source("00-global.R")
 runName <- "AOU_CNRM-ESM2-1_SSP585_res250_rep10"; source("00-global.R")
 
-## ROF
+## ROF - CNRM-ESM2-1 ------------------------------------------------##
 runName <- "ROF_CNRM-ESM2-1_SSP245_res125_rep01"; source("00-global.R")
 runName <- "ROF_CNRM-ESM2-1_SSP245_res125_rep02"; source("00-global.R")
 runName <- "ROF_CNRM-ESM2-1_SSP245_res125_rep03"; source("00-global.R")
@@ -65,3 +65,37 @@ runName <- "ROF_CNRM-ESM2-1_SSP585_res125_rep07"; source("00-global.R")
 runName <- "ROF_CNRM-ESM2-1_SSP585_res125_rep08"; source("00-global.R")
 runName <- "ROF_CNRM-ESM2-1_SSP585_res125_rep09"; source("00-global.R")
 runName <- "ROF_CNRM-ESM2-1_SSP585_res125_rep10"; source("00-global.R")
+
+## ROF - CanESM5 ------------------------------------------------##
+runName <- "ROF_CanESM5_SSP245_res125_rep01"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep02"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep03"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep04"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep05"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep06"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep07"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep08"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep09"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP245_res125_rep10"; source("00-global.R")
+
+runName <- "ROF_CanESM5_SSP370_res125_rep01"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep02"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep03"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep04"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep05"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep06"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep07"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep08"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep09"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP370_res125_rep10"; source("00-global.R")
+
+runName <- "ROF_CanESM5_SSP585_res125_rep01"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep02"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep03"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep04"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep05"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep06"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep07"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep08"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep09"; source("00-global.R")
+runName <- "ROF_CanESM5_SSP585_res125_rep10"; source("00-global.R")
