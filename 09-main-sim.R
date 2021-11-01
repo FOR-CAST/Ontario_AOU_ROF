@@ -75,8 +75,7 @@ annualRasters <- data.frame(
 annualRasters$file <- paste0(annualRasters$objectName, "_", annualRasters$saveTime, ".tif")
 
 objectsToSaveAnnually <- c(
-  #"activePixelIndex", ## integer vector ## TODO: not an output -- it's in mod?
-  "cohortData"       ## data.table
+  "cohortData", ## data.table
 )
 
 annualObjects <- data.frame(
@@ -152,6 +151,19 @@ mainSim <- simInitAndSpades(
 saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
 
 resultsDir <- file.path("outputs", runName)
+
+## make annual standAgeMaps from cohortData
+lapply(2011:2100, function(year) {
+  cohortData <- qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
+  cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
+  cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
+  cohortDataReduced <- unique(cohortDataReduced)
+  pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
+  names(pixelGroupMap) <- "pixelGroup"
+  standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
+  writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+})
+
 #archive::archive_write_dir(archive = paste0(resultsDir, ".tar.gz"), dir = resultsDir) ## doesn't work
 utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip") ## TODO: use archive pkg
 

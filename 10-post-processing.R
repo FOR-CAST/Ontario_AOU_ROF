@@ -31,35 +31,6 @@ et <- elapsedTime(sim, units = "hours")
 sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
 et_rof <- elapsedTime(sim_rof)
 
-###############
-
-lapply(studyAreaNames, function(studyAreaName) {
-  lapply(climateScenarios, function(cs) {
-    lapply(1:10, function(rep) {
-      res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
-      resultsDir <- file.path("outputs", runName)
-
-      lapply(2011:2100, function(year) {
-        cohortData <- qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
-        cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
-        cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
-        cohortDataReduced <- unique(cohortDataReduced)
-        pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
-        names(pixelGroupMap) <- "pixelGroup"
-        standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
-        writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
-      })
-
-      unlink(paste0(resultsDir, ".tar.gz"))
-      utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip")
-
-      retry(quote(drive_put(paste0(resultsDir, ".tar.gz"), as_id(gdriveURL(studyAreaName)), overwrite = TRUE)),
-            retries = 5, exponentialDecayBase = 2)
-    })
-  })
-})
-
 # summary figures -----------------------------------------------------------------------------
 
 ## BURN SUMMARIES
