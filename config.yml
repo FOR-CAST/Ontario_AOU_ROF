@@ -47,3 +47,16 @@ alex:
   reupload: !expr if (grepl("picea.for-cast.ca", Sys.info()[["nodename"]])) TRUE else FALSE
   slackchannel: "@alex.chubaty"
   useprerun: false
+
+ian:
+ inherits: default
+ cloud:
+  googleuser: "ianmseddy@gmail.com"
+ paths:
+  scratchdir: "D:/temp"
+ useprerun: false
+ studyarea: "ROF"
+ run: 1
+ plot: false
+ resolution: 125
+
