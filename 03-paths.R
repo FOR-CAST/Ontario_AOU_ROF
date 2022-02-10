@@ -4,15 +4,15 @@
 
 defaultPaths <- list(
   cachePath = cacheDir,
-  modulePath = "modules",
+  modulePath = moduleDir,
   inputPath = "inputs",
   outputPath = file.path("outputs", studyAreaName)
 )
 
-scratchDir <- checkPath(scratchDir, create = TRUE) ## from config
+scratchDir <- checkPath(file.path(scratchDir, studyAreaName), create = TRUE) ## basedir set in config
 
 preamblePaths <- defaultPaths
-preamblePaths[["cachePath"]] <- file.path(cacheDir, "cache_preamble")
+preamblePaths[["cachePath"]] <- file.path(cacheDir, "cache_preamble", studyAreaName)
 
 dataPrepPaths <- defaultPaths
 dataPrepPaths[["cachePath"]] <- file.path(cacheDir, "cache_dataPrep")
@@ -24,7 +24,7 @@ escapeFitPaths <- defaultPaths
 escapeFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_escapeFit")
 
 spreadFitPaths <- defaultPaths
-spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit")
+spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit", runName)
 
 ## main (dynamic) simulation
 dynamicPaths <-  defaultPaths

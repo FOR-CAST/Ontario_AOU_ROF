@@ -1,7 +1,11 @@
+spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit", runName)
 do.call(setPaths, spreadFitPaths)
 
 gid_spreadOut <- gdriveSims[studyArea == studyAreaName & simObject == "spreadOut" & runID == run, gid]
 upload_spreadOut <- reupload | length(gid_spreadOut) == 0
+
+## TODO: remove this workaround
+fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]])
 
 extremeVals <- 4
 lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
@@ -57,7 +61,7 @@ spreadFitParams <- list(
     "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,
     "visualizeDEoptim" = FALSE,
-    ".plot" = TRUE,
+    ".plot" = FALSE, # TRUE,
     ".plotSize" = list(height = 1600, width = 2000)
   )
 )
@@ -75,7 +79,7 @@ spreadFitObjects <- list(
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-fspreadOut <- file.path(Paths$outputPath, paste0("spreadOut_", studyAreaName, "_", run, ".qs"))
+fspreadOut <- simFile(paste0("spreadOut_", studyAreaName, "_", run), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
     googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
@@ -115,4 +119,3 @@ if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
     )
   }
 }
-

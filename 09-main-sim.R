@@ -12,33 +12,34 @@ dynamicModules <- list("fireSense_dataPrepPredict",
                        "Biomass_core",
                        "Biomass_regeneration") ## TODO: add CSmodules when useLandRCS == TRUE
 
-## TODO: remove as.data.table where appropriate
 dynamicObjects <- list(
+  .runName = runName,
   ATAstack = simOutPreamble[["ATAstack"]],
   biomassMap = biomassMaps2011$biomassMap,
   climateComponentsTouse = fSsimDataPrep[["climateComponentsToUse"]],
   CMInormal = simOutPreamble[["CMInormal"]],
   CMIstack = simOutPreamble[["CMIStack"]],
   cohortData = fSsimDataPrep[["cohortData2011"]],
+  covMinMax_spread = spreadOut[["covMinMax_spread"]],
+  covMinMax_ignition = ignitionOut[["covMinMax_ignition"]],
   ecoregion = biomassMaps2011[["ecoregion"]],
   ecoregionMap = biomassMaps2011[["ecoregionMap"]],
   flammableRTM = fSsimDataPrep[["flammableRTM"]],
   fireSense_IgnitionFitted = ignitionOut[["fireSense_IgnitionFitted"]],
   fireSense_EscapeFitted = escapeOut[["fireSense_EscapeFitted"]],
   fireSense_SpreadFitted = spreadOut[["fireSense_SpreadFitted"]],
-  covMinMax_spread = spreadOut[["covMinMax_spread"]],
-  covMinMax_ignition = ignitionOut[["covMinMax_ignition"]],
   landcoverDT = fSsimDataPrep[["landcoverDT"]],
   nonForest_timeSinceDisturbance = fSsimDataPrep[["nonForest_timeSinceDisturbance2011"]],
-  minRelativeB = as.data.table(biomassMaps2011[["minRelativeB"]]), ## biomassMaps2011 needs bugfix to qs
+  minRelativeB = biomassMaps2011[["minRelativeB"]],
   PCAveg = fSsimDataPrep[["PCAveg"]],
-  pixelGroupMap = fSsimDataPrep[["pixelGroupMap2011"]],
+  pixelGroupMap = biomassMaps2011[["pixelGroupMap"]],
+  #pixelGroupMap = fSsimDataPrep[["pixelGroupMap2011"]], ## TODO: why is this slightly off?
   projectedClimateLayers = simOutPreamble[["projectedClimateRasters"]],
   rasterToMatch = biomassMaps2011[["rasterToMatch"]],
   rasterToMatchLarge = biomassMaps2011[["rasterToMatchLarge"]],
   rescaleFactor = 1 / fSsimDataPrep@params$fireSense_dataPrepFit$igAggFactor^2,
-  species = as.data.table(biomassMaps2011[["species"]]),
-  speciesEcoregion = as.data.table(biomassMaps2011[["speciesEcoregion"]]), ## biomassMaps2011 needs bugfix to qs
+  species = biomassMaps2011[["species"]],
+  speciesEcoregion = biomassMaps2011[["speciesEcoregion"]],
   speciesLayers = biomassMaps2011[["speciesLayers"]], ## TODO: does Biomass_core actually need this?
   sppColorVect = biomassMaps2011[["sppColorVect"]],
   sppEquiv = fSsimDataPrep[["sppEquiv"]],
@@ -46,7 +47,7 @@ dynamicObjects <- list(
   studyAreaLarge = biomassMaps2011[["studyAreaLarge"]],
   studyAreaPSP = simOutPreamble[["studyAreaPSP"]],
   studyAreaReporting = biomassMaps2011[["studyAreaReporting"]],
-  sufficientLight = as.data.frame(biomassMaps2011[["sufficientLight"]]), ## biomassMaps2011 needs bugfix to qs
+  sufficientLight = biomassMaps2011[["sufficientLight"]],
   terrainDT = fSsimDataPrep[["terrainDT"]],
   vegComponentsToUse = fSsimDataPrep[["vegComponentsToUse"]]
 )
