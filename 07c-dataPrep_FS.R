@@ -17,6 +17,33 @@ LCC_FN_groups <- list(
   ## nonForest_nonFlam = c(1:7, 11, 21:14)
 )
 
+
+#for reference
+classes <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 3,
+             "Intertidal Marsh" = 4, "Supratidal Marsh" = 5, "Fresh Water Marsh" = 6,
+             "Heath" = 7, "Thicket Swamp" = 8, "Coniferous Swamp" = 9, "Deciduous Swamp" = 10,
+             "Open Fen" = 11, "Treed Fen" = 12, "Open Bog" = 13, "Treed Bog" = 14,
+             "Sparse Treed" = 15, "Deciduous Treed" = 16, "Mixed Treed" = 17, "Coniferous Treed" = 18,
+             "Disturbance - Non and sparse-woody" = 19, "Disturbance - Treed or shrub" = 20,
+             "Sand/Gravel/Mine Tailings" = 21, "Bedrock" = 22, "Community/Infrastructure" = 23,
+             "Agriculture" = 24, "Cloud/Shadow" = -9, "Other" = -99)
+plot(biomassMaps2001$rstLCC, rain)
+# must reclassify the LCC map
+
+
+######WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
+wildfire2020 <- prepInputs(url = "https://drive.google.com/file/d/1Vc4cOY1jOS1y8P20S14nYBJWwkRj_SPL/view?usp=sharing",
+                           targetFile = "Fire_1985-2020_ROF.dat",
+                           fun = 'raster',
+                           rasterToMatch = simOutPreamble$rasterToMatch,
+                           alsoExtract = c("Fire_1985-2020_ROF.dat.ovr",
+                                           "Fire_1985-2020_ROF.dat.aux.xml",
+                                           "Fire_1985-2020_ROF.dat.vat.cpg",
+                                           "Fire_1985-2020_ROF.hdr"),
+                           destinationPath = dataPrepPaths$inputPath)
+
+wildfire2020 <- setMinMax(wildfire2020)
+
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
     ".studyAreaName" = studyAreaName,
@@ -29,6 +56,7 @@ fSdataPrepParams <- list(
     "nonForestedLCCgroups" = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
     "sppEquivCol" = sppEquivCol,
     "useCentroids" = TRUE,
+    "useFireRaster" = TRUE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
   )
 )
@@ -38,6 +66,7 @@ fSdataPrepObjects <- list(
   .runName = runName,
   cohortData2001 = biomassMaps2001[["cohortData"]],
   cohortData2011 = biomassMaps2011[["cohortData"]],
+  fireRaster = wildfire2020,
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
