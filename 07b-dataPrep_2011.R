@@ -29,22 +29,15 @@ dataPrepOutputs2011 <- data.frame(
                   "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
-fbiomassMaps2011 <- file.path(Paths$outputPath, paste0("biomassMaps2011_", studyAreaName, ".qs"))
+fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", studyAreaName), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2011), path = fbiomassMaps2011)
   }
   biomassMaps2011 <- loadSimList(fbiomassMaps2011)
 
-  ## TODO: temp until bug in qs resolved
-  biomassMaps2011$cohortData <- as.data.table(biomassMaps2011$cohortData)
-  biomassMaps2011$minRelativeB <- as.data.table(biomassMaps2011$minRelativeB)
-  biomassMaps2011$pixelFateDT <- as.data.table(biomassMaps2011$pixelFateDT)
-  biomassMaps2011$species <- as.data.table(biomassMaps2011$species)
-  biomassMaps2011$speciesEcoregion <- as.data.table(biomassMaps2011$speciesEcoregion)
-  biomassMaps2011$sppEquiv <- as.data.table(biomassMaps2011$sppEquiv)
-  biomassMaps2011$sufficientLight <- as.data.frame(biomassMaps2011$sufficientLight)
-  ## end TODO
+  ## TODO: fix these upstream
+  biomassMaps2011[["sufficientLight"]] <- as.data.frame(biomassMaps2011[["sufficientLight"]])
 } else {
   biomassMaps2011 <- Cache(
     simInitAndSpades,

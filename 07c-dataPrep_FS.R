@@ -1,4 +1,5 @@
 ## NOTE: 07a-dataPrep_2001.R and 07b-dataPrep_2011.R need to be run before this script
+do.call(setPaths, dataPrepPaths)
 
 gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
@@ -54,7 +55,7 @@ fSdataPrepParams <- list(
     "missingLCCgroup" = if (grepl("AOU", studyAreaName)) "nonForest_highFlam" else "nonForest_lowFlam",
     "nonflammableLCC" = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
     "nonForestedLCCgroups" = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
-    "sppEquivCol" = sppEquivCol,
+    "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
     "useCentroids" = TRUE,
     "useFireRaster" = TRUE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
@@ -72,7 +73,7 @@ fSdataPrepObjects <- list(
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]], ## this needs to be masked
   rstLCC = postProcess(biomassMaps2011[["rstLCC"]], studyArea = simOutPreamble[["studyArea"]]),
-  sppEquiv = as.data.table(simOutPreamble[["sppEquiv"]]),
+  sppEquiv = simOutPreamble[["sppEquiv"]],
   standAgeMap2001 = biomassMaps2001[["standAgeMap"]],
   standAgeMap2011 = biomassMaps2011[["standAgeMap"]],
   studyArea = simOutPreamble[["studyArea"]]
@@ -80,26 +81,12 @@ fSdataPrepObjects <- list(
 
 invisible(replicate(10, gc()))
 
-ffSsimDataPrep <- file.path(Paths$outputPath, paste0("fSsimDataPrep_", studyAreaName, ".qs"))
+ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", studyAreaName), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
   if (!file.exists(ffSsimDataPrep)) {
     googledrive::drive_download(file = as_id(gid_fSsimDataPrep), path = ffSsimDataPrep)
   }
   fSsimDataPrep <- loadSimList(ffSsimDataPrep)
-
-  ## TODO: temporary until bug in qs is fixed
-  fSsimDataPrep$fireSense_escapeCovariates <- as.data.table(fSsimDataPrep$fireSense_escapeCovariates)
-  fSsimDataPrep$fireSense_annualSpreadFitCovariates <- lapply(fSsimDataPrep$fireSense_annualSpreadFitCovariates, as.data.table)
-  fSsimDataPrep$fireBufferedListDT <- lapply(fSsimDataPrep$fireBufferedListDT, as.data.table)
-  fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]])
-  fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[2]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[2]])
-  fSsimDataPrep$cohortData2001 <- as.data.table(fSsimDataPrep$cohortData2001)
-  fSsimDataPrep$cohortData2011 <- as.data.table(fSsimDataPrep$cohortData2011)
-  fSsimDataPrep$fireSense_ignitionCovariates <- as.data.table(fSsimDataPrep$fireSense_ignitionCovariates)
-  fSsimDataPrep$landcoverDT <- as.data.table(fSsimDataPrep$landcoverDT)
-  fSsimDataPrep$terrainDT <- as.data.table(fSsimDataPrep$terrainDT)
-  fSsimDataPrep$sppEquiv <- as.data.table(fSsimDataPrep$sppEquiv)
-  ## end TODO
 } else {
   fSsimDataPrep <- Cache(
     simInitAndSpades,
@@ -125,6 +112,8 @@ if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
       gdriveSims
     )
   }
+
+  source("R/upload_spreadFit_coeffs.R")
 }
 
 if (isTRUE(firstRunMDCplots)) {

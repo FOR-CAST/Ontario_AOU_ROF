@@ -15,12 +15,14 @@ dataPrep <- list(
 dataPrepModules <- if (isTRUE(useLandR.CS)) {
   list(
     "Biomass_speciesData",
+    "Biomass_speciesFactorial",
     "Biomass_borealDataPrep",
     "Biomass_speciesParameters"
   )
 } else {
   list(
     "Biomass_speciesData",
+    "Biomass_speciesFactorial",
     "Biomass_borealDataPrep"
   )
 }
@@ -42,8 +44,8 @@ dataPrepParams2001 <- list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
-    "sppEquivCol" = sppEquivCol,
-    "subsetDataBiomassModel" = dataPrep[["subsetDataBiomassModel"]],
+    "sppEquivCol" = simOutPreamble$sppEquivCol,
+    "subsetDataBiomassModel" = dataPrep$subsetDataBiomassModel,
     "useCloudCacheForStats" = useCloudCache,
     ".plots" = c("object", "png", "raw"),
     ".studyAreaName" = paste0(studyAreaName, 2001),
@@ -51,10 +53,13 @@ dataPrepParams2001 <- list(
   ),
   Biomass_speciesData = list(
     #"dataYear" = 2001, ## passed globally
-    "sppEquivCol" = sppEquivCol,
-    "types" = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN", ## TODO: issue with raster extent mismatch with ROF FRI
+    "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
+    "types" = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
     ".plotInitialTime" = .plotInitialTime,
     ".studyAreaName" = paste0(studyAreaName, 2001)
+  ),
+  Biomass_speciesFactorial = list(
+    factorialSize = "small" ## TODO: use medium?
   ),
   Biomass_speciesParameters = list(
     constrainGrowthCurve = c(0, 1),
@@ -65,6 +70,7 @@ dataPrepParams2001 <- list(
     GAMMknots = 3,
     minimumPlotsPerGamm = 65,
     quantileAgeSubset = 98,
+    speciesFittingApproach = "focal",
     sppEquivCol = simOutPreamble$sppEquivCol
   )
 )
@@ -86,36 +92,24 @@ dataPrepOutputs2001 <- data.frame(
 
 dataPrepObjects <- list(
   .runName = runName,
-  cloudFolderID = cloudCacheFolderID,
-  #nonTreePixels = simOutPreamble[["nonTreePixels"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
-  rstLCC = simOutPreamble[["LCC"]],
-  speciesTable = simOutPreamble[["speciesTable"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],
-  standAgeMap = simOutPreamble[["standAgeMap2001"]],
   studyArea = simOutPreamble[["studyArea"]],
   studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
 )
 
-fbiomassMaps2001 <- file.path(Paths$outputPath, paste0("biomassMaps2001_", studyAreaName, ".qs"))
+fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", studyAreaName), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2001), path = fbiomassMaps2001)
   }
   biomassMaps2001 <- loadSimList(fbiomassMaps2001)
 
-  ## TODO: temp until bug in qs resolved
-  simOutBiomassMaps2001$cohortData <- as.data.table(simOutBiomassMaps2001$cohortData)
-  simOutBiomassMaps2001$minRelativeB <- as.data.table(simOutBiomassMaps2001$minRelativeB)
-  simOutBiomassMaps2001$pixelFateDT <- as.data.table(simOutBiomassMaps2001$pixelFateDT)
-  simOutBiomassMaps2001$species <- as.data.table(simOutBiomassMaps2001$species)
-  simOutBiomassMaps2001$speciesEcoregion <- as.data.table(simOutBiomassMaps2001$speciesEcoregion)
-  simOutBiomassMaps2001$sppEquiv <- as.data.table(simOutBiomassMaps2001$sppEquiv)
-  simOutBiomassMaps2001$sufficientLight <- as.data.frame(simOutBiomassMaps2001$sufficientLight)
-  ## end TODO
+  ## TODO: fix these upstream
+  biomassMaps2001[["sufficientLight"]] <- as.data.frame(biomassMaps2001[["sufficientLight"]])
 } else {
   biomassMaps2001 <- Cache(
     simInitAndSpades,

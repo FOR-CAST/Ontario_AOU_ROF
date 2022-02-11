@@ -12,7 +12,7 @@ preambleParams <- list(
   Ontario_preamble = list(
     .plotInitialTime = ifelse(usePlot, 0, NA),
     .resolution = resolution, ## derived from runName
-    .useCache = TRUE,
+    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
     climateGCM = climateGCM,
     climateSSP = climateSSP,
     historicalFireYears = 1991:2020,
@@ -27,21 +27,17 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
     googledrive::drive_download(file = as_id(gid_preamble), path = fsimOutPreamble)
   }
   simOutPreamble <- loadSimList(fsimOutPreamble)
-
-  ## TODO: temp until bug in qs resolved
-  simOutPreamble$speciesTable <- as.data.table(simOutPreamble$speciesTable)
-  ## end TODO
 } else {
-  simOutPreamble <- Cache(simInitAndSpades,
+  simOutPreamble <- simInitAndSpades(
                           times = list(start = 0, end = 1),
                           params = preambleParams,
                           modules = c("Ontario_preamble"),
                           objects = preambleObjects,
-                          paths = preamblePaths,
+                          paths = preamblePaths#,
                           #useCache = "overwrite",
                           #useCloud = useCloudCache,
                           #cloudFolderID = cloudCacheFolderID,
-                          userTags = c("Ontario_preamble", studyAreaName)
+                          #userTags = c("Ontario_preamble", studyAreaName)
   )
   saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
 
