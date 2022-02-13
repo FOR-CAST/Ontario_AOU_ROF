@@ -12,20 +12,12 @@ dataPrep <- list(
   useCache = TRUE
 )
 
-dataPrepModules <- if (isTRUE(useLandR.CS)) {
-  list(
-    "Biomass_speciesData",
-    "Biomass_speciesFactorial",
-    "Biomass_borealDataPrep",
-    "Biomass_speciesParameters"
-  )
-} else {
-  list(
-    "Biomass_speciesData",
-    "Biomass_speciesFactorial",
-    "Biomass_borealDataPrep"
-  )
-}
+dataPrepModules <- list(
+  "Biomass_speciesData",
+  "Biomass_speciesFactorial",
+  "Biomass_borealDataPrep",
+  "Biomass_speciesParameters"
+)
 
 dataPrepParams2001 <- list(
   .globals = list("dataYear" = 2001),

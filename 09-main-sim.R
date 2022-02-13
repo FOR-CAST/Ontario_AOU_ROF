@@ -4,13 +4,18 @@ gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", g
 
 times <- list(start = 2011, end = 2100)
 
-dynamicModules <- list("fireSense_dataPrepPredict",
-                       "fireSense",
-                       "fireSense_IgnitionPredict",
-                       "fireSense_EscapePredict",
-                       "fireSense_SpreadPredict",
-                       "Biomass_core",
-                       "Biomass_regeneration") ## TODO: add CSmodules when useLandRCS == TRUE
+dynamicModules <- list(
+  "fireSense_dataPrepPredict",
+  "fireSense",
+   "fireSense_IgnitionPredict",
+   "fireSense_EscapePredict",
+   "fireSense_SpreadPredict",
+   "Biomass_core",
+   "Biomass_regeneration",
+   ifelse(isTRUE(useLandR.CS), "gmcsDataPrep", "")
+)
+dynamicModules <- lapply(dynamicModules, function(m) if (nzchar(m)) m)
+dynamicModules[sapply(dynamicModules, is.null)] <- NULL ## this is bananas!
 
 dynamicObjects <- list(
   .runName = runName,
@@ -18,7 +23,7 @@ dynamicObjects <- list(
   biomassMap = biomassMaps2011$biomassMap,
   climateComponentsTouse = fSsimDataPrep[["climateComponentsToUse"]],
   CMInormal = simOutPreamble[["CMInormal"]],
-  CMIstack = simOutPreamble[["CMIStack"]],
+  CMIstack = simOutPreamble[["CMIstack"]],
   cohortData = fSsimDataPrep[["cohortData2011"]],
   covMinMax_spread = spreadOut[["covMinMax_spread"]],
   covMinMax_ignition = ignitionOut[["covMinMax_ignition"]],
@@ -76,7 +81,7 @@ annualRasters <- data.frame(
 annualRasters$file <- paste0(annualRasters$objectName, "_", annualRasters$saveTime, ".tif")
 
 objectsToSaveAnnually <- c(
-  "cohortData", ## data.table
+  "cohortData" ## data.table
 )
 
 annualObjects <- data.frame(
@@ -110,48 +115,53 @@ dynamicOutputs <- rbind(annualRasters, annualObjects, finalYearOutputs)
 
 dynamicParams <- list(
   Biomass_core = list(
-    "sppEquivCol" = sppEquivCol,
-    "vegLeadingProportion" = 0, ## apparently sppColorVect has no mixed color
-    ".plotInitialTime" = .plotInitialTime,
-    ".plots" = c("object", "png", "raw")
+    "sppEquivCol" = fSsimDataPrep@params$fireSense_dataPrepFit$sppEquivCol,
+    "vegLeadingProportion" = 0, ## apparently `sppColorVect` has no mixed colour
+    ".plots" = c("object", "png", "raw"),
+    ".studyAreaName" = studyAreaName
   ),
   Biomass_regeneration = list(
     "fireInitialTime" = times$start + 1 #regeneration is scheduled earlier, so it starts in 2012
   ),
   fireSense_dataPrepPredict = list(
     "fireTimeStep" = 1,
-    "sppEquivCol" = sppEquivCol,
+    "sppEquivCol" = simOutPreamble$sppEquivCol,
     "whichModulesToPrepare" = c("fireSense_IgnitionPredict",
                                 "fireSense_EscapePredict",
                                 "fireSense_SpreadPredict"),
     "missingLCCgroup" = fSsimDataPrep@params$fireSense_dataPrepFit$missingLCCgroup
   ),
   fireSense_ignitionPredict = list(
-    # "rescaleFactor" = 1 / fSsimDataPrep@params$fireSense_dataPrepFit$igAggFactor^2 #deprecated
+    ##
   ),
   fireSense = list(
     .plotInterval = NA,
     .plotInitialTime = .plotInitialTime,
     plotIgnitions = FALSE,
     whichModulesToPrepare = c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict")
+  ),
+  gmcsDataPrep = list(
+    "yearOfFirstClimateImpact" = times$start
   )
 )
 
 ## TODO: delete unused objects, including previous simLists to free up memory
 
-fsim <- file.path(Paths$outputPath, paste0(runName, ".qs"))
+fsim <- simFile(runName, Paths$outputPath, ext = simFileFormat)
 mainSim <- simInitAndSpades(
   times = times,
   modules = dynamicModules,
   objects = dynamicObjects,
   outputs = dynamicOutputs,
   params = dynamicParams,
-  paths = dynamicPaths
+  paths = dynamicPaths,
+  loadOrder = unlist(dynamicModules)
 )
 
 saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
 
 resultsDir <- file.path("outputs", runName)
+tarball <- paste0(resultsDir, ".tar.gz")
 
 ## make annual standAgeMaps from cohortData
 lapply(2011:2100, function(year) {
@@ -165,10 +175,10 @@ lapply(2011:2100, function(year) {
   writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
 })
 
-#archive::archive_write_dir(archive = paste0(resultsDir, ".tar.gz"), dir = resultsDir) ## doesn't work
-utils::tar(paste0(resultsDir, ".tar.gz"), resultsDir, compression = "gzip") ## TODO: use archive pkg
+#archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
+utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
 
-retry(quote(drive_put(paste0(resultsDir, ".tar.gz"), unique(as_id(gid_results)))),
+retry(quote(drive_put(media = tarball, path = unique(as_id(gid_results)), name = basename(tarball))),
       retries = 5, exponentialDecayBase = 2)
 
 SpaDES.project::notify_slack(runName = runName, channel = config::get("slackchannel"))

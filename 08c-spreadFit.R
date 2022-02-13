@@ -27,10 +27,14 @@ dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
-cores <- if (peutils::user("achubaty") && Sys.info()["nodename"] == "picea.for-cast.ca") {
-  c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
-} else {
-  stop("please specify number of cores to use for spreadFit")
+cores <- if (peutils::user("achubaty")) {
+  if (Sys.info()[["nodename"]] == "picea.for-cast.ca") {
+    if (fitUsing == 3) {
+      c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
+    } else if (fitUsing == 2) {
+      c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
+    }
+  }
 }
 
 stopifnot(length(cores) == length(lower)*10) ## 10 populations per parameter for DEoptim
@@ -48,6 +52,7 @@ spreadFitParams <- list(
     "lower" = lower,
     "maxFireSpread" = max(0.28, upper[1]),
     "mode" = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
+    "mutuallyExclusive" = list("youngAge" = c("class", "nf_")),
     "NP" = length(cores),
     "objFunCoresInternal" = 1L,
     "objfunFireReps" = 100,

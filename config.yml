@@ -19,6 +19,7 @@ default:
   reproduciblealgorithm: 2
   reupload: false
   resolution: 250  ## 250 for AOU; 125 for ROF
+  run: 1
   simfileformat: "qs"
   studyarea: "ROF" ## "AOU" or "ROF"
   uselandrcs: false ## hardcoded FALSE if studyArea is "ROF"
@@ -39,6 +40,7 @@ test:
 alex:
   inherits: production
   cachedb: "postgresql"
+  cacheformat: "qs"
   cloud:
     #cachedir: ""
     googleuser: "achubaty@for-cast.ca"
@@ -50,4 +52,5 @@ alex:
   reupload: !expr if (grepl("picea", Sys.info()[["nodename"]])) TRUE else FALSE
   simfileformat: "qs"
   slackchannel: "@alex.chubaty"
+  studyArea: "ROF"
   useprerun: false

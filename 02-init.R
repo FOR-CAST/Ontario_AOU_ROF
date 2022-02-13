@@ -1,8 +1,12 @@
-.starttime <- Sys.time()
+if (getDTthreads() > 4) {
+  data.table::setDTthreads(4)
+}
 
-if (file.exists(".Renviron")) readRenviron(".Renviron")
-
-Require::Require("config")
+switch(Sys.info()[["user"]],
+       "achubaty" = Sys.setenv(R_CONFIG_ACTIVE = "alex"),
+       Sys.setenv(R_CONFIG_ACTIVE = "test")
+)
+#Sys.getenv("R_CONFIG_ACTIVE") ## verify
 
 cacheDir <- config::get("paths")[["cachedir"]]
 cacheFormat <- config::get("cacheformat")
@@ -20,24 +24,10 @@ resolution <- as.integer(config::get("resolution"))
 reupload <- config::get("reupload")
 run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
-sppEquivCol <- "ON"
-studyAreaName <- if (grepl("AOU", runName)) {
-  if (grepl("test", runName)) {
-    "AOU_test"
-  } else {
-    "AOU"
-  }
-} else if (grepl("ROF", runName)) {
-  if (grepl("test", runName)) {
-    "ROF_test" ## TODO: enable test areas in preamble for RoF
-  } else {
-    "ROF"
-  }
-} else {
-  stop("runName must contain one of 'AOU' or 'ROF'.")
-}
+simFileFormat <- config::get()[["simfileformat"]]
+studyAreaName <- config::get("studyarea")
 useCloudCache <- config::get("cloud")[["usecloud"]]
-useLandR.CS <- if (grepl("ROF", studyAreaName)) FALSE else config::get("uselandrcs")
+useLandR.CS <- config::get("uselandrcs")
 useMemoise <- config::get("usememoise")
 usePlot <- config::get("plot")
 userInputPaths <- config::get("inputpaths")

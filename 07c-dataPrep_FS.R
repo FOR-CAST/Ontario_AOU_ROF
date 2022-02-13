@@ -30,6 +30,7 @@ fSdataPrepParams <- list(
     "nonForestedLCCgroups" = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
     "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
     "useCentroids" = TRUE,
+    "usePCA" = FALSE,
     "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
   )
 )
@@ -43,7 +44,7 @@ fSdataPrepObjects <- list(
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]], ## this needs to be masked
-  rstLCC = postProcess(biomassMaps2011[["rstLCC"]], studyArea = simOutPreamble[["studyArea"]]),
+  rstLCC = biomassMaps2011[["rstLCC"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],
   standAgeMap2001 = biomassMaps2001[["standAgeMap"]],
   standAgeMap2011 = biomassMaps2011[["standAgeMap"]],
