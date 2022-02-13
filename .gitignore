@@ -20,6 +20,7 @@ packages/
 
 # simulation data and outputs
 data/
+inputs
 inputs/
 outputs
 outputs/

@@ -25,8 +25,7 @@ if (!require("Require", quietly = TRUE)) {
 .spatialPkgs <- c("lwgeom", "rgdal", "rgeos", "sf", "sp", "raster", "terra")
 
 Require("PredictiveEcology/SpaDES.install@development")
-#devtools::install("c:/Eliot/GitHub/climateData", args = "--no-multiarch", upgrade = FALSE, quick = TRUE);
-#devtools::install("c:/Eliot/GitHub/reproducible", args = "--no-multiarch", upgrade = FALSE, quick = TRUE);
+
 installSpaDES(dontUpdate = .spatialPkgs)
 
 if (FALSE) {
