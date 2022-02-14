@@ -40,11 +40,8 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
     modules = preambleModules,
     loadOrder = unlist(preambleModules),
     objects = preambleObjects,
-    paths = preamblePaths#,
-    #useCache = "overwrite",
-    #useCloud = useCloudCache,
-    #cloudFolderID = cloudCacheFolderID,
-    #userTags = c("Ontario_preamble", studyAreaName)
+    paths = preamblePaths,
+    useAgeMapkNN = FALSE
   )
   saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
 
