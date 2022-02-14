@@ -49,3 +49,6 @@
 [submodule "ROF_age"]
 	path = ROF_age
 	url = https://github.com/FOR-CAST/ROF_age
+[submodule "modules/canClimateData"]
+	path = modules/canClimateData
+	url = https://github.com/PredictiveEcology/canClimateData
