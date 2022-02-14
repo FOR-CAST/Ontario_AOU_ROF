@@ -28,7 +28,13 @@ message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
 cores <- if (peutils::user("achubaty")) {
-  if (Sys.info()[["nodename"]] == "picea.for-cast.ca") {
+  if (Sys.info()[["nodename"]] == "pinus.for-cast.ca") {
+    if (fitUsing == 3) {
+      c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
+    } else if (fitUsing == 2) {
+      c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
+    }
+  } else if (Sys.info()[["nodename"]] == "picea.for-cast.ca") {
     if (fitUsing == 3) {
       c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
     } else if (fitUsing == 2) {
