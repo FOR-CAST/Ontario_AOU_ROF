@@ -13,6 +13,7 @@ default:
   ecozone: "plain" ## 'plain' or 'shield'
   inputpaths: null
   messagingNumCharsModule: 21
+  nreps: 10
   paths:
     cachedir: "cache"
     scratchdir: "/tmp/scratch/ON"
