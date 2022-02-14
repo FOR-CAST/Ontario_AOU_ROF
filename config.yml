@@ -10,6 +10,7 @@ default:
     usecloud: false
   codechecks: true
   delaystart: 0
+  ecozone: "plain"
   inputpaths: null
   messagingNumCharsModule: 21
   paths:

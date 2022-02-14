@@ -16,6 +16,7 @@ climateSSP <- as.numeric(config::get("climatessp"))
 cloudCacheFolderID <- config::get("cloud")[["cachedir"]]
 codeChecks <- config::get("codechecks")
 delayStart <- config::get("delaystart")
+ecozone <- config::get("ecozone")
 fitUsing <- if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) 3 else 0
 messagingNumCharsModule <- config::get("messagingNumCharsModule")
 newGoogleIDs <- FALSE ## gets rechecked/updated for each script (06, 07x, 08x) based on script 05
@@ -26,7 +27,7 @@ reupload <- config::get("reupload")
 run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
 simFileFormat <- config::get()[["simfileformat"]]
-studyAreaName <- config::get("studyarea")
+studyAreaName <- paste0(config::get("studyarea"), "_", ecozone)
 useCloudCache <- config::get("cloud")[["usecloud"]]
 useLandR.CS <- config::get("uselandrcs")
 useMemoise <- config::get("usememoise")
@@ -41,9 +42,13 @@ if (!exists("runName")) {
   runName <- sprintf("%s_%s_SSP%03d_run%02d", studyAreaName, climateGCM, climateSSP, run)
 } else {
   chunks <- strsplit(runName, "_")[[1]]
-  climateSSP <- substr(chunks[length(chunks) - 2], 4, 6) ## TODO: confirm
-  climateGCM <- if (grepl("ensemble", runName)) paste0(chunks[2], "_", chunks[3]) else chunks[2]
-  studyAreaName <- chunks[1]
+  climateGCM <- if (grepl("ensemble", runName)) {
+    paste0(chunks[3], "_", chunks[4])
+  } else {
+    chunks[3]
+  }
+  climateSSP <- as.numeric(substr(chunks[length(chunks) - 1], 4, 6))
+  studyAreaName <- paste0(chunks[1], "_", chunks[2])
   run <- as.numeric(substr(chunks[length(chunks)], 4, 5))
 }
 

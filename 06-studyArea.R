@@ -8,16 +8,20 @@ preambleObjects <- list(
   .runName = runName
 )
 
+preambleModules <- list("Ontario_preamble", "canClimateData")
+
 preambleParams <- list(
-  Ontario_preamble = list(
-    .plotInitialTime = ifelse(usePlot, 0, NA),
-    .resolution = resolution, ## derived from runName
+  canClimateData = list(
     .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
     climateGCM = climateGCM,
     climateSSP = climateSSP,
     historicalFireYears = 1991:2020,
-    runName = runName,
-    studyAreaName = studyAreaName
+    runName = runName
+  ),
+  Ontario_preamble = list(
+    .resolution = resolution, ## derived from runName
+    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
+    runName = runName
   )
 )
 
@@ -30,15 +34,16 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
   simOutPreamble <- loadSimList(fsimOutPreamble)
 } else {
   simOutPreamble <- simInitAndSpades(
-                          times = list(start = 0, end = 1),
-                          params = preambleParams,
-                          modules = c("Ontario_preamble"),
-                          objects = preambleObjects,
-                          paths = preamblePaths#,
-                          #useCache = "overwrite",
-                          #useCloud = useCloudCache,
-                          #cloudFolderID = cloudCacheFolderID,
-                          #userTags = c("Ontario_preamble", studyAreaName)
+    times = list(start = 0, end = 1),
+    params = preambleParams,
+    modules = preambleModules,
+    loadOrder = unlist(preambleModules),
+    objects = preambleObjects,
+    paths = preamblePaths#,
+    #useCache = "overwrite",
+    #useCloud = useCloudCache,
+    #cloudFolderID = cloudCacheFolderID,
+    #userTags = c("Ontario_preamble", studyAreaName)
   )
   saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
 
