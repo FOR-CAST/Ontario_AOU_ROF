@@ -28,7 +28,7 @@ classes <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 
              "Disturbance - Non and sparse-woody" = 19, "Disturbance - Treed or shrub" = 20,
              "Sand/Gravel/Mine Tailings" = 21, "Bedrock" = 22, "Community/Infrastructure" = 23,
              "Agriculture" = 24, "Cloud/Shadow" = -9, "Other" = -99)
-plot(biomassMaps2001$rstLCC, rain)
+#plot(biomassMaps2001$rstLCC, rain)
 # must reclassify the LCC map
 
 
