@@ -24,3 +24,7 @@ ROF,spreadOut,"",,2,1i-Kqapi6ecbKeLw0koYEmEGnXfbeHjNR
 ROF,spreadOut,"",,3,1zKxUITMEUBZ4NluEdyPcRISDT_PMGFyF
 ROF,results,"",,,1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4
 ROF_plain,simOutPreamble,CNRM-ESM2-1,370,,1uSsQadhN7bkzESKJl63FlDsR-MYdccJ7
+ROF_plain,biomassMaps2001,,,,1Zff5L_X4DbVD8oD_qs00ATt0XPmHqeQw
+ROF_shield,simOutPreamble,CanESM5,370,,1cFvp20waZdWv6tfWvGaKoLFPZlIoa4Ic
+ROF_shield,biomassMaps2001,"",,,1ZxaC75I4PnGc8phX1gnNu1ojq1601G5U
+ROF_shield,biomassMaps2011,"",,,1L_4D1YfhgzL6rT9KEa-PSnrFDNmA0dL4
