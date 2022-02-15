@@ -33,6 +33,8 @@ cores <- if (peutils::user("achubaty")) {
       c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
     } else if (fitUsing == 2) {
       c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
+    } else if (fitUsing == 1) {
+      rep("pseudotsuga.for-cast.ca", 100)
     }
   } else if (Sys.info()[["nodename"]] == "picea.for-cast.ca") {
     if (fitUsing == 3) {
