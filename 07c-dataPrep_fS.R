@@ -33,15 +33,17 @@ classes <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 
 
 
 ######WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
-wildfire2020 <- prepInputs(url = "https://drive.google.com/file/d/1Vc4cOY1jOS1y8P20S14nYBJWwkRj_SPL/view?usp=sharing",
-                           targetFile = "Fire_1985-2020_ROF.dat",
-                           fun = 'raster',
-                           rasterToMatch = simOutPreamble$rasterToMatch,
-                           alsoExtract = c("Fire_1985-2020_ROF.dat.ovr",
-                                           "Fire_1985-2020_ROF.dat.aux.xml",
-                                           "Fire_1985-2020_ROF.dat.vat.cpg",
-                                           "Fire_1985-2020_ROF.hdr"),
-                           destinationPath = dataPrepPaths$inputPath)
+wildfire2020 <- prepInputs(
+  url = "https://drive.google.com/file/d/1Vc4cOY1jOS1y8P20S14nYBJWwkRj_SPL/",
+  targetFile = "Fire_1985-2020_ROF.dat",
+  fun = "raster::raster",
+  rasterToMatch = simOutPreamble$rasterToMatch,
+  alsoExtract = c("Fire_1985-2020_ROF.dat.ovr",
+                  "Fire_1985-2020_ROF.dat.aux.xml",
+                  "Fire_1985-2020_ROF.dat.vat.cpg",
+                  "Fire_1985-2020_ROF.hdr"),
+  destinationPath = dataPrepPaths$inputPath
+)
 
 wildfire2020 <- setMinMax(wildfire2020)
 
