@@ -8,10 +8,10 @@ Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVi
 # Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9071)")
 
 studyAreaNames <- c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
-climateScenarios <- "CNRM-ESM2-1_370" # c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")
+climateScenarios <- "CNRM-ESM2-1_SSP370" # c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")
 #cs <- climateScenarios[1]
 #studyAreaName <- "ROF"
-Nreps <- 10
+Nreps <- 1 ## TODO
 
 gdriveURL <- function(studyAreaName) {
   if (studyAreaName == "AOU") {
@@ -35,13 +35,12 @@ et_rof <- elapsedTime(sim_rof)
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", gsub("SSP", "", cs), ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
     burnSummaryAllReps <- rbindlist(lapply(1:Nreps, function(rep) {
-      res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
+      runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
 
       burnDT <- qs::qload(file.path(resultsDir, "burnSummary_year2100.qs"))
@@ -164,7 +163,7 @@ lapply(studyAreaNames, function(studyAreaName) {
     gg <- plot_grid(title, p, ncol = 1, rel_heights = c(0.1, 1))
     ggsave(gg, filename = fgg, height = 8, width = 11)
 
-    drive_put(fgg, gdriveURL(studyAreaName), basename(fgg), overwrite = TRUE)
+    drive_put(fgg, gdriveURL(studyAreaName), basename(fgg))
   })
 })
 
@@ -173,13 +172,18 @@ lapply(studyAreaNames, function(studyAreaName) {
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", gsub("SSP", "", cs), ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
+    if (grepl("ROF", studyAreaName)) {
+      if (unique(res(rasterToMatch)) == 250) {
+        rasterToMatch <- disaggregate(rasterToMatch, fact = 2) ## 125 m pixels from sims
+      }
+    }
+
     burnMapAllReps <- lapply(1:Nreps, function(rep) {
-      res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
+      runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
 
       burnMap <- raster(file.path(resultsDir, "burnMap_2100_year2100.tif"))
@@ -197,8 +201,7 @@ lapply(studyAreaNames, function(studyAreaName) {
     rasterVis::levelplot(cumulBurnMap, margin = list(FUN = "mean"), ## median?
                          main = paste0("Cumulative burn map 2011-2100 under ", cs),
                          colorkey = list(
-                           at = seq(0, maxValue(cumulBurnMap),
-                                    length.out = Nreps + 1),
+                           at = seq(0, maxValue(cumulBurnMap), length.out = Nreps + 1),
                            space = "bottom",
                            axis.line = list(col = "black"),
                            width = 0.75
@@ -206,7 +209,7 @@ lapply(studyAreaNames, function(studyAreaName) {
                          par.settings = myTheme)
     dev.off()
 
-    drive_put(fburnMap, gdriveURL(studyAreaName), basename(fburnMap), overwrite = TRUE)
+    drive_put(fburnMap, gdriveURL(studyAreaName), basename(fburnMap))
   })
 })
 
@@ -250,8 +253,7 @@ lapply(studyAreaNames, function(studyAreaName) {
     rm(sim)
 
     allReps <- lapply(1:10, function(rep) {
-      res <- if (studyAreaName == "AOU") 250 else if (studyAreaName == "ROF") 125
-      runName <- sprintf("%s_%s_res%03d_rep%02d", studyAreaName, cs, res, rep)
+      runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
 
       bothYears <- lapply(c(2011, 2100), function(year) {
@@ -341,6 +343,6 @@ lapply(studyAreaNames, function(studyAreaName) {
     b
     dev.off()
 
-    drive_put(fmeanLeadingChange_gg, gdriveURL(studyAreaName), basename(fmeanLeadingChange_gg), overwrite = TRUE)
+    drive_put(fmeanLeadingChange_gg, gdriveURL(studyAreaName), basename(fmeanLeadingChange_gg))
   })
 })
