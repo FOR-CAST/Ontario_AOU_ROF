@@ -48,6 +48,7 @@ alex:
     googleuser: "achubaty@for-cast.ca"
     usecloud: false ## TODO: use cloud cache
   codechecks: false ## TODO: set false after all fixed
+  messagingNumCharsModule: 36
   nreps: 5
   paths:
     scratchdir: !expr if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) "/mnt/scratch/WBI_forecasts" else "/tmp/scratch/WBI_forecasts"
