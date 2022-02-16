@@ -165,7 +165,7 @@ tarball <- paste0(resultsDir, ".tar.gz")
 
 ## make annual standAgeMaps from cohortData
 lapply(2011:2100, function(year) {
-  cohortData <- qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
+  cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
   cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
   cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
   cohortDataReduced <- unique(cohortDataReduced)
