@@ -1,16 +1,14 @@
 library(Require)
 
 Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVis",
-          "SpaDES.core",
-          "SpaDES.tools",
-          "qs"))
+          "SpaDES.core", "SpaDES.tools", "qs"))
 
 # Require("PredictiveEcology/pemisc@development (>= 0.0.3.9001)")
 # Require("PredictiveEcology/LandR@development (>= 1.0.0.9004)")
 # Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9071)")
 
-studyAreaNames <- c("AOU", "ROF")
-climateScenarios <- c("CCSM4_RCP45", "CCSM4_RCP85")
+studyAreaNames <- c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
+climateScenarios <- "CNRM-ESM2-1_370" # c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")
 #cs <- climateScenarios[1]
 #studyAreaName <- "ROF"
 Nreps <- 10
@@ -18,7 +16,7 @@ Nreps <- 10
 gdriveURL <- function(studyAreaName) {
   if (studyAreaName == "AOU") {
     "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
-  } else if (studyAreaName == "ROF") {
+  } else if (grepl("ROF", studyAreaName)) {
     "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
   }
 }

@@ -173,6 +173,7 @@ lapply(2011:2100, function(year) {
   names(pixelGroupMap) <- "pixelGroup"
   standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
   writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+  TRUE
 })
 
 #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work

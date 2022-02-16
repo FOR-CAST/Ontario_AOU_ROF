@@ -20,14 +20,34 @@ LCC_FN_groups <- list(
 
 
 #for reference
-classes <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 3,
-             "Intertidal Marsh" = 4, "Supratidal Marsh" = 5, "Fresh Water Marsh" = 6,
-             "Heath" = 7, "Thicket Swamp" = 8, "Coniferous Swamp" = 9, "Deciduous Swamp" = 10,
-             "Open Fen" = 11, "Treed Fen" = 12, "Open Bog" = 13, "Treed Bog" = 14,
-             "Sparse Treed" = 15, "Deciduous Treed" = 16, "Mixed Treed" = 17, "Coniferous Treed" = 18,
-             "Disturbance - Non and sparse-woody" = 19, "Disturbance - Treed or shrub" = 20,
-             "Sand/Gravel/Mine Tailings" = 21, "Bedrock" = 22, "Community/Infrastructure" = 23,
-             "Agriculture" = 24, "Cloud/Shadow" = -9, "Other" = -99)
+classes <- c(
+  "Clear Open Water" = 1,
+  "Turbid Water" = 2,
+  "Intertidal Mudflat" = 3,
+  "Intertidal Marsh" = 4,
+  "Supratidal Marsh" = 5,
+  "Fresh Water Marsh" = 6,
+  "Heath" = 7,
+  "Thicket Swamp" = 8,
+  "Coniferous Swamp" = 9,
+  "Deciduous Swamp" = 10,
+  "Open Fen" = 11,
+  "Treed Fen" = 12,
+  "Open Bog" = 13,
+  "Treed Bog" = 14,
+  "Sparse Treed" = 15,
+  "Deciduous Treed" = 16,
+  "Mixed Treed" = 17,
+  "Coniferous Treed" = 18,
+  "Disturbance - Non and sparse-woody" = 19,
+  "Disturbance - Treed or shrub" = 20,
+  "Sand/Gravel/Mine Tailings" = 21,
+  "Bedrock" = 22,
+  "Community/Infrastructure" = 23,
+  "Agriculture" = 24,
+  "Cloud/Shadow" = -9,
+  "Other" = -99
+)
 #plot(biomassMaps2001$rstLCC, rain)
 # must reclassify the LCC map
 

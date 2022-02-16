@@ -29,7 +29,9 @@ Require:::messageDF(dfT)
 
 cores <- if (peutils::user("achubaty")) {
   if (Sys.info()[["nodename"]] == "pinus.for-cast.ca") {
-    if (fitUsing == 3) {
+    if (fitUsing == 4) {
+      c(rep("localhost", 32), rep("picea.for-cast.ca", 16), rep("pseudotsuga.for-cast.ca", 52))
+    } else if (fitUsing == 3) {
       c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
     } else if (fitUsing == 2) {
       c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
