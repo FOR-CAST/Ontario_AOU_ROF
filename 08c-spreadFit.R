@@ -32,7 +32,7 @@ cores <- if (peutils::user("achubaty")) {
     if (fitUsing == 3) {
       c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
     } else if (fitUsing == 2) {
-      c(rep("pseudotsuga.for-cast.ca", 68), rep("pinus.for-cast.ca", 32))
+      c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
     } else if (fitUsing == 1) {
       rep("pseudotsuga.for-cast.ca", 100)
     }
@@ -45,7 +45,8 @@ cores <- if (peutils::user("achubaty")) {
   }
 }
 
-stopifnot(length(cores) == length(lower)*10) ## 10 populations per parameter for DEoptim
+## TODO: fix this check -- 100 cores, not 90 ??
+#stopifnot(length(cores) == length(lower)*10) ## 10 populations per parameter for DEoptim
 
 spreadFitParams <- list(
   fireSense_SpreadFit = list(

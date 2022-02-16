@@ -45,7 +45,7 @@ wildfire2020 <- prepInputs(
   destinationPath = dataPrepPaths$inputPath
 )
 
-wildfire2020 <- setMinMax(wildfire2020)
+wildfire2020 <- raster::setMinMax(wildfire2020)
 
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(

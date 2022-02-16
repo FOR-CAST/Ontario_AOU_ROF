@@ -31,7 +31,7 @@ installSpaDES(dontUpdate = .spatialPkgs)
 if (FALSE) {
   installSpatialPackages()
   #install.packages(c("raster", "terra"), repos = "https://rspatial.r-universe.dev")
-  sf::sf_extSoftVersion() ## want GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+  sf::sf_extSoftVersion() ## want GEOS 3.9.1, GDAL 3.3.2, PROJ 7.2.1
 }
 
 out <- makeSureAllPackagesInstalled(modulePath = moduleDir)
