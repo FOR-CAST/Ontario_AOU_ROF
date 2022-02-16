@@ -23,7 +23,7 @@ message(crayon::red("Data prep", runName, "complete"))
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
 
-fitUsing <- 2 ## 1: pseudotsuga only; 2: pinus + pseudotsuga
+fitUsing <- 3 ## 1: pseudotsuga; 2: 1 + pinus; 3: 2 + picea
 for (i in 1:nReps) {
   run <- i
   runName <- gsub("run[0-9][0-9]", sprintf("run%02d", run), runName)

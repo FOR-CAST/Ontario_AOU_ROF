@@ -17,7 +17,7 @@ default:
   paths:
     cachedir: "cache"
     scratchdir: "/tmp/scratch/ON"
-  plot: true
+  plot: false
   reproduciblealgorithm: 2
   reupload: false
   resolution: 250  ## 250 for AOU; 125 for ROF
