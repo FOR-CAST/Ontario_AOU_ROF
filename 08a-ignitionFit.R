@@ -9,7 +9,8 @@ biggestObj <- as.numeric(object.size(fSsimDataPrep[["fireSense_ignitionCovariate
 
 form <- fSsimDataPrep[["fireSense_ignitionFormula"]]
 
-nCores <- pmin(14, pemisc::optimalClusterNum(biggestObj)/2 - 6)
+nCores <- ifelse(Sys.info()[["nodename"]] == "pinus.for-cast.ca", 4, 8) ## 400 GB pinus
+
 ignitionFitParams <- list(
   fireSense_IgnitionFit = list(
     # .plotInitialTime = 1,
