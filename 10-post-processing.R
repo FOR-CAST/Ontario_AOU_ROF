@@ -94,7 +94,7 @@ lapply(studyAreaNames, function(studyAreaName) {
       geom_point() +
       # geom_smooth() +
       ylim(0, max(dat$sumBurn) * 1.1) +
-      labs(y = "cumulative annual burn (ha)",
+      labs(y = "annual area burned (ha)",
            title = paste(studyAreaName, "rep", run),
            subtitle = paste(gcm, ssp))
 
