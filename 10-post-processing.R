@@ -255,7 +255,7 @@ lapply(studyAreaNames, function(studyAreaName) {
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
-    allReps <- lapply(1:10, function(rep) {
+    allReps <- lapply(1:Nreps, function(rep) {
       runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
 
