@@ -220,6 +220,9 @@ lapply(studyAreaNames, function(studyAreaName) {
 #    if conifer to decid = 1, if decid to conifer = -1, otherwise 0
 # 2. Create one single map of "proportion net conversion" sum of difference / Nreps
 
+source("modules/Ontario_preamble/R/sppEquiv.R") ## makeSppEquivON()
+sppEquiv <- makeSppEquivON()
+
 treeSpecies <- unique(sppEquiv[, c("ON", "Type")])
 setnames(treeSpecies, "ON", "Species")
 
@@ -248,7 +251,7 @@ leadingPercentage <- 0.8
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
     sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", cs, ".qs")))
+                                 paste0("simOutPreamble_", studyAreaName, "_", gsub("SSP", "", cs), ".qs")))
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
