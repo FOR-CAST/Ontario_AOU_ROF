@@ -25,22 +25,104 @@ gdriveURL <- function(studyAreaName) {
 
 ###############
 
-sim <- loadSimList("outputs/AOU_CCSM4_RCP85_res250_rep02/AOU_CCSM4_RCP85_res250_rep02.qs")
-et <- elapsedTime(sim, units = "hours")
+#sim <- loadSimList("outputs/AOU_CCSM4_RCP85_res250_rep02/AOU_CCSM4_RCP85_res250_rep02.qs")
+#et <- elapsedTime(sim, units = "hours")
 
-sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
-et_rof <- elapsedTime(sim_rof)
+#sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
+#et_rof <- elapsedTime(sim_rof)
 
 # summary figures -----------------------------------------------------------------------------
 
-## BURN SUMMARIES
+## HISTORIC FIRES
+# same historic fire polygons for all sims, so it doesn't matter which one we load
+sim <- loadSimList(file.path("outputs", studyAreaNames[[1]], paste0("fSsimDataPrep_", studyAreaNames[[1]], ".qs")))
+firePolys <- sim$firePolys
+ignitionFirePoints <- sim$ignitionFirePoints
+rm(sim)
+
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
-    sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", gsub("SSP", "", cs), ".qs")))
-    rasterToMatch <- sim$rasterToMatchReporting
-    rm(sim)
+    gcm <- strsplit(cs, "_")[[1]][1]
+    ssp <- strsplit(cs, "_")[[1]][2]
+    runName <- sprintf("%s_%s_run01", studyAreaName, cs) ## doesn't matter which run, all same
+    run <- as.integer(strsplit(runName, "run")[[1]][2])
+    mainSim <- loadSimList(file.path("outputs", runName, paste0(runName, ".qs")))
+    burnSummary <- mainSim$burnSummary
+    rm(mainSim)
 
+    historicalBurns <- do.call(what = rbind, args = firePolys)
+    historicalBurns <- as.data.table(historicalBurns@data)
+
+    ## restrict to escapes only, but sum poly_ha for burns
+    res <- ifelse(grepl("ROF", studyAreaName), 125, 250)
+    historicalBurns <- historicalBurns[SIZE_HA > res, .(sumBurn = sum(as.numeric(POLY_HA)), nFires = .N), .(YEAR)]
+    setnames(historicalBurns, "YEAR", "year")
+    historicalBurns[, stat := 'observed']
+    projectedEscapes <- burnSummary[areaBurnedHa > res, .(nFires = .N), .(year)]
+    projectedBurns <- burnSummary[, .(sumBurn = sum(areaBurnedHa)), .(year)]
+    projectedBurns <- projectedBurns[projectedEscapes, on = c("year")]
+    projectedBurns[, stat := "projected"]
+    dat <- rbind(projectedBurns, historicalBurns)
+    rm(mainSim)
+
+    trueHistoricalIgs <- as.data.table(ignitionFirePoints) %>%
+      .[, .N, .(YEAR)] %>%
+      setnames(., "YEAR", "year") %>%
+      .[, stat := "observed"] %>%
+      .[, year := as.numeric(year)]
+    projectedIgs <- burnSummary[, .N, .(year)] %>%
+      .[, stat := "projected"]
+    dat2 <- rbind(trueHistoricalIgs, projectedIgs)
+
+    gIgnitions <- ggplot(data = dat2, aes(x = year, y = N, col = stat)) +
+      geom_point() +
+      # geom_smooth() +
+      ylim(0, max(dat2$N) * 1.2) +
+      labs(y = "number of ignitions",
+           title = studyAreaName,
+           subtitle = paste(gcm, ssp))
+
+    gEscapes <- ggplot(data = dat, aes(x = year, y = nFires, col = stat)) +
+      geom_point() +
+      # geom_smooth() +
+      ylim(0, max(dat$nFires) * 1.2) +
+      labs(y = "number of escaped fires",
+           title = studyAreaName,
+           subtitle = paste(gcm, ssp))
+
+    gBurns <- ggplot(data = dat, aes(x = year, y = sumBurn, col = stat)) +
+      geom_point() +
+      # geom_smooth() +
+      ylim(0, max(dat$sumBurn) * 1.1) +
+      labs(y = "cumulative annual burn (ha)",
+           title = paste(studyAreaName, "rep", run),
+           subtitle = paste(gcm, ssp))
+
+
+    figs <- list(
+      ignition = file.path("outputs", runName, "figures", "simulated_Ignitions.png"),
+      escape = file.path("outputs", runName, "figures", "simulated_Escapes.png"),
+      spread = file.path("outputs", runName, "figures", "simulated_burnArea.png")
+    )
+    ggsave(plot = gIgnitions, filename = figs$ignition)
+    ggsave(plot = gEscapes, filename = figs$escape)
+    ggsave(plot = gBurns, filename = figs$spread)
+
+    lapply(figs, function(f) {
+      drive_put(f, gdriveURL(studyAreaName), basename(f))
+    })
+  })
+})
+
+## BURN SUMMARIES
+# same RTM for all sims, so it doesn't matter which one we load
+sim <- loadSimList(file.path("outputs", studyAreaNames[[1]],
+                             paste0("simOutPreamble_", studyAreaNames[[1]], "_", gsub("SSP", "", climateScenarios[[1]]), ".qs")))
+rasterToMatch <- sim$rasterToMatchReporting
+rm(sim)
+
+lapply(studyAreaNames, function(studyAreaName) {
+  lapply(climateScenarios, function(cs) {
     burnSummaryAllReps <- rbindlist(lapply(1:Nreps, function(rep) {
       runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
