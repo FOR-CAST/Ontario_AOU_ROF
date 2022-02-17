@@ -9,13 +9,13 @@ try(file.move(
 ))
 
 try(file.move(
-  file.path("outputs", studyAreaName, "figures", "IgnitionRatePer100.png"),
-  file.path("outputs", studyAreaName, "figures", paste0("IgnitionRatePer100_", studyAreaName, ".png"))
+  file.path("outputs", studyAreaName, "figures", "IgnitionRatePer25.png"),
+  file.path("outputs", studyAreaName, "figures", paste0("IgnitionRatePer25_", studyAreaName, ".png"))
 ))
 
 filesToUpload <- c(
   paste0("figures/ignitionNoFiresFitted_", studyAreaName, ".png"),
-  paste0("figures/IgnitionRatePer100_", studyAreaName, ".png")
+  paste0("figures/IgnitionRatePer25_", studyAreaName, ".png")
 )
 
 gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
