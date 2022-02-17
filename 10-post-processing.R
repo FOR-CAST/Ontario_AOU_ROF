@@ -5,23 +5,26 @@ source("01-packages.R")
 Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVis",
           "SpaDES.core", "SpaDES.tools", "qs"))
 
-# Require("PredictiveEcology/pemisc@development (>= 0.0.3.9001)")
-# Require("PredictiveEcology/LandR@development (>= 1.0.0.9004)")
-# Require("PredictiveEcology/fireSenseUtils@development (>= 0.0.4.9071)")
-
 studyAreaNames <- c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
 climateScenarios <- "CNRM-ESM2-1_SSP370" # c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")
-#cs <- climateScenarios[1]
-#studyAreaName <- "ROF"
+# cs <- climateScenarios[1]
+# studyAreaName <- studyAreaNames[1]
+# runName <- sprintf("%s_%s_run01", studyAreaName, cs)
 Nreps <- 1 ## TODO
 
-gdriveURL <- function(studyAreaName) {
-  if (studyAreaName == "AOU") {
-    "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
-  } else if (grepl("ROF", studyAreaName)) {
-    "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
-  }
-}
+source("05-google-ids.R")
+
+# same RTM for all sims, so it doesn't matter which one we load
+sim_SA <- loadSimList(file.path("outputs", studyAreaNames[[1]],
+                             paste0("simOutPreamble_", studyAreaNames[[1]], "_", gsub("SSP", "", climateScenarios[[1]]), ".qs")))
+rasterToMatch <- simsimSA$rasterToMatchReporting
+rm(sim_SA)
+
+# same historic fire polygons for all sims, so it doesn't matter which one we load
+sim_fsDP <- loadSimList(file.path("outputs", studyAreaNames[[1]], paste0("fSsimDataPrep_", studyAreaNames[[1]], ".qs")))
+firePolys <- sim_fsDP$firePolys
+ignitionFirePoints <- sim_fsDP$ignitionFirePoints
+rm(sim_fsDP)
 
 ###############
 
@@ -34,21 +37,15 @@ gdriveURL <- function(studyAreaName) {
 # summary figures -----------------------------------------------------------------------------
 
 ## HISTORIC FIRES
-# same historic fire polygons for all sims, so it doesn't matter which one we load
-sim <- loadSimList(file.path("outputs", studyAreaNames[[1]], paste0("fSsimDataPrep_", studyAreaNames[[1]], ".qs")))
-firePolys <- sim$firePolys
-ignitionFirePoints <- sim$ignitionFirePoints
-rm(sim)
-
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
     gcm <- strsplit(cs, "_")[[1]][1]
     ssp <- strsplit(cs, "_")[[1]][2]
     runName <- sprintf("%s_%s_run01", studyAreaName, cs) ## doesn't matter which run, all same
     run <- as.integer(strsplit(runName, "run")[[1]][2])
-    mainSim <- loadSimList(file.path("outputs", runName, paste0(runName, ".qs")))
-    burnSummary <- mainSim$burnSummary
-    rm(mainSim)
+    sim <- loadSimList(file.path("outputs", runName, paste0(runName, ".qs")))
+    burnSummary <- sim$burnSummary
+    rm(sim)
 
     historicalBurns <- do.call(what = rbind, args = firePolys)
     historicalBurns <- as.data.table(historicalBurns@data)
@@ -63,7 +60,6 @@ lapply(studyAreaNames, function(studyAreaName) {
     projectedBurns <- projectedBurns[projectedEscapes, on = c("year")]
     projectedBurns[, stat := "projected"]
     dat <- rbind(projectedBurns, historicalBurns)
-    rm(mainSim)
 
     trueHistoricalIgs <- as.data.table(ignitionFirePoints) %>%
       .[, .N, .(YEAR)] %>%
@@ -99,28 +95,24 @@ lapply(studyAreaNames, function(studyAreaName) {
            subtitle = paste(gcm, ssp))
 
 
+    figDir <- file.path("outputs", runName, "figures")
     figs <- list(
-      ignition = file.path("outputs", runName, "figures", "simulated_Ignitions.png"),
-      escape = file.path("outputs", runName, "figures", "simulated_Escapes.png"),
-      spread = file.path("outputs", runName, "figures", "simulated_burnArea.png")
+      ignition = file.path(figDir, paste0("simulated_Ignitions", studyAreaName, ".png")),
+      escape = file.path(figDir, paste0("simulated_Escapes", studyAreaName, ".png")),
+      spread = file.path(figDir, paste0("simulated_burnArea", studyAreaName, ".png"))
     )
     ggsave(plot = gIgnitions, filename = figs$ignition)
     ggsave(plot = gEscapes, filename = figs$escape)
     ggsave(plot = gBurns, filename = figs$spread)
 
+    gid <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
     lapply(figs, function(f) {
-      drive_put(f, gdriveURL(studyAreaName), basename(f))
+      drive_put(f, gid, basename(f))
     })
   })
 })
 
 ## BURN SUMMARIES
-# same RTM for all sims, so it doesn't matter which one we load
-sim <- loadSimList(file.path("outputs", studyAreaNames[[1]],
-                             paste0("simOutPreamble_", studyAreaNames[[1]], "_", gsub("SSP", "", climateScenarios[[1]]), ".qs")))
-rasterToMatch <- sim$rasterToMatchReporting
-rm(sim)
-
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
     burnSummaryAllReps <- rbindlist(lapply(1:Nreps, function(rep) {
@@ -132,7 +124,7 @@ lapply(studyAreaNames, function(studyAreaName) {
                                 N = burnDT[["N"]],
                                 areaBurnedHa = burnDT[["areaBurnedHa"]],
                                 rep = as.integer(rep))
-      burnSummary ## TODO: this is the BUFFERED studyARea, not the REPORTING one!!!!
+      burnSummary ## TODO: this is the BUFFERED studyArea, not the REPORTING one!!!!
     }))
 
     # totAreaBurned <- burnSummaryAllReps[, lapply(.SD, sum), by = c("year", "rep"), .SDcols = "areaBurnedHa"]
@@ -247,7 +239,8 @@ lapply(studyAreaNames, function(studyAreaName) {
     gg <- plot_grid(title, p, ncol = 1, rel_heights = c(0.1, 1))
     ggsave(gg, filename = fgg, height = 8, width = 11)
 
-    drive_put(fgg, gdriveURL(studyAreaName), basename(fgg))
+    gid <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
+    drive_put(fgg, gid, basename(fgg))
   })
 })
 
@@ -255,11 +248,6 @@ lapply(studyAreaNames, function(studyAreaName) {
 
 lapply(studyAreaNames, function(studyAreaName) {
   lapply(climateScenarios, function(cs) {
-    sim <- loadSimList(file.path("outputs", studyAreaName,
-                                 paste0("simOutPreamble_", studyAreaName, "_", gsub("SSP", "", cs), ".qs")))
-    rasterToMatch <- sim$rasterToMatchReporting
-    rm(sim)
-
     if (grepl("ROF", studyAreaName)) {
       if (unique(res(rasterToMatch)) == 250) {
         rasterToMatch <- disaggregate(rasterToMatch, fact = 2) ## 125 m pixels from sims
@@ -293,7 +281,8 @@ lapply(studyAreaNames, function(studyAreaName) {
                          par.settings = myTheme)
     dev.off()
 
-    drive_put(fburnMap, gdriveURL(studyAreaName), basename(fburnMap))
+    gid <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
+    drive_put(fburnMap, gid, basename(fburnMap))
   })
 })
 
@@ -440,6 +429,7 @@ lapply(studyAreaNames, function(studyAreaName) {
     b
     dev.off()
 
-    drive_put(fmeanLeadingChange_gg, gdriveURL(studyAreaName), basename(fmeanLeadingChange_gg))
+    gid <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
+    drive_put(fmeanLeadingChange_gg, gid, basename(fmeanLeadingChange_gg))
   })
 })

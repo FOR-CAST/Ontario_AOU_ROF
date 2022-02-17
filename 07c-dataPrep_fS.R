@@ -136,7 +136,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
     )
   }
 
-  source("R/upload_spreadFit_coeffs.R")
+  source("R/upload_fSDatPrepFit_vegCoeffs.R")
 }
 
 if (isTRUE(firstRunMDCplots)) {
