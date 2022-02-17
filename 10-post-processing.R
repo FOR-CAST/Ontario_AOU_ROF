@@ -1,4 +1,6 @@
-library(Require)
+moduleDir <- "modules"
+
+source("01-packages.R")
 
 Require(c("cowplot", "data.table", "ggplot2", "googledrive", "raster", "rasterVis",
           "SpaDES.core", "SpaDES.tools", "qs"))
