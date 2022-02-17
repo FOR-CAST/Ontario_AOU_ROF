@@ -255,6 +255,12 @@ lapply(studyAreaNames, function(studyAreaName) {
     rasterToMatch <- sim$rasterToMatchReporting
     rm(sim)
 
+    if (grepl("ROF", studyAreaName)) {
+      if (unique(res(rasterToMatch)) == 250) {
+        rasterToMatch <- disaggregate(rasterToMatch, fact = 2) ## 125 m pixels from sims
+      }
+    }
+
     allReps <- lapply(1:Nreps, function(rep) {
       runName <- sprintf("%s_%s_run%02d", studyAreaName, cs, rep)
       resultsDir <- file.path("outputs", runName)
@@ -304,11 +310,15 @@ lapply(studyAreaNames, function(studyAreaName) {
 
       leadingStackChange
     })
-    names(allReps) <- paste0("rep", 1:10)
+    names(allReps) <- paste0("rep", 1:Nreps)
 
     fmeanLeadingChange <- file.path("outputs", studyAreaName,
                                     paste0("leadingChange_", studyAreaName, "_", cs, ".tif"))
-    meanLeadingChange <- raster::calc(raster::stack(allReps), mean, na.rm = TRUE)
+    if (length() > 1) {
+      meanLeadingChange <- raster::calc(raster::stack(allReps), mean, na.rm = TRUE)
+    } else {
+      meanLeadingChange <- allReps[[1]]
+    }
     meanLeadingChange <- mask(crop(meanLeadingChange, rasterToMatch), rasterToMatch)
     writeRaster(meanLeadingChange, filename = fmeanLeadingChange, overwrite = TRUE)
 
