@@ -9,11 +9,10 @@ try(file.move(
 ))
 
 filesToUpload <- c(
-  sprintf("spreadFit_coeffs_%s_run_%02d.png", studyAreaName, run)
+  file.path("outputs", studyAreaName, "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png", studyAreaName, run))
 )
 
 gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
 lapply(filesToUpload, function(f) {
-  retry(quote(drive_put(file.path("outputs", studyAreaName, f), unique(as_id(gid_results)))),
-        retries = 5, exponentialDecayBase = 2)
+  retry(quote(drive_put(f, unique(as_id(gid_results)))), retries = 5, exponentialDecayBase = 2)
 })
