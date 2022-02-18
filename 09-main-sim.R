@@ -179,7 +179,6 @@ lapply(2011:2100, function(year) {
 #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
 utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
 
-retry(quote(drive_put(media = tarball, path = unique(as_id(gid_results)), name = basename(tarball))),
-      retries = 5, exponentialDecayBase = 2)
+## we will upload at the end to prevent timeouts from delaying subsequent sims
 
 SpaDES.project::notify_slack(runName = runName, channel = config::get("slackchannel"))
