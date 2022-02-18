@@ -27,6 +27,10 @@ spreadFitPaths <- defaultPaths
 spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit", runName)
 
 ## main (dynamic) simulation
-dynamicPaths <-  defaultPaths
+dynamicPaths <- defaultPaths
 dynamicPaths$cachePath <- file.path(cacheDir, "cache_sim")
 dynamicPaths$outputPath <- file.path("outputs", runName)
+
+posthocPaths <- defaultPaths
+posthocPaths[["cachePath"]] <- file.path(cacheDir, "cache_posthoc")
+posthocPaths[["outputPath"]] <- dirname(defaultPaths[["outputPath"]])
