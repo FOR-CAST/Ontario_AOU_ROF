@@ -66,19 +66,20 @@ wildfire2020 <- raster::setMinMax(wildfire2020)
 
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
-    ".studyAreaName" = studyAreaName,
-    ".useCache" = ".inputObjects",
-    "climateGCM" = climateGCM,
-    "climateSSP" = climateSSP,
-    "fireYears" = 2001:2020,
-    "missingLCCgroup" = if (grepl("AOU", studyAreaName)) "nonForest_highFlam" else "nonForest_lowFlam",
-    "nonflammableLCC" = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
-    "nonForestedLCCgroups" = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
-    "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
-    "useCentroids" = TRUE,
-    "useFireRaster" = TRUE,
-    "usePCA" = FALSE,
-    "whichModulesToPrepare" = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
+    .studyAreaName = studyAreaName,
+    .useCache = ".inputObjects",
+    climateGCM = climateGCM,
+    climateSSP = climateSSP,
+    fireYears = 2001:2020,
+    forestedLCC = simOutPreamble[["treeClasses"]],
+    missingLCCgroup = if (grepl("AOU", studyAreaName)) "nonForest_highFlam" else "nonForest_lowFlam",
+    nonflammableLCC = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
+    nonForestedLCCgroups = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
+    sppEquivCol = simOutPreamble[["sppEquivCol"]],
+    useCentroids = TRUE,
+    useFireRaster = TRUE,
+    usePCA = FALSE,
+    whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
   )
 )
 
