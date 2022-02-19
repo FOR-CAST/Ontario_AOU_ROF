@@ -4,19 +4,17 @@ do.call(setPaths, dataPrepPaths)
 gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 
-LCC2005_nonFlam <- c(0, 25, 30, 33, 36:39) ## original fireSense_dataPrepFit defaults
-LCC_FN_nonFlam <- c(1:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
-
 LCC2005_groups <- list(
   nonForest_highFlam = c(16:19, 22),
   nonForest_lowFlam = c(21, 23:24, 26:29, 31)
-  ## nonForest_nonFlam = c(0, 25, 30, 33, 36:39)
 )
+LCC2005_nonFlam <- c(0, 25, 30, 33, 36:39) ## original fireSense_dataPrepFit defaults
+
 LCC_FN_groups <- list(
   nonForest_highFlam = NULL, ## none
   nonForest_lowFlam = c(8, 13)
-  ## nonForest_nonFlam = c(1:7, 11, 21:14)
 )
+LCC_FN_nonFlam <- c(1:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
 
 ## Far North Land Cover Classes (for reference)
 LCC_FN_classes <- c(
