@@ -10,7 +10,7 @@ default:
     usecloud: false
   codechecks: true
   delaystart: 0
-  ecozone: "plain" ## 'plain' or 'shield'
+  ecozone: "shield" ## 'plain' or 'shield'
   inputpaths: null
   messagingNumCharsModule: 21
   nreps: 10

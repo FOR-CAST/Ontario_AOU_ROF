@@ -1,5 +1,3 @@
-moduleDir <- "modules"
-
 source("01-packages.R")
 
 source("02-init.R")
@@ -12,12 +10,12 @@ if (delayStart > 0 & run == 1) {
   Sys.sleep(delayStart*6)
 }
 
+usePrerun = TRUE; reupload = FALSE
 source("06-studyArea.R")
 source("07a-dataPrep_2001.R")
 source("07b-dataPrep_2011.R")
 source("07c-dataPrep_fS.R")
 
-usePrerun = TRUE; reupload = FALSE
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
 source("08c-spreadFit.R")

@@ -18,9 +18,8 @@ LCC_FN_groups <- list(
   ## nonForest_nonFlam = c(1:7, 11, 21:14)
 )
 
-
-#for reference
-classes <- c(
+## Far North Land Cover Classes (for reference)
+LCC_FN_classes <- c(
   "Clear Open Water" = 1,
   "Turbid Water" = 2,
   "Intertidal Mudflat" = 3,

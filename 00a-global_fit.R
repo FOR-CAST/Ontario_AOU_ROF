@@ -1,5 +1,3 @@
-moduleDir <- "modules"
-
 source("01-packages.R")
 
 source("02-init.R")
@@ -12,6 +10,7 @@ if (delayStart > 0) {
   Sys.sleep(delayStart*60)
 }
 
+reupload = TRUE; usePrerun = FALSE;
 source("06-studyArea.R")
 
 source("07a-dataPrep_2001.R")
@@ -19,11 +18,12 @@ source("07b-dataPrep_2011.R")
 source("07c-dataPrep_fS.R")
 
 message(crayon::red("Data prep", runName, "complete"))
-
+reupload = TRUE; usePrerun = FALSE;
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
 
-fitUsing <- 3 ## 1: pseudotsuga; 2: 1 + pinus; 3: 2 + picea
+fitUsing <- 3 ## 1: pseudotsuga; 2: 1 + picea; 3: 2 + pinus
+nReps <- 5
 for (i in 1:nReps) {
   run <- i
   runName <- gsub("run[0-9][0-9]", sprintf("run%02d", run), runName)
