@@ -16,6 +16,7 @@ default:
   nreps: 10
   paths:
     cachedir: "cache"
+    libpathdeoptim: !expr Require::checkPath(Sys.getenv("PRJ_PKG_DIR")) ## absolute path!
     scratchdir: "/tmp/scratch/ON"
   plot: false
   reproduciblealgorithm: 2
@@ -51,6 +52,7 @@ alex:
   messagingNumCharsModule: 36
   nreps: 5
   paths:
+    libpathdeoptim: "~/GitHub/Ontario_AOU_ROF/packages"
     scratchdir: !expr if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) "/mnt/scratch/WBI_forecasts" else "/tmp/scratch/WBI_forecasts"
   reupload: !expr if (grepl("picea", Sys.info()[["nodename"]])) TRUE else FALSE
   simfileformat: "qs"

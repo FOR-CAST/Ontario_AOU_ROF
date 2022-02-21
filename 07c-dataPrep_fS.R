@@ -12,9 +12,9 @@ LCC2005_nonFlam <- c(0, 25, 30, 33, 36:39) ## original fireSense_dataPrepFit def
 
 LCC_FN_groups <- list(
   nonForest_highFlam = NULL, ## none
-  nonForest_lowFlam = c(8, 13)
+  nonForest_lowFlam = c(9, 13)
 )
-LCC_FN_nonFlam <- c(1:6, 7, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
+LCC_FN_nonFlam <- c(1:6, 7:8, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
 
 ## Far North Land Cover Classes (for reference)
 LCC_FN_classes <- c(
@@ -45,11 +45,9 @@ LCC_FN_classes <- c(
   "Cloud/Shadow" = -9,
   "Other" = -99
 )
-#plot(biomassMaps2001$rstLCC, rain)
-# must reclassify the LCC map
 
 
-######WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
+## WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
 wildfire2020 <- prepInputs(
   url = "https://drive.google.com/file/d/1Vc4cOY1jOS1y8P20S14nYBJWwkRj_SPL/",
   targetFile = "Fire_1985-2020_ROF.dat",
@@ -72,6 +70,7 @@ fSdataPrepParams <- list(
     climateSSP = climateSSP,
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["treeClasses"]],
+    libPathDEoptim = libPathDEoptim,
     missingLCCgroup = if (grepl("AOU", studyAreaName)) "nonForest_highFlam" else "nonForest_lowFlam",
     nonflammableLCC = if (grepl("AOU", studyAreaName)) LCC2005_nonFlam else LCC_FN_nonFlam,
     nonForestedLCCgroups = if (grepl("AOU", studyAreaName)) LCC2005_groups else LCC_FN_groups,
@@ -103,7 +102,7 @@ fSdataPrepObjects <- list(
 invisible(replicate(10, gc()))
 
 ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", studyAreaName), Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
+if (isTRUE(usePrerun)) {
   if (!file.exists(ffSsimDataPrep)) {
     googledrive::drive_download(file = as_id(gid_fSsimDataPrep), path = ffSsimDataPrep)
   }
@@ -122,19 +121,6 @@ if (isTRUE(usePrerun) & isFALSE(upload_fSsimDataPrep)) {
     userTags = c("fireSense_dataPrepFit", studyAreaName)
   )
   saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
-
-  if (isTRUE(upload_fSsimDataPrep)) {
-    fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep))
-    gid_fSsimDataPrep <- as.character(fdf$id)
-    rm(fdf)
-    gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "fSsimDataPrep",  runID = NA,
-                 gcm = NA, ssp = NA, gid = gid_fSsimDataPrep),
-      gdriveSims
-    )
-  }
-
-  source("R/upload_fSDatPrepFit_vegCoeffs.R")
 }
 
 if (isTRUE(firstRunMDCplots)) {
@@ -149,6 +135,19 @@ if (isTRUE(firstRunMDCplots)) {
   checkPath(dirname(fggMDC), create = TRUE)
 
   ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
+}
+
+if (isTRUE(upload_fSsimDataPrep)) {
+  fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep))
+  gid_fSsimDataPrep <- as.character(fdf$id)
+  rm(fdf)
+  gdriveSims <- update_googleids(
+    data.table(studyArea = studyAreaName, simObject = "fSsimDataPrep",  runID = NA,
+               gcm = NA, ssp = NA, gid = gid_fSsimDataPrep),
+    gdriveSims
+  )
+
+  source("R/upload_fSDatPrepFit_vegCoeffs.R")
 
   googledrive::drive_put(
     media = fggMDC,

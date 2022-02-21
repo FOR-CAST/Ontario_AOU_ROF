@@ -19,6 +19,7 @@ delayStart <- config::get("delaystart")
 ecozone <- config::get("ecozone")
 fitUsing <- if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) 3 else 0
 messagingNumCharsModule <- config::get("messagingNumCharsModule")
+libPathDEoptim <- config::get("paths")[["libpathdeoptim"]]
 newGoogleIDs <- FALSE ## gets rechecked/updated for each script (06, 07x, 08x) based on script 05
 nReps <- config::get("nreps")
 reproducibleAlgorithm <- config::get("reproduciblealgorithm")

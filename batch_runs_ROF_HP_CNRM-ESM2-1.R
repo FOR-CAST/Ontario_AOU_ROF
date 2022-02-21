@@ -10,7 +10,7 @@
 # runName <- "ROF_plain_CNRM-ESM2-1_SSP245_run09"; source("00b-global_sim.R")
 # runName <- "ROF_plain_CNRM-ESM2-1_SSP245_run10"; source("00b-global_sim.R")
 
-# runName <- "ROF_plain_CNRM-ESM2-1_SSP370_run01"; source("00b-global_sim.R")
+runName <- "ROF_plain_CNRM-ESM2-1_SSP370_run01"; source("00b-global_sim.R")
 runName <- "ROF_plain_CNRM-ESM2-1_SSP370_run02"; source("00b-global_sim.R")
 runName <- "ROF_plain_CNRM-ESM2-1_SSP370_run03"; source("00b-global_sim.R")
 runName <- "ROF_plain_CNRM-ESM2-1_SSP370_run04"; source("00b-global_sim.R")
