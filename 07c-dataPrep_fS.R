@@ -16,6 +16,13 @@ LCC_FN_groups <- list(
 )
 LCC_FN_nonFlam <- c(1:6, 7:8, 10:11, 21:24) ## TODO: re-eval 7, 12:14, 21:22 per Rmd
 
+## compare nonForest classes with `simOutPreamble[["treeClasses"]]`
+if (grepl("ROF", studyAreaName)) {
+  all(1:24 %in% c(simOutPreamble[["treeClasses"]], unlist(LCC_FN_groups), LCC_FN_nonFlam))
+} else {
+  all(1:14 %in% c(simOutPreamble[["treeClasses"]], unlist(LCC2005_groups), LCC2005_nonFlam))
+}
+
 ## Far North Land Cover Classes (for reference)
 LCC_FN_classes <- c(
   "Clear Open Water" = 1,
