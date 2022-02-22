@@ -39,6 +39,20 @@ firePolygons <- prepInputs(url = fireUrl, destinationPath = dPath, fun = "sf::re
 
 ## Compare LCC and fire data
 
+### Ecozones
+
+```{r ecozones}
+ecozones <- prepInputs(
+    url = "https://sis.agr.gc.ca/cansis/nsdb/ecostrat/zone/ecozone_shp.zip",
+    targetFile = "ecozones.shp",
+    alsoExtract = "similar",
+    fun = "sf::st_read",
+    destinationPath = dPath,
+    targetCRS = sim$targetCRS
+  )
+ecozones[["ZONE_NAME"]] <- toupper(ecozones[["ZONE_NAME"]])
+```
+
 ### LCC2005
 
 ```{r LCC2005}
