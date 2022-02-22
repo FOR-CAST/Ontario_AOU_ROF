@@ -88,6 +88,7 @@ dataPrepObjects <- list(
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],
+  rstLCC = simOutPreamble[["LCC"]],
   studyArea = simOutPreamble[["studyArea"]],
   studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
