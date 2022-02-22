@@ -173,29 +173,29 @@ g2
 
 #### Far North LCC Results
 
-| LCC | Description                      | Flammable? |
-|-----|----------------------------------|------------|
-| 1   | clear open water                 | N          |
-| 2   | turbid water                     | N          |
-| 3   | intertidal mudflat               | N          |
-| 4   | intertidal marsh                 | N          |
-| 5   | supertidal marsh                 | N          |
-| 6   | freshwater marsh                 | N          |
-| 7   | heath                            | N          |
-| 8   | thicket swamp                    | Y          |
-| 9   | conifer swamp                    | Y          |
-| 10  | deciduous swamp                  | N          |
-| 11  | open fen                         | N          |
-| 12  | treed fen                        | Y\*        |
-| 13  | open bog                         | Y\*        |
-| 14  | treed bog                        | Y\*        |
-| 15  | sparse treed                     | Y          |
-| 16  | deciduous treed                  | Y          |
-| 17  | mixed treed                      | Y          |
-| 18  | conifer treed                    | Y          |
-| 19  | disturbance non and sparse woody | Y          |
-| 20  | disturbance tree/shrub           | Y          |
-| 21  | sand/gravel/mine tailings        | N\*        |
-| 22  | bedrock                          | N\*        |
-| 23  | community/infrastructure         | N          |
-| 24  | agriculture                      | N          |
+| LCC | Description                      | LandR        | fireSense     |
+|-----|----------------------------------|--------------|---------------|
+| 1   | clear open water                 | non-forest   | non-flammable |
+| 2   | turbid water                     | non-forest   | non-flammable |
+| 3   | intertidal mudflat               | non-forest   | non-flammable |
+| 4   | intertidal marsh                 | non-forest   | non-flammable |
+| 5   | supertidal marsh                 | non-forest   | non-flammable |
+| 6   | freshwater marsh                 | non-forest   | non-flammable |
+| 7   | heath                            | non-forest   | fen+          |
+| 8   | thicket swamp                    | non-forest   | fen+          |
+| 9   | conifer swamp                    | forest       | bogswamp      |
+| 10  | deciduous swamp                  | forest       | fen+          |
+| 11  | open fen                         | non-forest   | fen+          |
+| 12  | treed fen                        | forest       | fen+          |
+| 13  | open bog                         | non-forest   | bogswamp      |
+| 14  | treed bog                        | forest       | bogswamp      |
+| 15  | sparse treed                     | forest       | forest        |
+| 16  | deciduous treed                  | forest       | forest        |
+| 17  | mixed treed                      | forest       | forest        |
+| 18  | conifer treed                    | forest       | forest        |
+| 19  | disturbance non and sparse woody | reclassify\* | reclassify\*  |
+| 20  | disturbance tree/shrub           | reclassify\* | reclassify\*  |
+| 21  | sand/gravel/mine tailings        | non-forest   | non-flammable |
+| 22  | bedrock                          | non-forest   | non-flammable |
+| 23  | community/infrastructure         | non-forest   | non-flammable |
+| 24  | agriculture                      | non-forest   | non-flammable |
