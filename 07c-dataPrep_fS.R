@@ -26,7 +26,7 @@ fSdataPrepParams <- list(
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
     libPathDEoptim = libPathDEoptim,
-    missingLCCgroup = simOutPreamble$missingLCCGroup
+    missingLCCgroup = simOutPreamble$missingLCCGroup,
     nonflammableLCC = simOutPreamble$nonflammableLCC,
     sppEquivCol = simOutPreamble[["sppEquivCol"]],
     useCentroids = TRUE,
