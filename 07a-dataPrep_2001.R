@@ -22,26 +22,26 @@ dataPrepModules <- list(
 dataPrepParams2001 <- list(
   .globals = list("dataYear" = 2001),
   Biomass_borealDataPrep = list(
-    # "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
-    "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
+    # biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
+    biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
                                         (logAge + cover | ecoregionGroup))),
-    "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
-    "exportModels" = "all",
-    "fixModelBiomass" = TRUE,
-    "forestedLCCClasses" = simOutPreamble[["LandRforestedLCC"]],
-    "LCCClassesToReplaceNN" = numeric(0),
-    "pixelGroupAgeClass" = dataPrep$pixelGroupAgeClass,
-    "speciesTableAreas" = c("WestON"),
-    "speciesUpdateFunction" = list(
+    ecoregionLayerField = "ECOREGION", # "ECODISTRIC"
+    exportModels = "all",
+    fixModelBiomass = TRUE,
+    forestedLCCClasses = simOutPreamble[["LandRforestedLCC"]],
+    LCCClassesToReplaceNN = numeric(0),
+    pixelGroupAgeClass = dataPrep[["pixelGroupAgeClass"]],
+    speciesTableAreas = c("WestON"),
+    speciesUpdateFunction = list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
-    "subsetDataBiomassModel" = dataPrep$subsetDataBiomassModel,
-    "useCloudCacheForStats" = useCloudCache,
-    ".plots" = c("object", "png", "raw"),
-    ".studyAreaName" = paste0(studyAreaName, 2001),
-    ".useCache" = c(".inputObjects", "init")
+    sppEquivCol = simOutPreamble$sppEquivCol,
+    subsetDataBiomassModel = dataPrep$subsetDataBiomassModel,
+    useCloudCacheForStats = useCloudCache,
+    .plots = c("object", "png", "raw"),
+    .studyAreaName = paste0(studyAreaName, 2001),
+    .useCache = c(".inputObjects", "init")
   ),
   Biomass_speciesData = list(
     #"dataYear" = 2001, ## passed globally
