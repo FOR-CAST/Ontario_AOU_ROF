@@ -39,20 +39,6 @@ firePolygons <- prepInputs(url = fireUrl, destinationPath = dPath, fun = "sf::re
 
 ## Compare LCC and fire data
 
-### Ecozones
-
-```{r ecozones}
-ecozones <- prepInputs(
-    url = "https://sis.agr.gc.ca/cansis/nsdb/ecostrat/zone/ecozone_shp.zip",
-    targetFile = "ecozones.shp",
-    alsoExtract = "similar",
-    fun = "sf::st_read",
-    destinationPath = dPath,
-    targetCRS = sim$targetCRS
-  )
-ecozones[["ZONE_NAME"]] <- toupper(ecozones[["ZONE_NAME"]])
-```
-
 ### LCC2005
 
 ```{r LCC2005}
@@ -108,66 +94,72 @@ LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39)
 ## unable to download directly b/c of SSL, time outs, and other server problems
 ##   https://ws.gisetl.lrc.gov.on.ca/fmedatadownload/Packages/FarNorthLandCover.zip
 ##
+source("modules/Ontario_preamble/R/prepInputsFarNorthLCC.R")
+farNorthLCC <- prepInputsFarNorthLCC(dPath = dPath)
 
-FarNorthLandCoverZip <- file.path(dPath, "FarNorthLandCover.zip")
-rFiles <- c("New folder/Class/FarNorth_LandCover_Class_UTM15.tif",
-            "New folder/Class/FarNorth_LandCover_Class_UTM16.tif",
-            "New folder/Class/FarNorth_LandCover_Class_UTM17.tif")
-
-if (!file.exists(FarNorthLandCoverZip)) {
-  googledrive::drive_download(file = as_id("1_QeOAeSHjOjEU1iTqACRj8BYo3ysQKUi"),
-                              path = FarNorthLandCoverZip)
-  archive::archive_extract(
-    archive = file.path(dPath, "FarNorthLandCover.zip"),
-    dir = file.path(dPath, "FarNorthLandCover"),
-    files = "Version 1.4/TIF Format/ab1da0f2-7bba-430b-af11-d503865ff130-TIF.zip"
-  )
-
-  archive::archive_extract(
-    archive = file.path(dPath, "FarNorthLandCover", "Version 1.4", "TIF Format",
-                        "ab1da0f2-7bba-430b-af11-d503865ff130-TIF.zip"),
-    dir = file.path(dPath, "FarNorthLandCover"),
-    files = rFiles
-  )
-
-  vapply(file.path(dPath, "FarNorthLandCover", rFiles), file.copy, logical(1),
-         to = file.path(dPath, "FarNorthLandCover"))
-  unlink(file.path(dPath, "FarNorthLandCover", "New folder"), recursive = TRUE)
-  unlink(file.path(dPath, "FarNorthLandCover", "Version 1.4"), recursive = TRUE)
-}
-
-r15 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[1])
-r16 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[2])
-r17 <- raster(file.path(dPath, "FarNorthLandCover", basename(rFiles))[3])
-
-burnCalcFN <- lapply(list(r15, r16, r17), function(r) {
-  r[r[] > 24] <- NA_integer_ ## a few pixels have values >24, so make them NA
-  
-  firePolygons2 <- sf::st_transform(firePolygons, crs = crs(r))
-  
-  ## rasterize firePolygons
-  firePolygons2$dummyVar <- 1
-  firePolygons2 <- firePolygons2[firePolygons2$YEAR > 2004, ]
-  fireRaster <- fasterize(sf = firePolygons2, raster = r, field = "dummyVar")
-  fireLoc <- 1:ncell(r)
-  fireLoc <- fireLoc[!is.na(getValues(fireRaster))]
-  
-  burned <- data.table(pixelID = 1:ncell(r), lcc = getValues(r))
-  burned[pixelID %in% fireLoc, burn := 1]
-  
-  burnCalc <- burned[, .(available = .N, burned = sum(burn, na.rm = TRUE)), .(lcc)]
-  setkey(burnCalc, lcc)
-  burnCalc <- na.omit(burnCalc)
-  burnCalc
-}) %>%
-  rbindlist()
-
-burnCalcFN <- burnCalcFN[, lapply(.SD, sum), by = lcc]
-setkey(burnCalc, lcc)
-
-burnCalcFN[, "percentBurned" := round(burned/available * 100, digits = 3)]
-burnCalcFN
 ```
+
+### Ecozones
+
+```{r ecozones}
+ecozones <- prepInputs(
+    url = "https://sis.agr.gc.ca/cansis/nsdb/ecostrat/zone/ecozone_shp.zip",
+    targetFile = "ecozones.shp",
+    alsoExtract = "similar",
+    fun = "sf::st_read",
+    destinationPath = dPath,
+    targetCRS = crs(farNorthLCC)
+  )
+ecozones[["ZONE_NAME"]] <- toupper(ecozones[["ZONE_NAME"]])
+ecozones <- fasterize(ecozones, raster = farNorthLCC, fun = "last", field = "ZONE_ID")
+
+
+#TODO: source the NFI 1985-2015 ROF file and finish the analysis
+
+
+```
+
+
+```{get Wildfire 1985-2015}
+#this is a locally hosted private dataset - the NFI wildfire year raster representing 1985-2015 
+#It is ONLY the extent of the Ring of Fire area
+wildfire2020 <- prepInputs(
+  url = "https://drive.google.com/file/d/1Vc4cOY1jOS1y8P20S14nYBJWwkRj_SPL/",
+  targetFile = "Fire_1985-2020_ROF.dat",
+  fun = "raster::raster",
+  rasterToMatch = farNorthLCC,
+  alsoExtract = c("Fire_1985-2020_ROF.dat.ovr",
+                  "Fire_1985-2020_ROF.dat.aux.xml",
+                  "Fire_1985-2020_ROF.dat.vat.cpg",
+                  "Fire_1985-2020_ROF.hdr"),
+  destinationPath = dPath
+)
+
+```
+
+
+```{build fire summary table}
+
+farNorthClasses <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 3,
+                     "Intertidal Marsh" = 4, "Supratidal Marsh" = 5, "Fresh Water Marsh" = 6,
+                     "Heath" = 7, "Thicket Swamp" = 8, "Coniferous Swamp" = 9, "Deciduous Swamp" = 10,
+                     "Open Fen" = 11, "Treed Fen" = 12, "Open Bog" = 13, "Treed Bog" = 14,
+                     "Sparse Treed" = 15, "Deciduous Treed" = 16, "Mixed Treed" = 17, "Coniferous Treed" = 18,
+                     "Disturbance - Non and sparse-woody" = 19, "Disturbance - Treed or shrub" = 20,
+                     "Sand/Gravel/Mine Tailings" = 21, "Bedrock" = 22, "Community/Infrastructure" = 23,
+                     "Agriculture" = 24, "Cloud/Shadow" = -9, "Other" = -99)
+
+fireSummaryDT <- data.table(fireYear = getValues(wildfire2020),
+                            lcc = getValues(farNorthLCC),
+                            ecozone = getValues(ecozones))
+
+
+
+
+```
+
+
+
 
 ```{r LCCFN_plot, echo=FALSE}
 g2 <- ggplot(data = burnCalcFN, aes(x = lcc, y = percentBurned)) + 

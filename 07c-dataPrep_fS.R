@@ -17,7 +17,7 @@ upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 #   destinationPath = dataPrepPaths$inputPath
 # )
 
-wildfire2020 <- raster::setMinMax(wildfire2020)
+# wildfire2020 <- raster::setMinMax(wildfire2020)
 
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
@@ -41,8 +41,8 @@ fSdataPrepObjects <- list(
   .runName = runName,
   cohortData2001 = biomassMaps2001[["cohortData"]],
   cohortData2011 = biomassMaps2011[["cohortData"]],
-  fireRaster = wildfire2020,
-  nonForestLCCGroups = simOutPreamble[["nonForestLCCGroups"]],
+  # fireRaster = wildfire2020,
+  nonForestedLCCGroups = simOutPreamble[["nonForestLCCGroups"]],
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
