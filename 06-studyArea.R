@@ -57,4 +57,25 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
   }
 }
 
+if (isTRUE(firstRunMDCplots)) {
+  ggMDC <- fireSenseUtils::compareMDC(
+    historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
+    projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
+    flammableRTM = simOutPreamble$flammableRTM
+  )
+  fggMDC <- file.path(preamblePaths$outputPath, "figures", paste0("compareMDC_", studyAreaName, "_",
+                                                                  climateGCM, "_", climateSSP, ".png"))
+  checkPath(dirname(fggMDC), create = TRUE)
+
+  ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
+}
+
+if (isTRUE(upload_preamble)) {
+  googledrive::drive_put(
+    media = fggMDC,
+    path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
+    name = basename(fggMDC)
+  )
+}
+
 nSpecies <- length(unique(simOutPreamble$sppEquiv$LandR))

@@ -28,7 +28,7 @@ dataPrepParams2001 <- list(
     "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
     "exportModels" = "all",
     "fixModelBiomass" = TRUE,
-    "forestedLCCClasses" = simOutPreamble[["treeClasses"]],
+    "forestedLCCClasses" = simOutPreamble[["LandRforestedLCC"]],
     "LCCClassesToReplaceNN" = numeric(0),
     "pixelGroupAgeClass" = dataPrep$pixelGroupAgeClass,
     "speciesTableAreas" = c("WestON"),
