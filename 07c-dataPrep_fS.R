@@ -25,6 +25,7 @@ fSdataPrepParams <- list(
     .useCache = ".inputObjects",
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
+    igAggFactor = 10000 / preambleParams[["Ontario_preamble"]][[".resolution"]],
     libPathDEoptim = libPathDEoptim,
     missingLCCgroup = simOutPreamble$missingLCCGroup,
     nonflammableLCC = simOutPreamble$nonflammableLCC,
