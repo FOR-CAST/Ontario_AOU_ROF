@@ -6,7 +6,8 @@ defaultPaths <- list(
   cachePath = cacheDir,
   modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
+  outputPath = file.path("outputs", studyAreaName),
+  scratchPath = scratchDir
 )
 
 scratchDir <- checkPath(file.path(scratchDir, studyAreaName), create = TRUE) ## basedir set in config
