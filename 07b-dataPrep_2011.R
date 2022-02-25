@@ -29,6 +29,8 @@ dataPrepOutputs2011 <- data.frame(
                   "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
+dataPrepObjects$standAgeMap <- simOutPreamble[["standAgeMap2011"]]
+
 fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", studyAreaName), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {

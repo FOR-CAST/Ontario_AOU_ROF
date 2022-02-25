@@ -89,6 +89,7 @@ dataPrepObjects <- list(
   sppColorVect = simOutPreamble[["sppColorVect"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],
   rstLCC = simOutPreamble[["LCC"]],
+  standAgeMap = simOutPreamble[["standAgeMap2001"]],
   studyArea = simOutPreamble[["studyArea"]],
   studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
