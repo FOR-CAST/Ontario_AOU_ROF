@@ -52,27 +52,27 @@ cores <- if (peutils::user("achubaty")) {
 
 spreadFitParams <- list(
   fireSense_SpreadFit = list(
-    # "cacheId_DE" = paste0("DEOptim_", studyAreaName), # This is NWT DEoptim Cache
-    "cloudFolderID_DE" = cloudCacheFolderID,
-    "cores" = cores,
-    "DEoptimTests" = c("adTest", "snll_fs"), # Can be one or both of c("adTest", "snll_fs")
-    "doObjFunAssertions" = FALSE,
-    "iterDEoptim" = 150,
-    "iterStep" = 150,
-    "iterThresh" = 396L,
-    "lower" = lower,
-    "maxFireSpread" = max(0.28, upper[1]),
-    "mode" = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
-    "mutuallyExclusive" = list("youngAge" = c("class", "nf_")),
-    "NP" = length(cores),
-    "objFunCoresInternal" = 1L,
-    "objfunFireReps" = 100,
-    #"onlyLoadDEOptim" = FALSE,
-    "rescaleAll" = TRUE,
-    "trace" = 1,
-    "SNLL_FS_thresh" = NULL, # NULL means 'autocalibrate' to find suitable threshold value
-    "upper" = upper,
-    #"urlDEOptimObject" = NULL,
+    cloudFolderID_DE = cloudCacheFolderID,
+    cores = cores,
+    DEoptimTests = c("adTest", "snll_fs"),
+    doObjFunAssertions = FALSE,
+    iterDEoptim = 150,
+    iterStep = 150,
+    iterThresh = 396L,
+    libPathDEoptim = libPathDEoptim,
+    lower = lower,
+    maxFireSpread = max(0.28, upper[1]),
+    mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
+    mutuallyExclusive = list("youngAge" = c("class", "nf_")),
+    NP = length(cores),
+    objFunCoresInternal = 1L,
+    objfunFireReps = 100,
+    # onlyLoadDEOptim = FALSE,
+    rescaleAll = TRUE,
+    trace = 1,
+    SNLL_FS_thresh = NULL, # NULL means 'autocalibrate' to find suitable threshold value
+    upper = upper,
+    # urlDEOptimObject = NULL,
     "useCache_DE" = FALSE,
     "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,

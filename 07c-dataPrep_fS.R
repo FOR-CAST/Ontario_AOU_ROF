@@ -26,7 +26,6 @@ fSdataPrepParams <- list(
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
     igAggFactor = 10000 / preambleParams[["Ontario_preamble"]][[".resolution"]],
-    libPathDEoptim = libPathDEoptim,
     missingLCCgroup = simOutPreamble$missingLCCGroup,
     nonflammableLCC = simOutPreamble$nonflammableLCC,
     sppEquivCol = simOutPreamble[["sppEquivCol"]],
@@ -79,8 +78,6 @@ if (isTRUE(usePrerun)) {
   saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
 }
 
-
-
 if (isTRUE(upload_fSsimDataPrep)) {
   fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep))
   gid_fSsimDataPrep <- as.character(fdf$id)
@@ -92,5 +89,4 @@ if (isTRUE(upload_fSsimDataPrep)) {
   )
 
   source("R/upload_fSDatPrepFit_vegCoeffs.R")
-
 }

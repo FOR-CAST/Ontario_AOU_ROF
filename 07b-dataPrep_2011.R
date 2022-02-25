@@ -69,8 +69,3 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
 }
 
 rm(dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
-
-## PLOTTING
-if (!is.na(.plotInitialTime)) {
-  Plot(simOutSpeciesLayers2011$speciesLayers)
-}

@@ -1,4 +1,5 @@
 moduleDir <- "modules"
+usePrerun <- TRUE
 
 source("01-packages.R")
 

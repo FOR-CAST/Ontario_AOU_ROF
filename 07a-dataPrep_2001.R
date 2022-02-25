@@ -36,19 +36,19 @@ dataPrepParams2001 <- list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
-    sppEquivCol = simOutPreamble$sppEquivCol,
-    subsetDataBiomassModel = dataPrep$subsetDataBiomassModel,
+    sppEquivCol = simOutPreamble[["sppEquivCol"]],
+    subsetDataBiomassModel = dataPrep[["subsetDataBiomassModel"]],
     useCloudCacheForStats = useCloudCache,
     .plots = c("object", "png", "raw"),
     .studyAreaName = paste0(studyAreaName, 2001),
     .useCache = c(".inputObjects", "init")
   ),
   Biomass_speciesData = list(
-    #"dataYear" = 2001, ## passed globally
-    "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
-    "types" = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
-    ".plotInitialTime" = .plotInitialTime,
-    ".studyAreaName" = paste0(studyAreaName, 2001)
+    #dataYear = 2001, ## passed globally
+    sppEquivCol = simOutPreamble[["sppEquivCol"]],
+    types = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
+    .plotInitialTime = .plotInitialTime,
+    .studyAreaName = paste0(studyAreaName, 2001)
   ),
   Biomass_speciesFactorial = list(
     factorialSize = "small" ## TODO: use medium?

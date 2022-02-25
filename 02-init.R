@@ -18,12 +18,11 @@ codeChecks <- config::get("codechecks")
 delayStart <- config::get("delaystart")
 ecozone <- config::get("ecozone")
 fitUsing <- if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) 3 else 0
-messagingNumCharsModule <- config::get("messagingNumCharsModule")
 libPathDEoptim <- config::get("paths")[["libpathdeoptim"]]
+messagingNumCharsModule <- config::get("messagingNumCharsModule")
 newGoogleIDs <- FALSE ## gets rechecked/updated for each script (06, 07x, 08x) based on script 05
 nReps <- config::get("nreps")
 reproducibleAlgorithm <- config::get("reproduciblealgorithm")
-resolution <- as.integer(config::get("resolution"))
 reupload <- config::get("reupload")
 run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
@@ -33,7 +32,7 @@ useCloudCache <- config::get("cloud")[["usecloud"]]
 useLandR.CS <- config::get("uselandrcs")
 useMemoise <- config::get("usememoise")
 usePlot <- config::get("plot")
-userInputPaths <- config::get("inputpaths")
+userInputPaths <- config::get("paths")[["inputpaths"]]
 usePrerun <- config::get("useprerun")
 useRequire <- config::get("userequire")
 useTerra <- config::get("useterra")

@@ -16,12 +16,12 @@ default:
   nreps: 10
   paths:
     cachedir: "cache"
+    inputpaths: null
     libpathdeoptim: !expr Require::checkPath(Sys.getenv("PRJ_PKG_DIR")) ## absolute path!
     scratchdir: "/tmp/scratch/ON"
   plot: false
   reproduciblealgorithm: 2
   reupload: false
-  resolution: 250  ## 250 for AOU; 125 for ROF
   run: 1
   simfileformat: "qs"
   studyarea: "ROF" ## "AOU" or "ROF"
