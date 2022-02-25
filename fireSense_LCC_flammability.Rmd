@@ -95,7 +95,15 @@ LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39)
 ##   https://ws.gisetl.lrc.gov.on.ca/fmedatadownload/Packages/FarNorthLandCover.zip
 ##
 source("modules/Ontario_preamble/R/prepInputsFarNorthLCC.R")
-farNorthLCC <- prepInputsFarNorthLCC(dPath = dPath)
+farNorthLCCfn <- file.path("inputs", "FarNorth_LCC_Class_RoFL.tif")
+if (!file.exists(farNorthLCCfn)) {
+  #this file is incorrect - we only want the RoF portion, 
+  farNorthLCC <- prepInputsFarNorthLCC(dPath = dPath, filename2 = farNorthLCCfn)
+  # farNorthLCC <- postProcess(farNorthLCC, studyArea = <the RoF study area large)
+} else {
+  farNorthLCC <- raster(farNorthLCCfn)
+}
+
 
 ```
 
@@ -148,11 +156,31 @@ farNorthClasses <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mud
                      "Disturbance - Non and sparse-woody" = 19, "Disturbance - Treed or shrub" = 20,
                      "Sand/Gravel/Mine Tailings" = 21, "Bedrock" = 22, "Community/Infrastructure" = 23,
                      "Agriculture" = 24, "Cloud/Shadow" = -9, "Other" = -99)
+lcc <- data.table("lcc" = farNorthClasses, "lccName" = names(farNorthClasses))
 
+#ecozone 20 is the plains, ecozone 19 is the shield
 fireSummaryDT <- data.table(fireYear = getValues(wildfire2020),
                             lcc = getValues(farNorthLCC),
                             ecozone = getValues(ecozones))
 
+post2015 <- fireSummaryDT[lcc, on = "lcc"]
+post2015 <- post2015[!lcc %in% c(1,2,3,4,5,6,7,21,22,23,24,-9, -99)]
+#calculate the number of unburned and burned pixels - ignoring those that already burned
+post2015 <- post2015[ecozone %in% 19:20,]
+
+post2015[, Available := .N, .(lcc, ecozone)]
+post2015 <- post2015[fireYear > 2015 & !is.na(fireYear)]
+post2015 <- post2015[, .(Burned = .N), .(lcc, lccName, Available, ecozone)]
+post2015[, percentBurn := round(Burned/Available * 100, digits = 4)]
+
+post2015Plain <- post2015[ecozone == 20] 
+post2015Shield <- post2015[ecozone == 19]
+AllBurns <- post2015[, .(Available = sum(Available), Burned = sum(Burned)), .(lccName)]
+AllBurns[, percentBurn := round(Burned/Available * 100, digits =4 )]
+
+#we chose to group Bog and Coniferous swamp as BogSwamp (burn > 0.1%  in 5 years)
+#FenPlus is all categories where < 0.1% burned over 5 years - 
+#Trees are separate. Disturbance gets resampled but defaults to Coniferous Treed based on visual evidence
 
 
 

@@ -61,14 +61,32 @@ alex:
   useprerun: false
 
 ian:
- inherits: default
- cloud:
-  googleuser: "ianmseddy@gmail.com"
- paths:
-  scratchdir: "D:/temp"
- useprerun: false
- studyarea: "ROF"
- run: 1
- plot: false
- resolution: 125
+  inherits: default
+  batchmode: false
+  cachedb: "sqlite"
+  cacheformat: "qs"
+  climategcm: "CNRM-ESM2-1" ## '13GCMs_ensemble', 'CanESM5', 'CNRM-ESM2-1', 'CCSM4'
+  climatessp: 370 ## 245, 370, 585
+  cloud:
+    cachedir: ""
+    googleuser: "ianmseddy@gmail.com"
+    usecloud: false
+  ecozone: "plain" ## 'plain' or 'shield'
+  inputpaths: null
+  messagingNumCharsModule: 21
+  nreps: 10
+  paths:
+    cachedir: "cache"
+    scratchdir: "/tmp/scratch/ON"
+  plot: false
+  reproduciblealgorithm: 2
+  reupload: false
+  resolution: 125  ## 250 for AOU; 125 for ROF
+  run: 1
+  simfileformat: "qs"
+  studyarea: "ROF" ## "AOU" or "ROF"
+  usememoise: false
+  useprerun: true
+  userequire: true
+  useterra: true
 
