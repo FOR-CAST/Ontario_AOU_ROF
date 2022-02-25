@@ -17,7 +17,7 @@ default:
   paths:
     cachedir: "cache"
     inputpaths: null
-    libpathdeoptim: !expr Require::checkPath(Sys.getenv("PRJ_PKG_DIR")) ## absolute path!
+    libpathdeoptim: !expr Require::checkPath(ifelse(nzchar(Sys.getenv("PRJ_PKG_DIR")), Sys.getenv("PRJ_PKG_DIR"), "packages"))
     scratchdir: "/tmp/scratch/ON"
   plot: false
   reproduciblealgorithm: 2
