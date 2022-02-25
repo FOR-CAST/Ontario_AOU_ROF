@@ -8,6 +8,9 @@
 *.utf8.md
 *.knit.md
 
+# html files
+*.html
+
 # caches
 *_cache/
 /cache/
