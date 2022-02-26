@@ -68,14 +68,14 @@ if (isTRUE(firstRunMDCplots)) {
   checkPath(dirname(fggMDC), create = TRUE)
 
   ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
-}
 
-if (isTRUE(upload_preamble)) {
-  googledrive::drive_put(
-    media = fggMDC,
-    path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
-    name = basename(fggMDC)
-  )
+  if (isTRUE(upload_preamble)) {
+    googledrive::drive_put(
+      media = fggMDC,
+      path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
+      name = basename(fggMDC)
+    )
+  }
 }
 
 nSpecies <- length(unique(simOutPreamble$sppEquiv$LandR))
