@@ -90,21 +90,30 @@ LCC2005_nonFlam <- c(0, 25, 30, 33, 36, 37, 38, 39)
 ### Far North LCC
 
 ```{r LCC_FN}
+studyAreaBuff <- prepInputs(
+  url = "https://drive.google.com/file/d/1ngQshBgoyLjkjuXnloXPg7IUMdLmppkB",
+  destinationPath = dPath,
+  targetFile = "CEON_def_50km_buff.shp",
+  alsoExtract = "similar",
+  targetCRS = crs(lcc2005),
+  fun = "sf::st_read",
+  overwrite = TRUE,
+  team_drive = TRUE
+) %>%
+  as_Spatial(.)
+
 ## FAR NORTH LANDCOVER (620 MB)
 ## unable to download directly b/c of SSL, time outs, and other server problems
 ##   https://ws.gisetl.lrc.gov.on.ca/fmedatadownload/Packages/FarNorthLandCover.zip
 ##
 source("modules/Ontario_preamble/R/prepInputsFarNorthLCC.R")
-farNorthLCCfn <- file.path("inputs", "FarNorth_LCC_Class_RoFL.tif")
-if (!file.exists(farNorthLCCfn)) {
-  #this file is incorrect - we only want the RoF portion, 
-  farNorthLCC <- prepInputsFarNorthLCC(dPath = dPath, filename2 = farNorthLCCfn)
-  # farNorthLCC <- postProcess(farNorthLCC, studyArea = <the RoF study area large)
+f_farNorthLCC <- file.path("inputs", "FarNorth_LandCover_Class_UTM17_mosaic.tif")
+if (!file.exists(f_farNorthLCC)) {
+  farNorthLCC <- prepInputsFarNorthLCC(dPath = dPath, filename2 = f_farNorthLCC)
+  farNorthLCC <- postProcess(farNorthLCC, studyArea = studyAreaBuff)
 } else {
-  farNorthLCC <- raster(farNorthLCCfn)
+  farNorthLCC <- raster(f_farNorthLCC)
 }
-
-
 ```
 
 ### Ecozones
@@ -120,11 +129,7 @@ ecozones <- prepInputs(
   )
 ecozones[["ZONE_NAME"]] <- toupper(ecozones[["ZONE_NAME"]])
 ecozones <- fasterize(ecozones, raster = farNorthLCC, fun = "last", field = "ZONE_ID")
-
-
-#TODO: source the NFI 1985-2015 ROF file and finish the analysis
-
-
+## TODO: source the NFI 1985-2015 ROF file and finish the analysis
 ```
 
 
@@ -142,12 +147,10 @@ wildfire2020 <- prepInputs(
                   "Fire_1985-2020_ROF.hdr"),
   destinationPath = dPath
 )
-
 ```
 
 
 ```{build fire summary table}
-
 farNorthClasses <- c("Clear Open Water" = 1, "Turbid Water" = 2, "Intertidal Mudflat" = 3,
                      "Intertidal Marsh" = 4, "Supratidal Marsh" = 5, "Fresh Water Marsh" = 6,
                      "Heath" = 7, "Thicket Swamp" = 8, "Coniferous Swamp" = 9, "Deciduous Swamp" = 10,
@@ -181,13 +184,7 @@ AllBurns[, percentBurn := round(Burned/Available * 100, digits =4 )]
 #we chose to group Bog and Coniferous swamp as BogSwamp (burn > 0.1%  in 5 years)
 #FenPlus is all categories where < 0.1% burned over 5 years - 
 #Trees are separate. Disturbance gets resampled but defaults to Coniferous Treed based on visual evidence
-
-
-
 ```
-
-
-
 
 ```{r LCCFN_plot, echo=FALSE}
 g2 <- ggplot(data = burnCalcFN, aes(x = lcc, y = percentBurned)) + 

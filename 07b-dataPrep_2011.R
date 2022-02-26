@@ -70,4 +70,4 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   }
 }
 
-rm(dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
+rm(dataPrepObjects, dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
