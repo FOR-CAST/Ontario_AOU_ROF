@@ -2,8 +2,10 @@
 
 gdriveURL <- if (grepl("AOU", runName)) {
   "https://drive.google.com/drive/folders/1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki/"
-} else if (grepl("ROF", runName)) {
-  "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4/"
+} else if (grepl("ROF_shield", runName)) {
+  "https://drive.google.com/drive/folders/1Wys9aJSz57WdY0uMKxS8ObQ4mw-yoxBG"
+} else if (grepl("ROF_plain", runName)) {
+  "https://drive.google.com/drive/folders/1RJ0zoKeUPhl5opVa0v7WbaaxS-NUxfUn"
 }
 
 gdriveSims <- data.table::fread("05-google-ids.csv")
