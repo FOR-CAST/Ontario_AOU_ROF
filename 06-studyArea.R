@@ -12,7 +12,7 @@ preambleModules <- list("Ontario_preamble", "canClimateData")
 
 preambleParams <- list(
   canClimateData = list(
-    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
+    .useCache = ".inputObjects",
     climateGCM = climateGCM,
     climateSSP = climateSSP,
     historicalFireYears = 1991:2020,
@@ -21,7 +21,7 @@ preambleParams <- list(
   ),
   Ontario_preamble = list(
     .resolution = ifelse(grepl("ROF", studyAreaName), 125, 250),
-    .useCache = FALSE, #".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
+    .useCache = FALSE, #".inputObjects",
     runName = runName
   )
 )

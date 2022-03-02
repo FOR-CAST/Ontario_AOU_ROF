@@ -1,7 +1,5 @@
 do.call(setPaths, dynamicPaths)
 
-gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
-
 times <- list(start = 2011, end = 2100)
 
 dynamicModules <- list(
