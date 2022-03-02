@@ -41,7 +41,7 @@ dataPrepParams2001 <- list(
     useCloudCacheForStats = useCloudCache,
     .plots = c("object", "png", "raw"),
     .studyAreaName = paste0(studyAreaName, 2001),
-    .useCache = c(".inputObjects", "init")
+    .useCache = FALSE #c(".inputObjects", "init")
   ),
   Biomass_speciesData = list(
     #dataYear = 2001, ## passed globally
