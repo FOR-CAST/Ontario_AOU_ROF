@@ -21,7 +21,7 @@ preambleParams <- list(
   ),
   Ontario_preamble = list(
     .resolution = ifelse(grepl("ROF", studyAreaName), 125, 250),
-    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
+    .useCache = FALSE, #".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
     runName = runName
   )
 )
