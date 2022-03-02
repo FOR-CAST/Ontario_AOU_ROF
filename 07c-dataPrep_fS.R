@@ -22,7 +22,7 @@ upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
     .studyAreaName = studyAreaName,
-    .useCache = ".inputObjects",
+    .useCache = FALSE, #".inputObjects",
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
     igAggFactor = 10000 / preambleParams[["Ontario_preamble"]][[".resolution"]],
