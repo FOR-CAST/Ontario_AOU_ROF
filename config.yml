@@ -18,7 +18,7 @@ default:
     cachedir: "cache"
     inputpaths: null
     libpathdeoptim: !expr Require::checkPath(ifelse(nzchar(Sys.getenv("PRJ_PKG_DIR")), Sys.getenv("PRJ_PKG_DIR"), "packages"))
-    scratchdir: "/tmp/scratch/ON"
+    scratchdir: !expr file.path(dirname(tempdir()), "scratch", "ON")
   plot: false
   reproduciblealgorithm: 2
   reupload: false
