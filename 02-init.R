@@ -43,14 +43,21 @@ if (!exists("runName")) {
   runName <- sprintf("%s_%s_SSP%03d_run%02d", studyAreaName, climateGCM, climateSSP, run)
 } else {
   chunks <- strsplit(runName, "_")[[1]]
-  climateGCM <- if (grepl("ensemble", runName)) {
-    paste0(chunks[3], "_", chunks[4])
-  } else {
-    chunks[3]
+  studyAreaName <- if (length(chunks) == 4) {
+    chunks[1] ## AOU|ROF
+  } else if (length(chunks) == 5) {
+    paste0(chunks[1], "_", chunks[2]) ## ROF_xxxxx
   }
+  climateGCM <- chunks[length(chunks) - 2] ## chunks[2] for AOU|ROF; chunks[3] for ROF_xxxxx
   climateSSP <- as.numeric(substr(chunks[length(chunks) - 1], 4, 6))
-  studyAreaName <- paste0(chunks[1], "_", chunks[2])
   run <- as.numeric(substr(chunks[length(chunks)], 4, 5))
+
+  stopifnot(
+    studyAreaName %in% c("AOU", "ROF", "ROF_plain", "ROF_shield"),
+    grepl("CanESM5|CNRM-ESM2-1", climateGCM),
+    climateSSP %in% c(370, 585),
+    !is.na(run)
+  )
 }
 
 firstRunMDCplots <- if (run == 1 && reupload) TRUE else FALSE
