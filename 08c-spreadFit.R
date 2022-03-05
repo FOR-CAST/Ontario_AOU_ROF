@@ -22,7 +22,7 @@ upperParams <- c(upperParamsAnnual, upperParamsNonAnnual)
 # upper <- c(0.29, 10, 10, upperParams)
 
 lower <- c(0.25, 0.2, 0.1, lowerParams)
-upper <- c(0.276, 2, 4, upperParams)
+upper <- c(0.265, 2, 4, upperParams) ## NOTE: 2022-03-04: lowered to 0.265 from 0.276 b/c too burny
 dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
