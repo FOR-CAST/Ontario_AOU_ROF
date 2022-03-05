@@ -10,7 +10,7 @@ if (delayStart > 0) {
   Sys.sleep(delayStart*60)
 }
 
-reupload = FALSE; usePrerun = FALSE;
+usePrerun = FALSE; reupload = TRUE;
 source("06-studyArea.R")
 
 source("07a-dataPrep_2001.R")
@@ -18,7 +18,7 @@ source("07b-dataPrep_2011.R")
 source("07c-dataPrep_fS.R")
 
 message(crayon::red("Data prep", runName, "complete"))
-reupload = TRUE; usePrerun = FALSE;
+
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
 
