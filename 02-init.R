@@ -27,7 +27,7 @@ reproducibleAlgorithm <- config::get("reproduciblealgorithm")
 reupload <- config::get("reupload")
 run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
-simFileFormat <- config::get()[["simfileformat"]]
+simFileFormat <- config::get("simfileformat")
 studyAreaName <- paste0(config::get("studyarea"), "_", ecozone)
 useCloudCache <- config::get("cloud")[["usecloud"]]
 useLandR.CS <- config::get("uselandrcs")
@@ -53,7 +53,7 @@ if (!exists("runName")) {
   run <- as.numeric(substr(chunks[length(chunks)], 4, 5))
 
   stopifnot(
-    studyAreaName %in% c("AOU", "ROF", "ROF_plain", "ROF_shield"),
+    studyAreaName %in% c("AOU", "ROF", "ROF-kNN", "ROF_plain", "ROF_shield"),
     grepl("CanESM5|CNRM-ESM2-1", climateGCM),
     climateSSP %in% c(370, 585),
     !is.na(run)

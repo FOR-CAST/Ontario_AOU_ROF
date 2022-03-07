@@ -1,3 +1,4 @@
+#runName <- "ROF-kNN_CNRM-ESM2-1_SSP370_run01"
 source("01-packages.R")
 
 source("02-init.R")

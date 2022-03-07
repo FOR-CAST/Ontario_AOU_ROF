@@ -22,7 +22,8 @@ preambleParams <- list(
   Ontario_preamble = list(
     .resolution = ifelse(grepl("ROF", studyAreaName), 125, 250),
     .useCache = FALSE, #".inputObjects",
-    runName = runName
+    runName = runName,
+    useAgeMapkNN = grepl("kNN", runName)
   )
 )
 
