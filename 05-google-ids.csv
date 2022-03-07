@@ -9,14 +9,15 @@ AOU,escapeOut,CCSM4,,,1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J
 AOU,spreadOut,CCSM4,,1,1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs
 AOU,results,"",,,1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki
 ROF,simOutPreamble,CNRM-ESM2-1,370,,1K7s0eVAMCGLtyihRmqfi0YDaKtj3cRai
-ROF,simOutPreamble,CanESM5,370,,1IB5tRL87Kt9Vg0A_fK_qxy6y7dyhVKqK
 ROF,biomassMaps2001,"",,,1Fzb9ECBFytqWgDmV2oet88WqY25hfsMF
 ROF,biomassMaps2011,"",,,1MZPDRAiaMpaL-rJxXUGbuSonf1-cjoux
 ROF,fSsimDataPrep,"",,,1i3_NusL3IJRDw6QLGZZmG3IHYf0to4zL
 ROF,ignitionOut,"",,,18gTJLZJRpMqQaLuE0a0W0C1rNmpWJQnM
 ROF,escapeOut,"",,,11k8oDh1sDPKsL-jGssVSHwcgyH6fH2Fs
+ROF,spreadOut,,,2,1DimTSmRPCa35KupjinDq_Oygz9W14az1
 ROF,spreadOut,"",,1,1492X_PPPRsYESfMjrVVQcnsbpRsaOex8
 ROF,results,"",,,1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4
+ROF-kNN,results,"",,,1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4
 ROF_plain,simOutPreamble,CNRM-ESM2-1,370,,1uSsQadhN7bkzESKJl63FlDsR-MYdccJ7
 ROF_plain,simOutPreamble,CanESM5,370,,190ltLPfsI5rxnCJcDNK2aH6BwspBULsk
 ROF_plain,biomassMaps2001,"",,,1Zff5L_X4DbVD8oD_qs00ATt0XPmHqeQw

@@ -6,6 +6,10 @@ gdriveURL <- if (grepl("AOU", runName)) {
   "https://drive.google.com/drive/folders/1Wys9aJSz57WdY0uMKxS8ObQ4mw-yoxBG"
 } else if (grepl("ROF_plain", runName)) {
   "https://drive.google.com/drive/folders/1RJ0zoKeUPhl5opVa0v7WbaaxS-NUxfUn"
+} else if (grepl("ROF-kNN", runName)) {
+  "https://drive.google.com/drive/folders/1KVpkvRhKCh7eNUp4BVBkRl4Y2zrA-jBo"
+} else if (grepl("ROF", runName)) {
+  "https://drive.google.com/drive/folders/1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4"
 }
 
 gdriveSims <- data.table::fread("05-google-ids.csv")
