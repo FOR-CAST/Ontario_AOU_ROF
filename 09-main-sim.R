@@ -128,8 +128,7 @@ dynamicParams <- list(
     sppEquivCol = simOutPreamble$sppEquivCol,
     missingLCCgroup = fSsimDataPrep@params$fireSense_dataPrepFit$missingLCCgroup,
     nonForestCanBeYoungAge = TRUE,
-    whichModulesToPrepare = fs_predict_modules,
-
+    whichModulesToPrepare = fs_predict_modules
   ),
   fireSense_ignitionPredict = list(
     ##

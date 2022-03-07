@@ -47,7 +47,7 @@ cores <- if (peutils::user("achubaty")) {
              c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
            }
          },
-         "pseudostsuga.for-cast.ca" = {
+         "pseudotsuga.for-cast.ca" = {
            rep("localhost", 100)
          })
 }
