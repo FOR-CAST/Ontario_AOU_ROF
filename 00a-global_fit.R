@@ -1,4 +1,3 @@
-#runName <- "ROF-kNN_CNRM-ESM2-1_SSP370_run01"
 source("01-packages.R")
 
 source("02-init.R")
@@ -11,7 +10,6 @@ if (delayStart > 0) {
   Sys.sleep(delayStart*60)
 }
 
-usePrerun = FALSE; reupload = TRUE;
 source("06-studyArea.R")
 
 source("07a-dataPrep_2001.R")
@@ -23,8 +21,7 @@ message(crayon::red("Data prep", runName, "complete"))
 source("08a-ignitionFit.R")
 source("08b-escapeFit.R")
 
-fitUsing <- 3 ## 1: pseudotsuga; 2: 1 + picea; 3: 2 + pinus
-nReps <- 5
+usePrerun = FALSE; reupload = TRUE;
 for (i in 1:nReps) {
   run <- i
   runName <- gsub("run[0-9][0-9]", sprintf("run%02d", run), runName)
