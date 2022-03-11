@@ -1,43 +1,45 @@
 moduleDir <- "modules"
-usePrerun <- TRUE
+
+years <- c(2011, 2100)
+Nreps <- 5 ## adjust as needed
+studyAreaNames <- c("ROF", "ROF-kNN")[1] ## TODO #c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
+climateScenarios <- c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")[1] ## TODO
+
+runName <- sprintf("%s_%s_run01", studyAreaNames[1], climateScenarios[1]) ## need a runName for gids
 
 source("01-packages.R")
 source("02-init.R")
 source("03-paths.R")
-source("04-options.R")
-
-years <- c(2011, 2100)
-Nreps <- 1 ## TODO
-studyAreaNames <- c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
-climateScenarios <- c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")[3] ## TODO
-
-runName <- sprintf("%s_%s_run01", studyAreaNames[1], climateScenarios[1]) ## need a runName for gids
+source("04-options.R"); options(mc.cores = nReps);
 source("05-google-ids.R")
+
+usePrerun <- TRUE
+doUpload <- TRUE
 
 gid_results <- lapply(studyAreaNames, function(sAN) {
   gdriveSims[studyArea == sAN & simObject == "results", gid]
 })
 names(gid_results) <- studyAreaNames
 
-## TODO: setPaths()
+do.call(setPaths, posthocPaths)
 
 posthocModules <- list("Biomass_summary", "fireSense_summary")
 
 posthocParams <- list(
   Biomass_summary = list(
-    climateScenarios = climateScenarios[1], ## TODO: use all scenarios
+    climateScenarios = climateScenarios,
     simOutputPath = dirname(defaultPaths$outputPath), ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
-    upload = TRUE,
+    upload = doUpload,
     year = years
   ),
   fireSense_summary = list(
-    climateScenarios = climateScenarios[1], ## TODO: use all scenarios
+    climateScenarios = climateScenarios,
     simOutputPath = dirname(defaultPaths$outputPath), ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
-    upload = TRUE
+    upload = doUpload
   )
 )
 
@@ -81,8 +83,8 @@ posthocSim <- simInitAndSpades(
 
 ## TODO: sim summary module?
 
-sim <- loadSimList("outputs/AOU_CCSM4_RCP85_res250_rep02/AOU_CCSM4_RCP85_res250_rep02.qs")
-et <- elapsedTime(sim, units = "hours")
+#sim <- loadSimList("outputs/AOU_CCSM4_RCP85_res250_rep02/AOU_CCSM4_RCP85_res250_rep02.qs")
+#et <- elapsedTime(sim, units = "hours")
 
-sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
-et_rof <- elapsedTime(sim_rof)
+#sim_rof <- loadSimList("outputs/ROF_CCSM4_RCP85_res125_rep02/ROF_CCSM4_RCP85_res125_rep02.qs")
+#et_rof <- elapsedTime(sim_rof)

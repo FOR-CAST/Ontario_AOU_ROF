@@ -1,19 +1,20 @@
 #source("01-packages.R")
 
-library(Require)
-library(reproducible)
-library(googledrive)
+library("Require")
+Require(c("googledrive", "purrr"))
+
+drive_auth(email = "achubaty@for-cast.ca", use_oob = quickPlot::isRstudioServer())
 
 source("05-google-ids.R")
 
-files2upload <- c(
-  list.files("outputs", "(CanESM5|CNRM-ESM2-1).*[.]tar.gz$", full.names = TRUE)
-)
+studyAreas <- c("ROF", "ROF-kNN") # c("AOU", "ROF") # c("ROF_shield", "ROF_plain")
+lapply(studyAreas, function(sA) {
+  gid_results <- as_id(gdriveSims[studyArea == sA & simObject == "results", gid])
 
-m <- which(basename(files2upload) == "ROF_plain_CanESM5_SSP370_run01.tar.gz")
-lapply(files2upload[-c(1:m)], function(tarball) {
-  studyAreaName <- substr(basename(tarball), 1, 9)
-  gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
-  retry(quote(drive_put(media = tarball, path = unique(as_id(gid_results)), name = basename(tarball))),
-        retries = 5, exponentialDecayBase = 2)
+  files2upload <- list.files("outputs", paste0(sA, "_(CanESM5|CNRM-ESM2-1).*[.]tar.gz$"), full.names = TRUE)
+  files2upload <- set_names(files2upload, basename(files2upload))
+
+  prevUploaded <- drive_ls(gid_results)
+  toUpload <- files2upload[!(basename(files2upload) %in% prevUploaded$name)]
+  uploaded <- map(toUpload, ~ drive_upload(.x, path = gid_results))
 })
