@@ -24,8 +24,7 @@ if (!require("Require", quietly = TRUE)) {
 
 .spatialPkgs <- c("lwgeom", "rgdal", "rgeos", "sf", "sp", "raster", "terra")
 
-#Require("PredictiveEcology/SpaDES.install@development")
-Require("PredictiveEcology/SpaDES.install@installFromSource")
+Require("PredictiveEcology/SpaDES.install@development")
 
 installSpaDES(dontUpdate = .spatialPkgs)
 
