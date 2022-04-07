@@ -77,6 +77,33 @@ posthocSim <- simInitAndSpades(
   paths = posthocPaths
 )
 
+
+# fires ---------------------------------------------------------------------------------------
+
+tmp <- loadSimList("outputs/ROF_shield_CanESM5_SSP370_run01/ROF_shield_CanESM5_SSP370_run01.qs")
+
+r <- raster::raster(tmp$rasterToMatch)
+burnSummary = copy(tmp$burnSummary)
+
+bs <- burnSummary[ , .N, .(igLoc)]
+
+r[bs$igLoc] <- bs$N
+
+raster::plot(r)
+
+
+myXYs <- raster::xyFromCell(object = r, cell = bs$igLoc)
+mySPs <- sp::SpatialPoints(coords = myXYs, proj4string = raster::crs(r))
+
+sp::plot(mySPs)
+
+
+bm <- raster::raster("outputs/ROF_shield_CanESM5_SSP370_run01/burnMap_2100_year2100.tif")
+raster::plot(bm)
+
+raster::setMinMax(bm)
+hist(bm[])
+
 # simulation summaries ------------------------------------------------------------------------
 
 ## TODO: sim summary module?

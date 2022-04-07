@@ -8,6 +8,9 @@ AOU,ignitionOut,CCSM4,,,1_NtOc8lG5GMIftWXsxPdeW_pu9Z7EZGa
 AOU,escapeOut,CCSM4,,,1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J
 AOU,spreadOut,CCSM4,,1,1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs
 AOU,results,"",,,1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki
+ROF,simOutPreamble,CanESM5,370,,1IB5tRL87Kt9Vg0A_fK_qxy6y7dyhVKqK
+ROF,biomassMaps2001,,,,1Fzb9ECBFytqWgDmV2oet88WqY25hfsMF
+ROF,biomassMaps2011,,,,1MZPDRAiaMpaL-rJxXUGbuSonf1-cjoux
 ROF,results,"",,,1OjTkQVUhVq65YPGGOpijZ1ifeRWCwBA4
 ROF_plain,simOutPreamble,CNRM-ESM2-1,370,,1uSsQadhN7bkzESKJl63FlDsR-MYdccJ7
 ROF_plain,simOutPreamble,CanESM5,370,,190ltLPfsI5rxnCJcDNK2aH6BwspBULsk
@@ -17,7 +20,7 @@ ROF_plain,fSsimDataPrep,"",,,1kU4TW4wE6uUijQOi4YsuiLY3K2JLjtiP
 ROF_plain,ignitionOut,"",,,1DvCx9r5pgI5XnGur_S0zXPfVXX2xWF6h
 ROF_plain,escapeOut,"",,,1QfZJL-o36unDMS1s39_xCRfu8zAjm18d
 ROF_plain,spreadOut,"",,1,16gNB3z6JzEX57CkDY59PjQIE53UIfLXj
-ROF_plain,spreadOut,,,2,1r-pZM95pOYC82-sgYdSM-AVys_I_qfkH
+ROF_plain,spreadOut,"",,2,1r-pZM95pOYC82-sgYdSM-AVys_I_qfkH
 ROF_plain,results,"",,,1RJ0zoKeUPhl5opVa0v7WbaaxS-NUxfUn
 ROF_shield,simOutPreamble,CNRM-ESM2-1,370,,1p1NLX4Vbu14GLMGDW8rFAbYSGOY_VM4C
 ROF_shield,simOutPreamble,CanESM5,370,,1cFvp20waZdWv6tfWvGaKoLFPZlIoa4Ic
