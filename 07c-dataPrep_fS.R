@@ -22,7 +22,7 @@ upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 fSdataPrepParams <- list(
   fireSense_dataPrepFit = list(
     .studyAreaName = studyAreaName,
-    .useCache = FALSE, #".inputObjects",
+    .useCache = ".inputObjects",
     fireYears = 2001:2020,
     forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
     igAggFactor = 10000 / preambleParams[["Ontario_preamble"]][[".resolution"]],
@@ -79,7 +79,7 @@ if (isTRUE(usePrerun)) {
 }
 
 if (isTRUE(upload_fSsimDataPrep)) {
-  fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = gdriveURL, name = basename(ffSsimDataPrep))
+  fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = as_id(gdriveURL), name = basename(ffSsimDataPrep))
   gid_fSsimDataPrep <- as.character(fdf$id)
   rm(fdf)
   gdriveSims <- update_googleids(

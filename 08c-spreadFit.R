@@ -47,7 +47,7 @@ cores <- if (peutils::user("achubaty")) {
              c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
            }
          },
-         "pseudostsuga.for-cast.ca" = {
+         "pseudotsuga.for-cast.ca" = {
            rep("localhost", 100)
          })
 }
@@ -120,7 +120,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
     if (!dir.exists(tempdir())) {
       dir.create(tempdir()) ## TODO: why is this dir being removed in the first place?
     }
-    fdf <- googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut))
+    fdf <- googledrive::drive_put(media = fspreadOut, path = as_id(gdriveURL), name = basename(fspreadOut))
     gid_spreadOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(

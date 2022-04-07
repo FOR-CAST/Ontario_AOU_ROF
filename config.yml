@@ -13,7 +13,7 @@ default:
   ecozone: "shield" ## 'plain' or 'shield'
   inputpaths: null
   messagingNumCharsModule: 21
-  nreps: 10
+  nreps: 5
   paths:
     cachedir: "cache"
     inputpaths: null
