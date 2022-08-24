@@ -1,18 +1,16 @@
 do.call(setPaths, dynamicPaths)
 
-gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
-
 times <- list(start = 2011, end = 2100)
 
 dynamicModules <- list(
   "fireSense_dataPrepPredict",
   "fireSense",
-   "fireSense_IgnitionPredict",
-   "fireSense_EscapePredict",
-   "fireSense_SpreadPredict",
-   "Biomass_core",
-   "Biomass_regeneration",
-   ifelse(isTRUE(useLandR.CS), "gmcsDataPrep", "")
+  "fireSense_IgnitionPredict",
+  "fireSense_EscapePredict",
+  "fireSense_SpreadPredict",
+  "Biomass_core",
+  "Biomass_regeneration",
+  ifelse(isTRUE(useLandR.CS), "gmcsDataPrep", "")
 )
 dynamicModules <- lapply(dynamicModules, function(m) if (nzchar(m)) m)
 dynamicModules[sapply(dynamicModules, is.null)] <- NULL ## this is bananas!
@@ -113,23 +111,24 @@ finalYearOutputs <- data.frame(
 
 dynamicOutputs <- rbind(annualRasters, annualObjects, finalYearOutputs)
 
+fs_predict_modules <- c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict")
 dynamicParams <- list(
   Biomass_core = list(
-    "sppEquivCol" = fSsimDataPrep@params$fireSense_dataPrepFit$sppEquivCol,
-    "vegLeadingProportion" = 0, ## apparently `sppColorVect` has no mixed colour
-    ".plots" = c("object", "png", "raw"),
-    ".studyAreaName" = studyAreaName
+    #growthAndMortalityDrivers = ifelse(isTRUE(useLandR.CS), "LandR.CS", "LandR"),
+    sppEquivCol = fSsimDataPrep@params$fireSense_dataPrepFit$sppEquivCol,
+    vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
+    .plots = c("object", "png", "raw"),
+    .studyAreaName = studyAreaName
   ),
   Biomass_regeneration = list(
-    "fireInitialTime" = times$start + 1 #regeneration is scheduled earlier, so it starts in 2012
+    fireInitialTime = times$start + 1 #regeneration is scheduled earlier, so it starts in 2012
   ),
   fireSense_dataPrepPredict = list(
-    "fireTimeStep" = 1,
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
-    "whichModulesToPrepare" = c("fireSense_IgnitionPredict",
-                                "fireSense_EscapePredict",
-                                "fireSense_SpreadPredict"),
-    "missingLCCgroup" = fSsimDataPrep@params$fireSense_dataPrepFit$missingLCCgroup
+    fireTimeStep = 1,
+    sppEquivCol = simOutPreamble$sppEquivCol,
+    missingLCCgroup = fSsimDataPrep@params$fireSense_dataPrepFit$missingLCCgroup,
+    nonForestCanBeYoungAge = TRUE,
+    whichModulesToPrepare = fs_predict_modules
   ),
   fireSense_ignitionPredict = list(
     ##
@@ -138,10 +137,11 @@ dynamicParams <- list(
     .plotInterval = NA,
     .plotInitialTime = .plotInitialTime,
     plotIgnitions = FALSE,
-    whichModulesToPrepare = c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict")
+    whichModulesToPrepare = fs_predict_modules
   ),
   gmcsDataPrep = list(
-    "yearOfFirstClimateImpact" = times$start
+    doPlotting = TRUE,
+    yearOfFirstClimateImpact = times$start
   )
 )
 
@@ -161,7 +161,6 @@ mainSim <- simInitAndSpades(
 saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
 
 resultsDir <- file.path("outputs", runName)
-tarball <- paste0(resultsDir, ".tar.gz")
 
 ## make annual standAgeMaps from cohortData
 lapply(2011:2100, function(year) {
@@ -173,12 +172,13 @@ lapply(2011:2100, function(year) {
   names(pixelGroupMap) <- "pixelGroup"
   standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
   writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+  TRUE
 })
 
+tarball <- paste0(resultsDir, ".tar.gz")
 #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
 utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
 
-retry(quote(drive_put(media = tarball, path = unique(as_id(gid_results)), name = basename(tarball))),
-      retries = 5, exponentialDecayBase = 2)
+## we will upload at the end to prevent timeouts from delaying subsequent sims
 
 SpaDES.project::notify_slack(runName = runName, channel = config::get("slackchannel"))

@@ -29,6 +29,8 @@ dataPrepOutputs2011 <- data.frame(
                   "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
+dataPrepObjects$standAgeMap <- simOutPreamble[["standAgeMap2011"]]
+
 fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", studyAreaName), Paths$outputPath, ext = simFileFormat)
 if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {
@@ -57,7 +59,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   saveSimList(biomassMaps2011, fbiomassMaps2011, fileBackend = 2)
 
   if (isTRUE(upload_biomassMaps2011)) {
-    fdf <- googledrive::drive_put(media = fbiomassMaps2011, path = gdriveURL, name = basename(fbiomassMaps2011))
+    fdf <- googledrive::drive_put(media = fbiomassMaps2011, path = as_id(gdriveURL), name = basename(fbiomassMaps2011))
     gid_biomassMaps2011 <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
@@ -68,9 +70,4 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
   }
 }
 
-rm(dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
-
-## PLOTTING
-if (!is.na(.plotInitialTime)) {
-  Plot(simOutSpeciesLayers2011$speciesLayers)
-}
+rm(dataPrepObjects, dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)

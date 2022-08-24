@@ -22,27 +22,34 @@ upperParams <- c(upperParamsAnnual, upperParamsNonAnnual)
 # upper <- c(0.29, 10, 10, upperParams)
 
 lower <- c(0.25, 0.2, 0.1, lowerParams)
-upper <- c(0.276, 2, 4, upperParams)
+upper <- c(0.265, 2, 4, upperParams) ## NOTE: 2022-03-04: lowered to 0.265 from 0.276 b/c too burny
 dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
 cores <- if (peutils::user("achubaty")) {
-  if (Sys.info()[["nodename"]] == "pinus.for-cast.ca") {
-    if (fitUsing == 3) {
-      c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
-    } else if (fitUsing == 2) {
-      c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
-    } else if (fitUsing == 1) {
-      rep("pseudotsuga.for-cast.ca", 100)
-    }
-  } else if (Sys.info()[["nodename"]] == "picea.for-cast.ca") {
-    if (fitUsing == 3) {
-      c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
-    } else if (fitUsing == 2) {
-      c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
-    }
-  }
+  switch(Sys.info()[["nodename"]],
+         "pinus.for-cast.ca" = {
+           if (fitUsing == 4) {
+             c(rep("localhost", 32), rep("picea.for-cast.ca", 16), rep("pseudotsuga.for-cast.ca", 52))
+           } else if (fitUsing == 3) {
+             c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
+           } else if (fitUsing == 2) {
+             c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
+           } else if (fitUsing == 1) {
+             rep("pseudotsuga.for-cast.ca", 100)
+           }
+         },
+         "picea.for-cast.ca" = {
+           if (fitUsing == 3) {
+             c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
+           } else if (fitUsing == 2) {
+             c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
+           }
+         },
+         "pseudotsuga.for-cast.ca" = {
+           rep("localhost", 100)
+         })
 }
 
 ## TODO: fix this check -- 100 cores, not 90 ??
@@ -50,27 +57,27 @@ cores <- if (peutils::user("achubaty")) {
 
 spreadFitParams <- list(
   fireSense_SpreadFit = list(
-    # "cacheId_DE" = paste0("DEOptim_", studyAreaName), # This is NWT DEoptim Cache
-    "cloudFolderID_DE" = cloudCacheFolderID,
-    "cores" = cores,
-    "DEoptimTests" = c("adTest", "snll_fs"), # Can be one or both of c("adTest", "snll_fs")
-    "doObjFunAssertions" = FALSE,
-    "iterDEoptim" = 150,
-    "iterStep" = 150,
-    "iterThresh" = 396L,
-    "lower" = lower,
-    "maxFireSpread" = max(0.28, upper[1]),
-    "mode" = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
-    "mutuallyExclusive" = list("youngAge" = c("class", "nf_")),
-    "NP" = length(cores),
-    "objFunCoresInternal" = 1L,
-    "objfunFireReps" = 100,
-    #"onlyLoadDEOptim" = FALSE,
-    "rescaleAll" = TRUE,
-    "trace" = 1,
-    "SNLL_FS_thresh" = NULL, # NULL means 'autocalibrate' to find suitable threshold value
-    "upper" = upper,
-    #"urlDEOptimObject" = NULL,
+    cloudFolderID_DE = cloudCacheFolderID,
+    cores = cores,
+    DEoptimTests = c("adTest", "snll_fs"),
+    doObjFunAssertions = FALSE,
+    iterDEoptim = 150,
+    iterStep = 150,
+    iterThresh = 396L,
+    libPathDEoptim = libPathDEoptim,
+    lower = lower,
+    maxFireSpread = max(0.28, upper[1]),
+    mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
+    mutuallyExclusive = list("youngAge" = c("class", "nf_")),
+    NP = length(cores),
+    objFunCoresInternal = 1L,
+    objfunFireReps = 100,
+    # onlyLoadDEOptim = FALSE,
+    rescaleAll = TRUE,
+    trace = 1,
+    SNLL_FS_thresh = NULL, # NULL means 'autocalibrate' to find suitable threshold value
+    upper = upper,
+    # urlDEOptimObject = NULL,
     "useCache_DE" = FALSE,
     "useCloud_DE" = useCloudCache,
     "verbose" = TRUE,
@@ -113,7 +120,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
     if (!dir.exists(tempdir())) {
       dir.create(tempdir()) ## TODO: why is this dir being removed in the first place?
     }
-    fdf <- googledrive::drive_put(media = fspreadOut, path = gdriveURL, name = basename(fspreadOut))
+    fdf <- googledrive::drive_put(media = fspreadOut, path = as_id(gdriveURL), name = basename(fspreadOut))
     gid_spreadOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(

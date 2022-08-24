@@ -4,9 +4,10 @@
 
 defaultPaths <- list(
   cachePath = cacheDir,
-  modulePath = moduleDir,
+  modulePath = "modules",
   inputPath = "inputs",
-  outputPath = file.path("outputs", studyAreaName)
+  outputPath = file.path("outputs", studyAreaName),
+  scratchPath = scratchDir
 )
 
 scratchDir <- checkPath(file.path(scratchDir, studyAreaName), create = TRUE) ## basedir set in config
@@ -27,6 +28,11 @@ spreadFitPaths <- defaultPaths
 spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit", runName)
 
 ## main (dynamic) simulation
-dynamicPaths <-  defaultPaths
+dynamicPaths <- defaultPaths
 dynamicPaths$cachePath <- file.path(cacheDir, "cache_sim")
 dynamicPaths$outputPath <- file.path("outputs", runName)
+
+## postprocessing paths
+posthocPaths <- defaultPaths
+posthocPaths[["cachePath"]] <- file.path(cacheDir, "cache_posthoc")
+posthocPaths[["outputPath"]] <- dirname(defaultPaths[["outputPath"]])

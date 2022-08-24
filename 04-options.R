@@ -20,10 +20,11 @@ maxMemory <- 5e+12
 
 raster::rasterOptions(default = TRUE)
 opts <- options(
+  "encoding" = "UTF-8",
   "LandR.assertions" = FALSE,
   "LandR.verbose" = 1,
   "rasterMaxMemory" = maxMemory,
-  "rasterTmpDir" = scratchDir,
+  "rasterTmpDir" = file.path(scratchDir, "raster"),
   "reproducible.cachePath" = file.path(scratchDir, "cache"),
   "reproducible.cacheSaveFormat" = cacheFormat,
   "reproducible.conn" = cacheDBconn,
@@ -46,6 +47,7 @@ opts <- options(
   "spades.nThreads" = 4,
   "spades.recoveryMode" = FALSE,
   "spades.restartR.restartDir" = defaultPaths[["outputPath"]],
+  "spades.scratchPath" = scratchDir,
   "spades.useRequire" = useRequire
 )
 

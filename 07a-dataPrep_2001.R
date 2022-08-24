@@ -22,33 +22,33 @@ dataPrepModules <- list(
 dataPrepParams2001 <- list(
   .globals = list("dataYear" = 2001),
   Biomass_borealDataPrep = list(
-    # "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
-    "biomassModel" = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
+    # biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
+    biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
                                         (logAge + cover | ecoregionGroup))),
-    "ecoregionLayerField" = "ECOREGION", # "ECODISTRIC"
-    "exportModels" = "all",
-    "fixModelBiomass" = TRUE,
-    "forestedLCCClasses" = simOutPreamble[["treeClasses"]],
-    "LCCClassesToReplaceNN" = numeric(0),
-    "pixelGroupAgeClass" = dataPrep$pixelGroupAgeClass,
-    "speciesTableAreas" = c("WestON"),
-    "speciesUpdateFunction" = list(
+    ecoregionLayerField = "ECOREGION", # "ECODISTRIC"
+    exportModels = "all",
+    fixModelBiomass = TRUE,
+    forestedLCCClasses = simOutPreamble[["LandRforestedLCC"]],
+    LCCClassesToReplaceNN = numeric(0),
+    pixelGroupAgeClass = dataPrep[["pixelGroupAgeClass"]],
+    speciesTableAreas = c("WestON"),
+    speciesUpdateFunction = list(
       quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
       quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
     ),
-    "sppEquivCol" = simOutPreamble$sppEquivCol,
-    "subsetDataBiomassModel" = dataPrep$subsetDataBiomassModel,
-    "useCloudCacheForStats" = useCloudCache,
-    ".plots" = c("object", "png", "raw"),
-    ".studyAreaName" = paste0(studyAreaName, 2001),
-    ".useCache" = c(".inputObjects", "init")
+    sppEquivCol = simOutPreamble[["sppEquivCol"]],
+    subsetDataBiomassModel = dataPrep[["subsetDataBiomassModel"]],
+    useCloudCacheForStats = useCloudCache,
+    .plots = c("object", "png", "raw"),
+    .studyAreaName = paste0(studyAreaName, 2001),
+    .useCache = FALSE #c(".inputObjects", "init")
   ),
   Biomass_speciesData = list(
-    #"dataYear" = 2001, ## passed globally
-    "sppEquivCol" = simOutPreamble[["sppEquivCol"]],
-    "types" = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
-    ".plotInitialTime" = .plotInitialTime,
-    ".studyAreaName" = paste0(studyAreaName, 2001)
+    #dataYear = 2001, ## passed globally
+    sppEquivCol = simOutPreamble[["sppEquivCol"]],
+    types = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
+    .plotInitialTime = .plotInitialTime,
+    .studyAreaName = paste0(studyAreaName, 2001)
   ),
   Biomass_speciesFactorial = list(
     factorialSize = "small" ## TODO: use medium?
@@ -88,6 +88,8 @@ dataPrepObjects <- list(
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],
+  rstLCC = simOutPreamble[["LCC"]],
+  standAgeMap = simOutPreamble[["standAgeMap2001"]],
   studyArea = simOutPreamble[["studyArea"]],
   studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
@@ -120,7 +122,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2001)) {
   saveSimList(biomassMaps2001, fbiomassMaps2001, fileBackend = 2)
 
   if (isTRUE(upload_biomassMaps2001)) {
-    fdf <- googledrive::drive_put(media = fbiomassMaps2001, path = gdriveURL, name = basename(fbiomassMaps2001))
+    fdf <- googledrive::drive_put(media = fbiomassMaps2001, path = as_id(gdriveURL), name = basename(fbiomassMaps2001))
     gid_biomassMaps2001 <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(

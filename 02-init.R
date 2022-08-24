@@ -18,21 +18,22 @@ codeChecks <- config::get("codechecks")
 delayStart <- config::get("delaystart")
 ecozone <- config::get("ecozone")
 fitUsing <- if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) 3 else 0
+libPathDEoptim <- file.path(config::get("paths")[["libpathdeoptim"]], version$platform,
+                            paste0(version$major, ".", strsplit(version$minor, "[.]")[[1]][1]))
 messagingNumCharsModule <- config::get("messagingNumCharsModule")
 newGoogleIDs <- FALSE ## gets rechecked/updated for each script (06, 07x, 08x) based on script 05
 nReps <- config::get("nreps")
 reproducibleAlgorithm <- config::get("reproduciblealgorithm")
-resolution <- as.integer(config::get("resolution"))
 reupload <- config::get("reupload")
 run <- config::get("run")
 scratchDir <- config::get("paths")[["scratchdir"]]
-simFileFormat <- config::get()[["simfileformat"]]
+simFileFormat <- config::get("simfileformat")
 studyAreaName <- paste0(config::get("studyarea"), "_", ecozone)
 useCloudCache <- config::get("cloud")[["usecloud"]]
 useLandR.CS <- config::get("uselandrcs")
 useMemoise <- config::get("usememoise")
 usePlot <- config::get("plot")
-userInputPaths <- config::get("inputpaths")
+userInputPaths <- config::get("paths")[["inputpaths"]]
 usePrerun <- config::get("useprerun")
 useRequire <- config::get("userequire")
 useTerra <- config::get("useterra")
@@ -42,14 +43,21 @@ if (!exists("runName")) {
   runName <- sprintf("%s_%s_SSP%03d_run%02d", studyAreaName, climateGCM, climateSSP, run)
 } else {
   chunks <- strsplit(runName, "_")[[1]]
-  climateGCM <- if (grepl("ensemble", runName)) {
-    paste0(chunks[3], "_", chunks[4])
-  } else {
-    chunks[3]
+  studyAreaName <- if (length(chunks) == 4) {
+    chunks[1] ## AOU|ROF
+  } else if (length(chunks) == 5) {
+    paste0(chunks[1], "_", chunks[2]) ## ROF_xxxxx
   }
+  climateGCM <- chunks[length(chunks) - 2] ## chunks[2] for AOU|ROF; chunks[3] for ROF_xxxxx
   climateSSP <- as.numeric(substr(chunks[length(chunks) - 1], 4, 6))
-  studyAreaName <- paste0(chunks[1], "_", chunks[2])
   run <- as.numeric(substr(chunks[length(chunks)], 4, 5))
+
+  stopifnot(
+    studyAreaName %in% c("AOU", "ROF", "ROF-kNN", "ROF_plain", "ROF_shield"),
+    grepl("CanESM5|CNRM-ESM2-1", climateGCM),
+    climateSSP %in% c(370, 585),
+    !is.na(run)
+  )
 }
 
 firstRunMDCplots <- if (run == 1 && reupload) TRUE else FALSE

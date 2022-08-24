@@ -12,7 +12,7 @@ preambleModules <- list("Ontario_preamble", "canClimateData")
 
 preambleParams <- list(
   canClimateData = list(
-    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
+    .useCache = ".inputObjects",
     climateGCM = climateGCM,
     climateSSP = climateSSP,
     historicalFireYears = 1991:2020,
@@ -21,8 +21,9 @@ preambleParams <- list(
   ),
   Ontario_preamble = list(
     .resolution = ifelse(grepl("ROF", studyAreaName), 125, 250),
-    .useCache = ".inputObjects", # Since there is only one event and it is saved manually below, TRUE here would essentially save 2x
-    runName = runName
+    .useCache = FALSE, #".inputObjects",
+    runName = runName,
+    useAgeMapkNN = grepl("kNN", runName)
   )
 )
 
@@ -46,13 +47,34 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
   saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
 
   if (isTRUE(upload_preamble)) {
-    fdf <- googledrive::drive_put(media = fsimOutPreamble, path = gdriveURL, name = basename(fsimOutPreamble))
+    fdf <- googledrive::drive_put(media = fsimOutPreamble, path = as_id(gdriveURL), name = basename(fsimOutPreamble))
     gid_preamble <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
       data.table(studyArea = studyAreaName, simObject = "simOutPreamble", runID = NA,
                  gcm = climateGCM, ssp = climateSSP, gid = gid_preamble),
       gdriveSims
+    )
+  }
+}
+
+if (isTRUE(firstRunMDCplots)) {
+  ggMDC <- fireSenseUtils::compareMDC(
+    historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
+    projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
+    flammableRTM = simOutPreamble$flammableRTM
+  )
+  fggMDC <- file.path(preamblePaths$outputPath, "figures", paste0("compareMDC_", studyAreaName, "_",
+                                                                  climateGCM, "_", climateSSP, ".png"))
+  checkPath(dirname(fggMDC), create = TRUE)
+
+  ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
+
+  if (isTRUE(upload_preamble)) {
+    googledrive::drive_put(
+      media = fggMDC,
+      path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
+      name = basename(fggMDC)
     )
   }
 }

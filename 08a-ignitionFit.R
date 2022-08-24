@@ -7,7 +7,11 @@ upload_ignitionOut <- reupload | length(gid_ignitionOut) == 0
 
 biggestObj <- as.numeric(object.size(fSsimDataPrep[["fireSense_ignitionCovariates"]]))/1e6 * 1.2
 
-form <- fSsimDataPrep[["fireSense_ignitionFormula"]]
+#form <- fSsimDataPrep[["fireSense_ignitionFormula"]]
+
+## NOTE: drop youngAge and class2 (rare on landscape and driving crazy ignitions)
+form <- paste("ignitions ~ FenPlus:MDC + BogSwamp:MDC + class3:MDC +",
+              "FenPlus:pw(MDC, k_FnP) + BogSwamp:pw(MDC, k_BgS) + class3:pw(MDC, k_cl3) - 1")
 
 nCores <- ifelse(Sys.info()[["nodename"]] == "pinus.for-cast.ca", 4, 8) ## 400 GB pinus
 
@@ -54,7 +58,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_ignitionOut)) {
   saveSimList(sim = ignitionOut, filename = fignitionOut, fileBackend = 2)
 
   if (isTRUE(upload_ignitionOut)) {
-    fdf <- googledrive::drive_put(media = fignitionOut, path = gdriveURL, name = basename(fignitionOut))
+    fdf <- googledrive::drive_put(media = fignitionOut, path = as_id(gdriveURL), name = basename(fignitionOut))
     gid_ignitionOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(

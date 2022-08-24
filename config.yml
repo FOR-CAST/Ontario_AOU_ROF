@@ -10,17 +10,18 @@ default:
     usecloud: false
   codechecks: true
   delaystart: 0
-  ecozone: "plain" ## 'plain' or 'shield'
+  ecozone: "shield" ## 'plain' or 'shield'
   inputpaths: null
   messagingNumCharsModule: 21
-  nreps: 10
+  nreps: 5
   paths:
     cachedir: "cache"
-    scratchdir: "/tmp/scratch/ON"
+    inputpaths: null
+    libpathdeoptim: !expr Require::checkPath(ifelse(nzchar(Sys.getenv("PRJ_PKG_DIR")), Sys.getenv("PRJ_PKG_DIR"), "packages"))
+    scratchdir: !expr file.path(dirname(tempdir()), "scratch", "ON")
   plot: false
   reproduciblealgorithm: 2
   reupload: false
-  resolution: 250  ## 250 for AOU; 125 for ROF
   run: 1
   simfileformat: "qs"
   studyarea: "ROF" ## "AOU" or "ROF"
@@ -51,6 +52,7 @@ alex:
   messagingNumCharsModule: 36
   nreps: 5
   paths:
+    libpathdeoptim: "~/GitHub/Ontario_AOU_ROF/packages"
     scratchdir: !expr if (grepl("for-cast[.]ca", Sys.info()[["nodename"]])) "/mnt/scratch/WBI_forecasts" else "/tmp/scratch/WBI_forecasts"
   reupload: !expr if (grepl("picea", Sys.info()[["nodename"]])) TRUE else FALSE
   simfileformat: "qs"
@@ -59,14 +61,32 @@ alex:
   useprerun: false
 
 ian:
- inherits: default
- cloud:
-  googleuser: "ianmseddy@gmail.com"
- paths:
-  scratchdir: "D:/temp"
- useprerun: false
- studyarea: "ROF"
- run: 1
- plot: false
- resolution: 125
+  inherits: default
+  batchmode: false
+  cachedb: "sqlite"
+  cacheformat: "qs"
+  climategcm: "CNRM-ESM2-1" ## '13GCMs_ensemble', 'CanESM5', 'CNRM-ESM2-1', 'CCSM4'
+  climatessp: 370 ## 245, 370, 585
+  cloud:
+    cachedir: ""
+    googleuser: "ianmseddy@gmail.com"
+    usecloud: false
+  ecozone: "plain" ## 'plain' or 'shield'
+  inputpaths: null
+  messagingNumCharsModule: 21
+  nreps: 10
+  paths:
+    cachedir: "cache"
+    scratchdir: "/tmp/scratch/ON"
+  plot: false
+  reproduciblealgorithm: 2
+  reupload: false
+  resolution: 125  ## 250 for AOU; 125 for ROF
+  run: 1
+  simfileformat: "qs"
+  studyarea: "ROF" ## "AOU" or "ROF"
+  usememoise: false
+  useprerun: true
+  userequire: true
+  useterra: true
 
