@@ -7,7 +7,7 @@ lvls <- c("simOutPreamble", "biomassMaps2001", "biomassMaps2011", "fSsimDataPrep
 data.table::set(gdriveSims, NULL, "simObject", factor(gdriveSims$simObject, levels = lvls))
 data.table::setkeyv(gdriveSims, c("studyArea", "simObject", "runID", "gcm", "ssp"))
 
-gdriveURL <- gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
+gdriveURL <- gid_results <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "results", gid]
 
 update_googleids <- function(x, gdriveSims) {
   gdriveSims_updated <- rbind(gdriveSims, x)

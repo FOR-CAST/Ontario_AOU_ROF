@@ -1,18 +1,12 @@
-## NOTE: 07a-dataPrep_2001.R needs to be run before this script
-
-do.call(setPaths, dataPrepPaths)
-
 gid_biomassMaps2011 <- gdriveSims[studyArea == studyAreaName & simObject == "biomassMaps2011", gid]
-upload_biomassMaps2011 <- reupload | length(gid_biomassMaps2011) == 0
+upload_biomassMaps2011 <- config$args[["reupload"]] | length(gid_biomassMaps2011) == 0
 
 year <- 2011
 
 dataPrepParams2011 <- dataPrepParams2001
-dataPrepParams2011$Biomass_speciesData$types <- "KNN"
-dataPrepParams2011$Biomass_speciesData$dataYear <- year
-dataPrepParams2011$Biomass_speciesData$.studyAreaName <- paste0(studyAreaName, year)
-dataPrepParams2011$Biomass_borealDataPrep$dataYear <- year
-dataPrepParams2011$Biomass_borealDataPrep$.studyAreaName <- paste0(studyAreaName, year)
+dataPrepParams2011[[".globals"]][["dataYear"]] <- year
+dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(studyAreaName, year)
+dataPrepParams2011[["Biomass_speciesData"]][["types"]] <- "KNN" ## TODO: is this correct? what year for ONFRI?
 
 dataPrepOutputs2011 <- data.frame(
   objectName = c("cohortData",
@@ -29,10 +23,10 @@ dataPrepOutputs2011 <- data.frame(
                   "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
-dataPrepObjects$standAgeMap <- simOutPreamble[["standAgeMap2011"]]
+dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
 
-fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", studyAreaName), Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
+fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2011), path = fbiomassMaps2011)
   }
@@ -43,7 +37,7 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
 } else {
   biomassMaps2011 <- Cache(
     simInitAndSpades,
-    times = list(start = 2011, end = 2011),
+    times = list(start = year, end = year),
     params = dataPrepParams2011,
     modules = dataPrepModules,
     objects = dataPrepObjects,
@@ -56,7 +50,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2011)) {
     cloudFolderID = cloudCacheFolderID,
     userTags = c("dataPrep2011", studyAreaName)
   )
-  saveSimList(biomassMaps2011, fbiomassMaps2011, fileBackend = 2)
+
+  if (isTRUE(attr(biomassMaps2011, ".Cache")[["newCache"]])) {
+    biomassMaps2011@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    saveSimList(biomassMaps2011, fbiomassMaps2011, fileBackend = 2)
+  }
 
   if (isTRUE(upload_biomassMaps2011)) {
     fdf <- googledrive::drive_put(media = fbiomassMaps2011, path = as_id(gdriveURL), name = basename(fbiomassMaps2011))

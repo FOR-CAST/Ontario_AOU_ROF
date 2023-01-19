@@ -1,71 +1,23 @@
-do.call(setPaths, dataPrepPaths)
-
 gid_biomassMaps2001 <- gdriveSims[studyArea == studyAreaName & simObject == "biomassMaps2001", gid]
-upload_biomassMaps2001 <- reupload | length(gid_biomassMaps2001) == 0
+upload_biomassMaps2001 <- config$args[["reupload"]] | length(gid_biomassMaps2001) == 0
 
 year <- 2001
 
-dataPrep <- list(
-  subsetDataBiomassModel = 50,
-  pixelGroupAgeClass = 20,
-  successionTimeStep = 10,
-  useCache = TRUE
-)
 
 dataPrepModules <- list(
   "Biomass_speciesData",
   "Biomass_speciesFactorial",
   "Biomass_borealDataPrep",
   "Biomass_speciesParameters"
-)
+) ## TODO: use config$modules
 
 dataPrepParams2001 <- list(
-  .globals = list("dataYear" = 2001),
-  Biomass_borealDataPrep = list(
-    # biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode + (1 | ecoregionGroup))),
-    biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
-                                        (logAge + cover | ecoregionGroup))),
-    ecoregionLayerField = "ECOREGION", # "ECODISTRIC"
-    exportModels = "all",
-    fixModelBiomass = TRUE,
-    forestedLCCClasses = simOutPreamble[["LandRforestedLCC"]],
-    LCCClassesToReplaceNN = numeric(0),
-    pixelGroupAgeClass = dataPrep[["pixelGroupAgeClass"]],
-    speciesTableAreas = c("WestON"),
-    speciesUpdateFunction = list(
-      quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
-      quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
-    ),
-    sppEquivCol = simOutPreamble[["sppEquivCol"]],
-    subsetDataBiomassModel = dataPrep[["subsetDataBiomassModel"]],
-    useCloudCacheForStats = useCloudCache,
-    .plots = c("object", "png", "raw"),
-    .studyAreaName = paste0(studyAreaName, 2001),
-    .useCache = FALSE #c(".inputObjects", "init")
-  ),
-  Biomass_speciesData = list(
-    #dataYear = 2001, ## passed globally
-    sppEquivCol = simOutPreamble[["sppEquivCol"]],
-    types = if (studyAreaName == "AOU") c("KNN", "ONFRI") else "KNN",
-    .plotInitialTime = .plotInitialTime,
-    .studyAreaName = paste0(studyAreaName, 2001)
-  ),
-  Biomass_speciesFactorial = list(
-    factorialSize = "small" ## TODO: use medium?
-  ),
-  Biomass_speciesParameters = list(
-    constrainGrowthCurve = c(0, 1),
-    constrainMaxANPP = c(3.0, 3.5),
-    constrainMortalityShape = c(10, 25),
-    GAMMiterations = 2,
-    #GAMMknots[names(GAMMknots) %in% sppEquiv$LandR]
-    GAMMknots = 3,
-    minimumPlotsPerGamm = 65,
-    quantileAgeSubset = 98,
-    speciesFittingApproach = "focal",
-    sppEquivCol = simOutPreamble$sppEquivCol
-  )
+  .globals = config$params[[".globals"]],
+  Biomass_speciesData = config$params[["Biomass_speciesData"]]
 )
+dataPrepParams2001[[".globals"]][["dataYear"]] <- year
+dataPrepParams2001[[".globals"]][[".plotInitialTime"]] <- year
+dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(studyAreaName, year)
 
 dataPrepOutputs2001 <- data.frame(
   objectName = c("cohortData",
@@ -95,8 +47,8 @@ dataPrepObjects <- list(
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
 )
 
-fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", studyAreaName), Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2001)) {
+fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2001), path = fbiomassMaps2001)
   }
@@ -111,15 +63,17 @@ if (isTRUE(usePrerun) & isFALSE(upload_biomassMaps2001)) {
     params = dataPrepParams2001,
     modules = dataPrepModules,
     objects = dataPrepObjects,
-    paths = getPaths(),
-    loadOrder = unlist(dataPrepModules),
     # outputs = dataPrepOutputs2001,
     .plots = NA,
     useCloud = useCloudCache,
     cloudFolderID = cloudCacheFolderID,
     userTags = c("dataPrep2001", studyAreaName)
   )
-  saveSimList(biomassMaps2001, fbiomassMaps2001, fileBackend = 2)
+
+  if (isTRUE(attr(biomassMaps2001, ".Cache")[["newCache"]])) {
+    biomassMaps2001@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    saveSimList(biomassMaps2001, fbiomassMaps2001, fileBackend = 2)
+  }
 
   if (isTRUE(upload_biomassMaps2001)) {
     fdf <- googledrive::drive_put(media = fbiomassMaps2001, path = as_id(gdriveURL), name = basename(fbiomassMaps2001))

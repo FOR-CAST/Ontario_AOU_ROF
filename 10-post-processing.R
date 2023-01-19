@@ -13,13 +13,18 @@ source("03-paths.R")
 source("04-options.R"); options(mc.cores = nReps);
 source("05-google-ids.R")
 
-usePrerun <- TRUE
+config$args[["usePrerun"]] <- TRUE
 doUpload <- TRUE
 
 gid_results <- lapply(studyAreaNames, function(sAN) {
   gdriveSims[studyArea == sAN & simObject == "results", gid]
 })
 names(gid_results) <- studyAreaNames
+
+## postprocessing paths
+posthocPaths <- defaultPaths
+posthocPaths[["cachePath"]] <- file.path(cacheDir, "cache_posthoc")
+posthocPaths[["outputPath"]] <- dirname(defaultPaths[["outputPath"]])
 
 do.call(setPaths, posthocPaths)
 
@@ -28,7 +33,7 @@ posthocModules <- list("Biomass_summary", "fireSense_summary")
 posthocParams <- list(
   Biomass_summary = list(
     climateScenarios = climateScenarios,
-    simOutputPath = dirname(defaultPaths$outputPath), ## "outputs"
+    simOutputPath = config$paths[["outputPath"]], ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
     upload = doUpload,
@@ -36,7 +41,7 @@ posthocParams <- list(
   ),
   fireSense_summary = list(
     climateScenarios = climateScenarios,
-    simOutputPath = dirname(defaultPaths$outputPath), ## "outputs"
+    simOutputPath = config$paths[["outputPath"]], ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
     upload = doUpload

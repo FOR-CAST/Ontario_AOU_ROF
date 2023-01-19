@@ -1,8 +1,5 @@
-## NOTE: 07a-dataPrep_2001.R and 07b-dataPrep_2011.R need to be run before this script
-do.call(setPaths, dataPrepPaths)
-
 gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
-upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
+upload_fSsimDataPrep <- config$args[["reupload"]] | length(gid_fSsimDataPrep) == 0
 
 ## WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
 # wildfire2020 <- prepInputs(
@@ -14,29 +11,22 @@ upload_fSsimDataPrep <- reupload | length(gid_fSsimDataPrep) == 0
 #                   "Fire_1985-2020_ROF.dat.aux.xml",
 #                   "Fire_1985-2020_ROF.dat.vat.cpg",
 #                   "Fire_1985-2020_ROF.hdr"),
-#   destinationPath = dataPrepPaths$inputPath
+#   destinationPath = config$paths[["inputPath"]]
 # )
 
 # wildfire2020 <- raster::setMinMax(wildfire2020)
 
 fSdataPrepParams <- list(
-  fireSense_dataPrepFit = list(
-    .studyAreaName = studyAreaName,
-    .useCache = ".inputObjects",
-    fireYears = 2001:2020,
-    forestedLCC = simOutPreamble[["fireSenseForestedLCC"]],
-    igAggFactor = 10000 / preambleParams[["Ontario_preamble"]][[".resolution"]],
-    missingLCCgroup = simOutPreamble$missingLCCGroup,
-    nonflammableLCC = simOutPreamble$nonflammableLCC,
-    sppEquivCol = simOutPreamble[["sppEquivCol"]],
-    useCentroids = TRUE,
-    useFireRaster = TRUE,
-    usePCA = FALSE,
-    whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit")
-  )
+  fireSense_dataPrepFit = config$params[["fireSense_dataPrepFit"]]
 )
 
-simOutPreamble$rasterToMatch <- raster::mask(simOutPreamble$rasterToMatch, simOutPreamble$studyArea)
+fSdataPrepParams[["fireSense_dataPrepFit"]][["forestedLCC"]] <- simOutPreamble[["fireSenseForestedLCC"]]
+fSdataPrepParams[["fireSense_dataPrepFit"]][["missingLCCgroup"]] <- simOutPreamble[["missingLCCGroup"]]
+fSdataPrepParams[["fireSense_dataPrepFit"]][["nonflammableLCC"]] <- simOutPreamble[["nonflammableLCC"]]
+fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
+
+simOutPreamble[["rasterToMatch"]] <- raster::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
+
 fSdataPrepObjects <- list(
   .runName = runName,
   cohortData2001 = biomassMaps2001[["cohortData"]],
@@ -54,10 +44,10 @@ fSdataPrepObjects <- list(
   studyArea = simOutPreamble[["studyArea"]]
 )
 
-invisible(replicate(10, gc()))
+amc::.gc()
 
-ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", studyAreaName), Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun)) {
+ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {
     googledrive::drive_download(file = as_id(gid_fSsimDataPrep), path = ffSsimDataPrep)
   }
@@ -75,7 +65,11 @@ if (isTRUE(usePrerun)) {
     #cloudFolderID = cloudCacheFolderID,
     userTags = c("fireSense_dataPrepFit", studyAreaName)
   )
-  saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
+
+  if (isTRUE(attr(fSsimDataPrep, ".Cache")[["newCache"]])) {
+    fSsimDataPrep@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
+  }
 }
 
 if (isTRUE(upload_fSsimDataPrep)) {

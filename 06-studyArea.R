@@ -1,35 +1,25 @@
-do.call(setPaths, preamblePaths)
-
-gid_preamble <- gdriveSims[studyArea == studyAreaName & simObject == "simOutPreamble" &
-                             gcm == climateGCM & ssp == climateSSP, gid]
-upload_preamble <- run == 1 & (reupload | length(gid_preamble) == 0)
+gid_preamble <- gdriveSims[studyArea == .studyAreaName & simObject == "simOutPreamble" &
+                             gcm == .climateGCM & ssp == .climateSSP, gid]
+upload_preamble <- config$context[["rep"]] == 1 & (config$args[["reupload"]] | length(gid_preamble) == 0)
 
 preambleObjects <- list(
-  .runName = runName
+  .runName = config$context[["runName"]]
 )
-
-preambleModules <- list("Ontario_preamble", "canClimateData")
 
 preambleParams <- list(
-  canClimateData = list(
-    .useCache = ".inputObjects",
-    climateGCM = climateGCM,
-    climateSSP = climateSSP,
-    historicalFireYears = 1991:2020,
-    studyAreaName = "ON",
-    runName = runName
-  ),
-  Ontario_preamble = list(
-    .resolution = ifelse(grepl("ROF", studyAreaName), 125, 250),
-    .useCache = FALSE, #".inputObjects",
-    runName = runName,
-    useAgeMapkNN = grepl("kNN", runName)
-  )
+  # config$params[[".globals"]],
+  canClimateData = config$params[["canClimateData"]],
+  Ontario_preamble = config$params[["Ontario_preamble"]]
 )
 
-fsimOutPreamble <- simFile(paste0("simOutPreamble_", studyAreaName, "_", climateGCM, "_", climateSSP),
-                           Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
+preambleModules <- list("Ontario_preamble", "canClimateData")  ## TODO: use config$modules
+
+fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaName"]],
+                                  "_", config$context[["climateGCM"]],
+                                  "_", config$context[["climateSSP"]]),
+                           prjPaths[["outputPath"]], ext = "qs")
+
+if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   if (!file.exists(fsimOutPreamble)) {
     googledrive::drive_download(file = as_id(gid_preamble), path = fsimOutPreamble)
   }
@@ -40,11 +30,13 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
     params = preambleParams,
     modules = preambleModules,
     loadOrder = unlist(preambleModules),
-    objects = preambleObjects,
-    paths = preamblePaths,
-    useAgeMapkNN = FALSE
+    objects = preambleObjects
   )
-  saveSimList(sim = simOutPreamble, filename = fsimOutPreamble, fileBackend = 2)
+
+  if (isTRUE(attr(simOutPreamble, ".Cache")[["newCache"]])) {
+    simOutPreamble@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    saveSimList(simOutPreamble, fsimOutPreamble, fileBackend = 2)
+  }
 
   if (isTRUE(upload_preamble)) {
     fdf <- googledrive::drive_put(media = fsimOutPreamble, path = as_id(gdriveURL), name = basename(fsimOutPreamble))
@@ -58,14 +50,16 @@ if (isTRUE(usePrerun) & isFALSE(upload_preamble)) {
   }
 }
 
+firstRunMDCplots <- if (config$context[["rep"]] == 1 && config$args[["reupload"]]) TRUE else FALSE
+
 if (isTRUE(firstRunMDCplots)) {
   ggMDC <- fireSenseUtils::compareMDC(
     historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
     projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
     flammableRTM = simOutPreamble$flammableRTM
   )
-  fggMDC <- file.path(preamblePaths$outputPath, "figures", paste0("compareMDC_", studyAreaName, "_",
-                                                                  climateGCM, "_", climateSSP, ".png"))
+  fggMDC <- file.path(config$paths[["outputPath"]], "figures",
+                      paste0("compareMDC_", studyAreaName, "_", climateGCM, "_", climateSSP, ".png"))
   checkPath(dirname(fggMDC), create = TRUE)
 
   ggplot2::ggsave(plot = ggMDC, filename = fggMDC)

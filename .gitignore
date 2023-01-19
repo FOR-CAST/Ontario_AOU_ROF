@@ -1,29 +1,36 @@
-.Renviron
-.Rhistory
 .Rapp.history
 .RData
+*.Renviron
+.Rhistory
 .Rproj.user/
 
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
 
-# html files
-*.html
-
-# caches
+## cache files
+.channel_cache
 *_cache/
 /cache/
 cache
 cache/
-.channel_cache
 
-# R packages
-packages/
-
-# simulation data and outputs
+## simulation data and outputs
+.checkpoint
 data/
 inputs
 inputs/
 outputs
 outputs/
+outputs*/
+
+## OAuth tokens
+.httr-oauth
+.httr-oauth-SUSPENDED
+*.json
+
+## misc OS files
+Thumbs.db
+
+## !! Module data should be gitignored in the respective module's data dir !!
+## !! inputs/ has its own .gitignore file too !!

@@ -1,6 +1,8 @@
-do.call(setPaths, dynamicPaths)
+################################################################################
+## main simulation
+################################################################################
 
-times <- list(start = 2011, end = 2100)
+times <- config$args[["simYears"]]
 
 dynamicModules <- list(
   "fireSense_dataPrepPredict",
@@ -10,10 +12,25 @@ dynamicModules <- list(
   "fireSense_SpreadPredict",
   "Biomass_core",
   "Biomass_regeneration",
-  ifelse(isTRUE(useLandR.CS), "gmcsDataPrep", "")
+  ifelse(isTRUE(config$args[["useLandR.CS"]]), "gmcsDataPrep", "")
 )
 dynamicModules <- lapply(dynamicModules, function(m) if (nzchar(m)) m)
 dynamicModules[sapply(dynamicModules, is.null)] <- NULL ## this is bananas!
+
+dynamicParams <- list(
+  .globals = config$params[[".globals"]],
+  Biomass_core = config$params[["Biomass_core"]],
+  Biomass_regeneration = config$params[["Biomass_regeneration"]],
+  fireSense = config$params[["fireSense"]],
+  fireSense_dataPrepPredict = config$params[["fireSense_dataPrepPredict"]],
+  fireSense_EscapePredict = config$params[["fireSense_EscapePredict"]],
+  fireSense_IgnitionPredict = config$params[["fireSense_IgnitionPredict"]],
+  fireSense_SpreadPredict = config$params[["fireSense_SpreadPredict"]],
+  gmcsDataPrep = config$params[["gmcsDataPrep"]]
+)
+
+dynamicParams[[".globals"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
+dynamicParams[["fireSense_dataPrepPredict"]][["missingLCCgroup"]] <- simOutPreamble[["missingLCCgroup"]]
 
 dynamicObjects <- list(
   .runName = runName,
@@ -64,7 +81,8 @@ rastersToSaveAnnually <- c(
   "mortalityMap",
   "pixelGroupMap",
   "rstCurrentBurn",
-  "simulatedBiomassMap"
+  "simulatedBiomassMap",
+  "standAgeMap"
 )
 
 annualRasters <- data.frame(
@@ -93,12 +111,14 @@ annualObjects <- data.frame(
 )
 annualObjects$file <- paste0(annualObjects$objectName, "_", annualObjects$saveTime, ".qs")
 
-objectNamesToSaveAtEnd <- c("speciesEcoregion",
-                            "species",
-                            #"gcsModel", ## TODO: from LandR.CS
-                            #"mcsModel", ## TODO: from LandR.CS
-                            "simulationOutput",
-                            "burnSummary")
+objectNamesToSaveAtEnd <- c(
+  #"gcsModel", ## TODO: from LandR.CS
+  "burnSummary",
+  #"mcsModel", ## TODO: from LandR.CS
+  "species",
+  "speciesEcoregion",
+  "simulationOutput"
+)
 
 finalYearOutputs <- data.frame(
   objectName = objectNamesToSaveAtEnd,
@@ -111,77 +131,92 @@ finalYearOutputs <- data.frame(
 
 dynamicOutputs <- rbind(annualRasters, annualObjects, finalYearOutputs)
 
-fs_predict_modules <- c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict")
-dynamicParams <- list(
-  .globals = list(
-    initialB = NA
-  ),
-  Biomass_core = list(
-    #growthAndMortalityDrivers = ifelse(isTRUE(useLandR.CS), "LandR.CS", "LandR"),
-    sppEquivCol = fSsimDataPrep@params$fireSense_dataPrepFit$sppEquivCol,
-    vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
-    .plots = c("object", "png", "raw"),
-    .studyAreaName = studyAreaName
-  ),
-  Biomass_regeneration = list(
-    fireInitialTime = times$start + 1 #regeneration is scheduled earlier, so it starts in 2012
-  ),
-  fireSense_dataPrepPredict = list(
-    fireTimeStep = 1,
-    sppEquivCol = simOutPreamble$sppEquivCol,
-    missingLCCgroup = fSsimDataPrep@params$fireSense_dataPrepFit$missingLCCgroup,
-    nonForestCanBeYoungAge = TRUE,
-    whichModulesToPrepare = fs_predict_modules
-  ),
-  fireSense_ignitionPredict = list(
-    ##
-  ),
-  fireSense = list(
-    .plotInterval = NA,
-    .plotInitialTime = .plotInitialTime,
-    plotIgnitions = FALSE,
-    whichModulesToPrepare = fs_predict_modules
-  ),
-  gmcsDataPrep = list(
-    doPlotting = TRUE,
-    yearOfFirstClimateImpact = times$start
+## delete unused objects, including previous simLists to free up memory
+rm(
+  preambleObjects, simOutPreamble,   ## 06-studyArea.R
+  biomassMaps2001,                   ## 07a-dataPrep_2001.R
+  biomassMaps2011,                   ## 07b-dataPrep_2011.R
+  fSdataPrepObjects, fSsimDataPrep,  ## 07c-dataPrep_fS.R
+  ignitionFitObjects, ignitionOut,   ## 08a-ignitionFit.R
+  escapeFitObjects, escapeOut,       ## 08b-escapeFit.R
+  spreadFitObjects, spreadOut        ## 08c-spreadFit.R
+)
+
+fsim <- simFile(runName, config$paths[["outputPath"]], ext = "qs")
+
+tryCatch({
+  mainSim <- simInitAndSpades(
+    times = times,
+    modules = dynamicModules,
+    objects = dynamicObjects,
+    outputs = dynamicOutputs,
+    params = dynamicParams,
+    paths = dynamicPaths,
+    loadOrder = unlist(dynamicModules),
+    debug = list(file = list(file = file.path(config$paths[["logPath"]], "sim.log"),
+                             append = TRUE), debug = 1)
   )
-)
 
-## TODO: delete unused objects, including previous simLists to free up memory
+  capture.output(warnings(), file = file.path(config$paths[["logPath"]], "warnings.txt"), split = TRUE)
+}, error = function(e) {
+  capture.output(traceback(), file = file.path(config$paths[["logPath"]], "traceback_mainSim.txt"), split = TRUE)
 
-fsim <- simFile(runName, Paths$outputPath, ext = simFileFormat)
-mainSim <- simInitAndSpades(
-  times = times,
-  modules = dynamicModules,
-  objects = dynamicObjects,
-  outputs = dynamicOutputs,
-  params = dynamicParams,
-  paths = dynamicPaths,
-  loadOrder = unlist(dynamicModules)
-)
+  DBI::dbDisconnect(getOption("reproducible.conn"))
 
-saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
+  if (requireNamespace("slackr") & file.exists("~/.slackr")) {
+    slackr::slackr_setup()
+    slackr::slackr_msg(
+      paste0("ERROR in simulation `", config$context[["runName"]], "` on host `", .nodename, "`.\n",
+             "```\n", e$message, "\n```"),
+      channel = config$args[["notifications"]][["slackChannel"]], preformatted = FALSE
+    )
 
-resultsDir <- file.path("outputs", runName)
-
-## make annual standAgeMaps from cohortData
-lapply(2011:2100, function(year) {
-  cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
-  cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
-  cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
-  cohortDataReduced <- unique(cohortDataReduced)
-  pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
-  names(pixelGroupMap) <- "pixelGroup"
-  standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
-  writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
-  TRUE
+    stop(e$message)
+  }
 })
 
-tarball <- paste0(resultsDir, ".tar.gz")
-#archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
-utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
+if (isTRUE(attr(mainSim, ".Cache")[["newCache"]])) {
+  mainSim@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
 
-## we will upload at the end to prevent timeouts from delaying subsequent sims
+  message("Saving simulation to: ", fsim)
+  saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
 
-SpaDES.project::notify_slack(runName = runName, channel = config::get("slackchannel"))
+  # save simulation stats -----------------------------------------------------------------------
+
+  elapsed <- elapsedTime(mainSim)
+  data.table::fwrite(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.csv"))
+  qs::qsave(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.qs"))
+
+  memory <- memoryUse(mainSim, max = TRUE)
+  data.table::fwrite(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.csv"))
+  qs::qsave(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.qs"))
+
+  # archive and upload --------------------------------------------------------------------------
+  resultsDir <- file.path("outputs", runName)
+
+  if (FALSE) { ## removed 2023-01: now being done via outputs
+    ## make annual standAgeMaps from cohortData
+    lapply(2011:2100, function(year) {
+      cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
+      cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
+      cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
+      cohortDataReduced <- unique(cohortDataReduced)
+      pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
+      names(pixelGroupMap) <- "pixelGroup"
+      standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
+      writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+      TRUE
+    })
+  }
+
+  tarball <- paste0(resultsDir, ".tar.gz")
+  #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
+  utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
+
+  ## we will upload at the end to prevent timeouts from delaying subsequent sims
+}
+
+# end-of-sim notifications --------------------------------------------------------------------
+
+SpaDES.project::notify_slack(config$context[["runName"]], config$args[["notifications"]][["slackChannel"]])
+

@@ -1,14 +1,12 @@
-spreadFitPaths[["cachePath"]] <- file.path(cacheDir, "cache_spreadFit", runName)
-do.call(setPaths, spreadFitPaths)
-
 gid_spreadOut <- gdriveSims[studyArea == studyAreaName & simObject == "spreadOut" & runID == run, gid]
-upload_spreadOut <- reupload | length(gid_spreadOut) == 0
+upload_spreadOut <- config$args[["reupload"]] | length(gid_spreadOut) == 0
 
 ## TODO: remove this workaround
-fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]] <- as.data.table(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]])
+fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]][[1]] <-
+  as.data.table(fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]][[1]])
 
 extremeVals <- 4
-lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(fSsimDataPrep$fireSense_nonAnnualSpreadFitCovariates[[1]]) - 1)
+lowerParamsNonAnnual <- rep(-extremeVals, times = ncol(fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]][[1]]) - 1)
 lowerParamsAnnual <- c(-extremeVals, -extremeVals)
 upperParamsNonAnnual <- rep(extremeVals, times = length(lowerParamsNonAnnual))
 upperParamsAnnual <- c(0, extremeVals) ## youngAge <= 0
@@ -27,65 +25,14 @@ dfT <- cbind(c("lower", "upper"), t(data.frame(lower, upper)))
 message("Upper and Lower parameter bounds are:")
 Require:::messageDF(dfT)
 
-cores <- if (peutils::user("achubaty")) {
-  switch(Sys.info()[["nodename"]],
-         "pinus.for-cast.ca" = {
-           if (fitUsing == 4) {
-             c(rep("localhost", 32), rep("picea.for-cast.ca", 16), rep("pseudotsuga.for-cast.ca", 52))
-           } else if (fitUsing == 3) {
-             c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
-           } else if (fitUsing == 2) {
-             c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
-           } else if (fitUsing == 1) {
-             rep("pseudotsuga.for-cast.ca", 100)
-           }
-         },
-         "picea.for-cast.ca" = {
-           if (fitUsing == 3) {
-             c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
-           } else if (fitUsing == 2) {
-             c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
-           }
-         },
-         "pseudotsuga.for-cast.ca" = {
-           rep("localhost", 100)
-         })
-}
-
-## TODO: fix this check -- 100 cores, not 90 ??
-#stopifnot(length(cores) == length(lower)*10) ## 10 populations per parameter for DEoptim
-
 spreadFitParams <- list(
-  fireSense_SpreadFit = list(
-    cloudFolderID_DE = cloudCacheFolderID,
-    cores = cores,
-    DEoptimTests = c("adTest", "snll_fs"),
-    doObjFunAssertions = FALSE,
-    iterDEoptim = 150,
-    iterStep = 150,
-    iterThresh = 396L,
-    libPathDEoptim = libPathDEoptim,
-    lower = lower,
-    maxFireSpread = max(0.28, upper[1]),
-    mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
-    mutuallyExclusive = list("youngAge" = c("class", "nf_")),
-    NP = length(cores),
-    objFunCoresInternal = 1L,
-    objfunFireReps = 100,
-    # onlyLoadDEOptim = FALSE,
-    rescaleAll = TRUE,
-    trace = 1,
-    SNLL_FS_thresh = NULL, # NULL means 'autocalibrate' to find suitable threshold value
-    upper = upper,
-    # urlDEOptimObject = NULL,
-    "useCache_DE" = FALSE,
-    "useCloud_DE" = useCloudCache,
-    "verbose" = TRUE,
-    "visualizeDEoptim" = FALSE,
-    ".plot" = FALSE, # TRUE,
-    ".plotSize" = list(height = 1600, width = 2000)
-  )
+  fireSense_SpreadFit = config$params[["fireSense_SpreadFit"]]
 )
+
+spreadFitParams[["fireSense_SpreadFit"]][["lower"]] <- lower
+spreadFitParams[["fireSense_SpreadFit"]][["upper"]] <- upper
+spreadFitParams[["fireSense_SpreadFit"]][["maxFireSpread"]] <- max(0.28, upper[1])
+spreadFitParams[["fireSense_SpreadFit"]][["NP"]] <- length(spreadFitParams[["fireSense_SpreadFit"]][["cores"]]) ## TODO: autoupdate config
 
 spreadFitObjects <- list(
   fireBufferedListDT = fSsimDataPrep[["fireBufferedListDT"]],
@@ -94,14 +41,14 @@ spreadFitObjects <- list(
   fireSense_nonAnnualSpreadFitCovariates = fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
   fireSense_spreadFormula = fSsimDataPrep[["fireSense_spreadFormula"]],
   flammableRTM = fSsimDataPrep[["flammableRTM"]],
-  #parsKnown = spreadOut$fireSense_SpreadFitted$meanCoef,
+  #parsKnown = spreadOut[["fireSense_SpreadFitted"]][["meanCoef"]],
   rasterToMatch = fSsimDataPrep[["rasterToMatch"]],
   spreadFirePoints = fSsimDataPrep[["spreadFirePoints"]],
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-fspreadOut <- simFile(paste0("spreadOut_", studyAreaName, "_", run), Paths$outputPath, ext = simFileFormat)
-if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
+fspreadOut <- simFile(paste0("spreadOut_", studyAreaName, "_", run), config$paths[["outputPath"]], ext = "qs")
+if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
     googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
   }
@@ -114,7 +61,11 @@ if (isTRUE(usePrerun) & isFALSE(upload_spreadOut)) {
     paths = spreadFitPaths,
     objects = spreadFitObjects
   )
-  saveSimList(spreadOut, fspreadOut, fileBackend = 2)
+
+  #if (isTRUE(attr(spreadOut, ".Cache")[["newCache"]])) {
+    spreadOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    saveSimList(spreadOut, fspreadOut, fileBackend = 2)
+  #}
 
   if (isTRUE(upload_spreadOut)) {
     if (!dir.exists(tempdir())) {
