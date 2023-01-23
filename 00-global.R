@@ -89,22 +89,6 @@ if (!"Require" %in% rownames(installed.packages(lib.loc = .libPaths()[1])) ||
 
 library(Require)
 
-## temporarily until new Rcpp release on CRAN in early 2023 ----------------------------------------
-options("Require.otherPkgs" = setdiff(getOption("Require.otherPkgs"), "Rcpp")) ## remove Rcpp from "forced source"
-RcppVersionNeeded <- package_version("1.0.9.3")
-
-RcppVersionAvail <- if (!"Rcpp" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
-  package_version(data.table::as.data.table(available.packages())[Package == "Rcpp", Version])
-} else {
-  package_version(packageVersion("Rcpp", lib.loc = .libPaths()[1]))
-}
-
-if (RcppVersionAvail < RcppVersionNeeded) {
-  Require(paste0("Rcpp (>= ", RcppVersionNeeded, ")"),  repos = "https://rcppcore.github.io/drat",
-          require = FALSE, verbose = 1)
-}
-##
-
 setLinuxBinaryRepo()
 
 Require(c(
@@ -114,6 +98,7 @@ Require(c(
 
 modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
 otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp", "future", "future.callr", "logging",
+               "Rcpp (>= 1.0.10)",
                "PredictiveEcology/reproducible@development (>= 1.2.16.9018)",
                "RPostgres", "slackr",
                "PredictiveEcology/SpaDES.core@development (>= 1.1.1)",
@@ -182,7 +167,7 @@ if (config$args[["delayStart"]] > 0) {
   Sys.sleep(config$args[["delayStart"]]*60)
 }
 
-if (config$context[["mode"]] != "postprocess") { ## TODO: resume (HERE)
+if (config$context[["mode"]] != "postprocess") {
   source("06-studyArea.R")
 
   if (!.fit) { ## TODO: add fit to config context
@@ -190,7 +175,7 @@ if (config$context[["mode"]] != "postprocess") { ## TODO: resume (HERE)
     config$args[["reupload"]] <- FALSE
   }
 
-  source("07a-dataPrep_2001.R")
+  source("07a-dataPrep_2001.R") ## TODO: resume (HERE)
   source("07b-dataPrep_2011.R")
   source("07c-dataPrep_fS.R")
 

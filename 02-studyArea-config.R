@@ -31,7 +31,7 @@ config.studyArea <- list(
     ),
     Ontario_preamble = list(
       studyAreaName = config$context[["studyAreaName"]],
-      useAgeMapkNN = grepl("AOU", config$context[["runName"]]),
+      useAgeMapkNN = !grepl("ROF", config$context[["runName"]]), ## don't use kNN for ROF
       .resolution = ifelse(grepl("ROF", config$context[["studyAreaName"]]), 125, 250),
       .useCache = FALSE #".inputObjects"
     )
