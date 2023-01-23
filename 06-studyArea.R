@@ -33,9 +33,10 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     objects = preambleObjects
   )
 
-  if (isTRUE(attr(simOutPreamble, ".Cache")[["newCache"]])) {
+  if (isUpdated(simOutPreamble)) {
     simOutPreamble@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(simOutPreamble, fsimOutPreamble, fileBackend = 2)
+    amc::.gc()
   }
 
   if (isTRUE(upload_preamble)) {
@@ -43,8 +44,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     gid_preamble <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "simOutPreamble", runID = NA,
-                 gcm = climateGCM, ssp = climateSSP, gid = gid_preamble),
+      data.table(studyArea = config$context[["studyAreaName"]], simObject = "simOutPreamble", runID = NA,
+                 gcm = config$context[["climateGCM"]], ssp = config$context[["climateSSP"]], gid = gid_preamble),
       gdriveSims
     )
   }
@@ -54,12 +55,14 @@ firstRunMDCplots <- if (config$context[["rep"]] == 1 && config$args[["reupload"]
 
 if (isTRUE(firstRunMDCplots)) {
   ggMDC <- fireSenseUtils::compareMDC(
-    historicalMDC = simOutPreamble$historicalClimateRasters$MDC,
-    projectedMDC = simOutPreamble$projectedClimateRasters$MDC,
-    flammableRTM = simOutPreamble$flammableRTM
+    historicalMDC = simOutPreamble[["historicalClimateRasters"]][["MDC"]],
+    projectedMDC = simOutPreamble[["projectedClimateRasters"]][["MDC"]],
+    flammableRTM = simOutPreamble[["flammableRTM"]]
   )
   fggMDC <- file.path(config$paths[["outputPath"]], "figures",
-                      paste0("compareMDC_", studyAreaName, "_", climateGCM, "_", climateSSP, ".png"))
+                      paste0("compareMDC_", config$context[["studyAreaName"]], "_",
+                             config$context[["climateGCM"]], "_",
+                             config$context[["climateSSP"]], ".png"))
   checkPath(dirname(fggMDC), create = TRUE)
 
   ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
@@ -67,10 +70,10 @@ if (isTRUE(firstRunMDCplots)) {
   if (isTRUE(upload_preamble)) {
     googledrive::drive_put(
       media = fggMDC,
-      path = unique(as_id(gdriveSims[studyArea == studyAreaName & simObject == "results", gid])),
+      path = unique(as_id(gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "results", gid])),
       name = basename(fggMDC)
     )
   }
 }
 
-nSpecies <- length(unique(simOutPreamble$sppEquiv$LandR))
+nSpecies <- length(unique(simOutPreamble[["sppEquiv"]][["LandR"]]))

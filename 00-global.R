@@ -158,6 +158,9 @@ SpaDES.config::authGoogle(tryToken = "landweb", tryEmail = config$args[["cloud"]
 
 source("05-google-ids.R")
 
+## helper functions
+source("R/cache_helpers.R")
+
 # begin simulations ---------------------------------------------------------------------------
 
 do.call(SpaDES.core::setPaths, prjPaths)

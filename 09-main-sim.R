@@ -175,7 +175,7 @@ tryCatch({
   }
 })
 
-if (isTRUE(attr(mainSim, ".Cache")[["newCache"]])) {
+if (isUpdated(mainSim)) {
   mainSim@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
 
   message("Saving simulation to: ", fsim)
@@ -219,4 +219,3 @@ if (isTRUE(attr(mainSim, ".Cache")[["newCache"]])) {
 # end-of-sim notifications --------------------------------------------------------------------
 
 SpaDES.project::notify_slack(config$context[["runName"]], config$args[["notifications"]][["slackChannel"]])
-

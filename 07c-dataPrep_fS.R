@@ -1,4 +1,4 @@
-gid_fSsimDataPrep <- gdriveSims[studyArea == studyAreaName & simObject == "fSsimDataPrep", gid]
+gid_fSsimDataPrep <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- config$args[["reupload"]] | length(gid_fSsimDataPrep) == 0
 
 ## WildFire raster - for now we will supply this data as WWH gang has not made it publicly available
@@ -46,7 +46,7 @@ fSdataPrepObjects <- list(
 
 amc::.gc()
 
-ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
 if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {
     googledrive::drive_download(file = as_id(gid_fSsimDataPrep), path = ffSsimDataPrep)
@@ -63,10 +63,10 @@ if (isTRUE(config$args[["usePrerun"]])) {
     .plots = NA,
     #useCloud = useCloudCache,
     #cloudFolderID = cloudCacheFolderID,
-    userTags = c("fireSense_dataPrepFit", studyAreaName)
+    userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
   )
 
-  if (isTRUE(attr(fSsimDataPrep, ".Cache")[["newCache"]])) {
+  if (isUpdated(fSsimDataPrep)) {
     fSsimDataPrep@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
   }
@@ -77,7 +77,7 @@ if (isTRUE(upload_fSsimDataPrep)) {
   gid_fSsimDataPrep <- as.character(fdf$id)
   rm(fdf)
   gdriveSims <- update_googleids(
-    data.table(studyArea = studyAreaName, simObject = "fSsimDataPrep",  runID = NA,
+    data.table(studyArea = config$context[["studyAreaName"]], simObject = "fSsimDataPrep",  runID = NA,
                gcm = NA, ssp = NA, gid = gid_fSsimDataPrep),
     gdriveSims
   )

@@ -1,4 +1,4 @@
-gid_biomassMaps2001 <- gdriveSims[studyArea == studyAreaName & simObject == "biomassMaps2001", gid]
+gid_biomassMaps2001 <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "biomassMaps2001", gid]
 upload_biomassMaps2001 <- config$args[["reupload"]] | length(gid_biomassMaps2001) == 0
 
 year <- 2001
@@ -17,7 +17,7 @@ dataPrepParams2001 <- list(
 )
 dataPrepParams2001[[".globals"]][["dataYear"]] <- year
 dataPrepParams2001[[".globals"]][[".plotInitialTime"]] <- year
-dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(studyAreaName, year)
+dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
 
 dataPrepOutputs2001 <- data.frame(
   objectName = c("cohortData",
@@ -26,7 +26,7 @@ dataPrepOutputs2001 <- data.frame(
                  "standAgeMap",
                  "rawBiomassMap"),
   saveTime = year,
-  file = paste0(studyAreaName, "_",
+  file = paste0(config$context[["studyAreaName"]], "_",
                 c("cohortData2001_fireSense.rds",
                   "pixelGroupMap2001_fireSense.rds",
                   "speciesLayers2001_fireSense.rds",
@@ -35,7 +35,7 @@ dataPrepOutputs2001 <- data.frame(
 )
 
 dataPrepObjects <- list(
-  .runName = runName,
+  .runName = config$context[["runName"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
@@ -47,7 +47,7 @@ dataPrepObjects <- list(
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
 )
 
-fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2001), path = fbiomassMaps2001)
@@ -63,14 +63,15 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
     params = dataPrepParams2001,
     modules = dataPrepModules,
     objects = dataPrepObjects,
+    loadOrder = unlist(dataPrepModules),
     # outputs = dataPrepOutputs2001,
     .plots = NA,
-    useCloud = useCloudCache,
-    cloudFolderID = cloudCacheFolderID,
-    userTags = c("dataPrep2001", studyAreaName)
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
+    userTags = c("dataPrep2001", config$context[["studyAreaName"]])
   )
 
-  if (isTRUE(attr(biomassMaps2001, ".Cache")[["newCache"]])) {
+  if (isUpdated(biomassMaps2001)) {
     biomassMaps2001@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(biomassMaps2001, fbiomassMaps2001, fileBackend = 2)
   }
@@ -80,7 +81,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
     gid_biomassMaps2001 <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "biomassMaps2001", runID = NA,
+      data.table(studyArea = config$context[["studyAreaName"]], simObject = "biomassMaps2001", runID = NA,
                  gcm = NA, ssp = NA, gid = gid_biomassMaps2001),
       gdriveSims
     )

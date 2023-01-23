@@ -1,4 +1,4 @@
-gid_spreadOut <- gdriveSims[studyArea == studyAreaName & simObject == "spreadOut" & runID == run, gid]
+gid_spreadOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "spreadOut" & runID == run, gid]
 upload_spreadOut <- config$args[["reupload"]] | length(gid_spreadOut) == 0
 
 ## TODO: remove this workaround
@@ -47,7 +47,7 @@ spreadFitObjects <- list(
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-fspreadOut <- simFile(paste0("spreadOut_", studyAreaName, "_", run), config$paths[["outputPath"]], ext = "qs")
+fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", run), config$paths[["outputPath"]], ext = "qs")
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
     googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
@@ -62,7 +62,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
     objects = spreadFitObjects
   )
 
-  #if (isTRUE(attr(spreadOut, ".Cache")[["newCache"]])) {
+  #if (isUpdated(spreadOut)) {
     spreadOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(spreadOut, fspreadOut, fileBackend = 2)
   #}
@@ -75,7 +75,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
     gid_spreadOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "spreadOut", runID = run,
+      data.table(studyArea = config$context[["studyAreaName"]], simObject = "spreadOut", runID = config$context[["rep"]],
                  gcm = NA, ssp = NA, gid = gid_spreadOut),
       gdriveSims
     )

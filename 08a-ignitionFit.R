@@ -1,4 +1,4 @@
-gid_ignitionOut <- gdriveSims[studyArea == studyAreaName & simObject == "ignitionOut", gid]
+gid_ignitionOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "ignitionOut", gid]
 upload_ignitionOut <- config$args[["reupload"]] | length(gid_ignitionOut) == 0
 
 ## ub and lb have to be provided for now
@@ -32,7 +32,7 @@ ignitionFitObjects <- list(
   ignitionFitRTM = fSsimDataPrep[["ignitionFitRTM"]]
 )
 
-fignitionOut <- simFile(paste0("ignitionOut_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+fignitionOut <- simFile(paste0("ignitionOut_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   if (!file.exists(fignitionOut)) {
     googledrive::drive_download(file = as_id(gid_ignitionOut), path = fignitionOut)
@@ -49,7 +49,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
     userTags = c("ignitionFit")
   )
 
-  if (isTRUE(attr(ignitionOut, ".Cache")[["newCache"]])) {
+  if (isUpdated(ignitionOut)) {
     ignitionOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(sim = ignitionOut, filename = fignitionOut, fileBackend = 2)
   }
@@ -59,7 +59,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
     gid_ignitionOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "ignitionOut", runID = NA,
+      data.table(studyArea = config$context[["studyAreaName"]], simObject = "ignitionOut", runID = NA,
                  gcm = NA, ssp = NA, gid = gid_ignitionOut),
       gdriveSims
     )

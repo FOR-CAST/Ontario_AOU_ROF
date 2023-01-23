@@ -1,4 +1,4 @@
-gid_escapeOut <- gdriveSims[studyArea == studyAreaName & simObject == "escapeOut", gid]
+gid_escapeOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "escapeOut", gid]
 upload_escapeOut <- config$args[["reupload"]] | length(gid_escapeOut) == 0
 
 escapeFitParams <- list(
@@ -11,7 +11,7 @@ escapeFitObjects <- list(
   fireSense_escapeCovariates = fSsimDataPrep[["fireSense_escapeCovariates"]]
 )
 
-fescapeOut <- simFile(paste0("escapeOut_", studyAreaName), config$paths[["outputPath"]], ext = "qs")
+fescapeOut <- simFile(paste0("escapeOut_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   if (!file.exists(fescapeOut)) {
@@ -28,7 +28,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     objects = escapeFitObjects
   )
 
-  if (isTRUE(attr(escapeOut, ".Cache")[["newCache"]])) {
+  if (isUpdated(escapeOut)) {
     escapeOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(sim = escapeOut, filename = fescapeOut, fileBackend = 2)
   }
@@ -38,7 +38,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     gid_escapeOut <- as.character(fdf$id)
     rm(fdf)
     gdriveSims <- update_googleids(
-      data.table(studyArea = studyAreaName, simObject = "escapeOut",  runID = NA,
+      data.table(studyArea = config$context[["studyAreaName"]], simObject = "escapeOut",  runID = NA,
                  gcm = NA, ssp = NA, gid = gid_escapeOut),
       gdriveSims
     )
