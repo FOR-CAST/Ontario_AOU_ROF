@@ -3,7 +3,6 @@ upload_biomassMaps2001 <- config$args[["reupload"]] | length(gid_biomassMaps2001
 
 year <- 2001
 
-
 dataPrepModules <- list(
   "Biomass_speciesData",
   "Biomass_speciesFactorial",
@@ -18,6 +17,20 @@ dataPrepParams2001 <- list(
 dataPrepParams2001[[".globals"]][["dataYear"]] <- year
 dataPrepParams2001[[".globals"]][[".plotInitialTime"]] <- year
 dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
+
+
+dataPrepObjects <- list(
+  .runName = config$context[["runName"]],
+  rasterToMatch = simOutPreamble[["rasterToMatch"]],
+  rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
+  sppColorVect = simOutPreamble[["sppColorVect"]],
+  sppEquiv = simOutPreamble[["sppEquiv"]],
+  rstLCC = simOutPreamble[["LCC"]],
+  standAgeMap = simOutPreamble[["standAgeMap2001"]],
+  studyArea = simOutPreamble[["studyArea"]],
+  studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
+  studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
+)
 
 dataPrepOutputs2001 <- data.frame(
   objectName = c("cohortData",
@@ -34,20 +47,8 @@ dataPrepOutputs2001 <- data.frame(
                   "rawBiomassMap2001_borealDataPrep.rds"))
 )
 
-dataPrepObjects <- list(
-  .runName = config$context[["runName"]],
-  rasterToMatch = simOutPreamble[["rasterToMatch"]],
-  rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
-  sppColorVect = simOutPreamble[["sppColorVect"]],
-  sppEquiv = simOutPreamble[["sppEquiv"]],
-  rstLCC = simOutPreamble[["LCC"]],
-  standAgeMap = simOutPreamble[["standAgeMap2001"]],
-  studyArea = simOutPreamble[["studyArea"]],
-  studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
-  studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
-)
-
 fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2001), path = fbiomassMaps2001)
@@ -89,7 +90,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
 }
 
 ## PLOTTING
-if (!is.na(.plotInitialTime)) {
+if ("screen" %in% config$params[[".globals"]][[".plots"]]) {
   lapply(dev.list(), function(x) {
     try(quickPlot::clearPlot(force = TRUE))
     try(dev.off())
@@ -98,5 +99,5 @@ if (!is.na(.plotInitialTime)) {
   grid::grid.rect(0.90, 0.03, width = 0.2, height = 0.06, gp = gpar(fill = "white", col = "white"))
   grid::grid.text(label = runName, x = 0.90, y = 0.03)
 
-  Plot(simOutSpeciesLayers2001$speciesLayers)
+  Plot(simOutSpeciesLayers2001[["speciesLayers"]])
 }

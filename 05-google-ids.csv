@@ -9,6 +9,8 @@ AOU,escapeOut,CCSM4,,,1zinlswysrTcQ1OZxBsfR-S5-kpMbDC8J
 AOU,spreadOut,CCSM4,,1,1-NuFcAcnG0G5SEEH5LlX0moh5h6EYcAs
 AOU,results,"",,,1DWOgy-XxZO9pmgfRXEzHJPX7jU4x3Vki
 ON_AOU_6.2,simOutPreamble,CanESM5,370,,1wfs1u68QoPNMDTtn0kha0y1PZkyFVQ-R
+ON_AOU_6.2,biomassMaps2001,"",,,14HodvLJXTANuELZueOezkSdZaayQ_O9K
+ON_AOU_6.2,biomassMaps2011,,,,1gqdC_iXm5pFeUgrMuLLj1gbSGdjIcTk1
 ROF,simOutPreamble,CNRM-ESM2-1,370,,1K7s0eVAMCGLtyihRmqfi0YDaKtj3cRai
 ROF,simOutPreamble,CanESM5,370,,1IB5tRL87Kt9Vg0A_fK_qxy6y7dyhVKqK
 ROF,biomassMaps2001,"",,,1Fzb9ECBFytqWgDmV2oet88WqY25hfsMF

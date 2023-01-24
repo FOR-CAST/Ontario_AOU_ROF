@@ -8,6 +8,8 @@ dataPrepParams2011[[".globals"]][["dataYear"]] <- year
 dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
 dataPrepParams2011[["Biomass_speciesData"]][["types"]] <- "KNN" ## TODO: is this correct? what year for ONFRI?
 
+dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
+
 dataPrepOutputs2011 <- data.frame(
   objectName = c("cohortData",
                  "pixelGroupMap",
@@ -23,9 +25,8 @@ dataPrepOutputs2011 <- data.frame(
                   "rawBiomassMap2011_borealDataPrep.rds"))
 )
 
-dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
-
 fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {
     googledrive::drive_download(file = as_id(gid_biomassMaps2011), path = fbiomassMaps2011)
@@ -41,13 +42,11 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
     params = dataPrepParams2011,
     modules = dataPrepModules,
     objects = dataPrepObjects,
-    paths = getPaths(),
     loadOrder = unlist(dataPrepModules),
     clearSimEnv = TRUE,
     # outputs = dataPrepOutputs2011,
-    .plots = "png",
-    useCloud = useCloudCache,
-    cloudFolderID = cloudCacheFolderID,
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2011", config$context[["studyAreaName"]])
   )
 

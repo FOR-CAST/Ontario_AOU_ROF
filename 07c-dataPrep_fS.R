@@ -28,7 +28,7 @@ fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[[
 simOutPreamble[["rasterToMatch"]] <- raster::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
 
 fSdataPrepObjects <- list(
-  .runName = runName,
+  .runName = config$context[["runName"]],
   cohortData2001 = biomassMaps2001[["cohortData"]],
   cohortData2011 = biomassMaps2011[["cohortData"]],
   # fireRaster = wildfire2020,
@@ -47,6 +47,7 @@ fSdataPrepObjects <- list(
 amc::.gc()
 
 ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+
 if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {
     googledrive::drive_download(file = as_id(gid_fSsimDataPrep), path = ffSsimDataPrep)
@@ -58,11 +59,9 @@ if (isTRUE(config$args[["usePrerun"]])) {
     times =  list(start = 2011, end = 2011),
     params = fSdataPrepParams,
     objects = fSdataPrepObjects,
-    paths = dataPrepPaths,
     modules = "fireSense_dataPrepFit",
-    .plots = NA,
-    #useCloud = useCloudCache,
-    #cloudFolderID = cloudCacheFolderID,
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
   )
 

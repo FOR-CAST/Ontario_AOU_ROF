@@ -3,11 +3,20 @@
 if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## GITHUB_PAT
 if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
 
+.ncores <- min(parallel::detectCores() / 2, 24L)
+.nodename <- Sys.info()[["nodename"]]
+.user <- Sys.info()[["user"]]
+
 ###### allow setting run context info from outside this script (e.g., bash script) -----------------
 if (exists(".mode", .GlobalEnv)) {
   stopifnot(.mode %in% c("development", "postprocess", "production"))
 } else {
-  .mode <- "development"
+  .mode <- c("development")
+
+  ## TODO: allow "fit" in config
+  # if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
+  #   .mode <- append(.mode, "fit")
+  # }
 }
 
 if (exists(".climateGCM", .GlobalEnv)) {
@@ -39,11 +48,6 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
   #.studyAreaName <- "ON_ROF_15.2" ## ecoprovs in ROF: 6.1, 6.2, 15.2 (omit 15.1)
   #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
 }
-
-.ncores <- min(parallel::detectCores() / 2, 24L)
-.nodename <- Sys.info()[["nodename"]]
-.user <- Sys.info()[["user"]]
-
 #####
 
 prjDir <- "~/GitHub/Ontario_AOU_ROF"
@@ -170,17 +174,20 @@ if (config$args[["delayStart"]] > 0) {
   Sys.sleep(config$args[["delayStart"]]*60)
 }
 
-if (config$context[["mode"]] != "postprocess") {
+if (!"postprocess" %in% config$context[["mode"]]) {
   source("06-studyArea.R")
 
-  if (!.fit) { ## TODO: add fit to config context
+  if ("fit" %in% config$context[["mode"]]) {
+    config$args[["usePrerun"]] <- FALSE
+    config$args[["reupload"]] <- TRUE
+  } else {
     config$args[["usePrerun"]] <- TRUE
     config$args[["reupload"]] <- FALSE
   }
 
-  source("07a-dataPrep_2001.R") ## TODO: resume (HERE)
+  source("07a-dataPrep_2001.R")
   source("07b-dataPrep_2011.R")
-  source("07c-dataPrep_fS.R")
+  source("07c-dataPrep_fS.R")  ## TODO: resume (HERE)
 
   source("08a-ignitionFit.R")
   source("08b-escapeFit.R")
