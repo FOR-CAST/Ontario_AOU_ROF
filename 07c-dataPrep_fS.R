@@ -26,6 +26,7 @@ fSdataPrepParams[["fireSense_dataPrepFit"]][["nonflammableLCC"]] <- simOutPreamb
 fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
 
 simOutPreamble[["rasterToMatch"]] <- raster::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
+rstLCC <- postProcess(biomassMaps2011[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
 
 fSdataPrepObjects <- list(
   .runName = config$context[["runName"]],
@@ -37,7 +38,7 @@ fSdataPrepObjects <- list(
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
-  rstLCC = biomassMaps2011[["rstLCC"]],
+  rstLCC = rstLCC,
   sppEquiv = simOutPreamble[["sppEquiv"]],
   standAgeMap2001 = biomassMaps2001[["standAgeMap"]],
   standAgeMap2011 = biomassMaps2011[["standAgeMap"]],
