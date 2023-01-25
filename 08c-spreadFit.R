@@ -85,7 +85,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (requireNamespace("slackr") & file.exists("~/.slackr")) {
     slackr::slackr_setup()
     slackr::slackr_msg(
-      paste0("`fireSense_SpreadFit` for `", runName, "` completed on host `", Sys.info()[["nodename"]], "`."),
+      paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", Sys.info()[["nodename"]], "`."),
       channel = config$args[["notifications"]][["slackChannel"]], preformatted = FALSE
     )
   }
