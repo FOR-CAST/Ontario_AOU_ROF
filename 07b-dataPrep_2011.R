@@ -3,8 +3,11 @@ upload_biomassMaps2011 <- config$args[["reupload"]] | length(gid_biomassMaps2011
 
 year <- 2011
 
+config$params$.globals
+
 dataPrepParams2011 <- dataPrepParams2001
 dataPrepParams2011[[".globals"]][["dataYear"]] <- year
+dataPrepParams2011[[".globals"]][[".plotInitialTime"]] <- year
 dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
 dataPrepParams2011[["Biomass_speciesData"]][["types"]] <- "KNN" ## TODO: is this correct? what year for ONFRI?
 

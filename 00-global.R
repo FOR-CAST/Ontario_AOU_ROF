@@ -103,10 +103,10 @@ Require(c(
 modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
 otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp", "future", "future.callr", "logging",
                "Rcpp (>= 1.0.10)",
-               "PredictiveEcology/reproducible@development (>= 1.2.16.9018)",
+               "PredictiveEcology/reproducible@development (>= 1.2.16.9023)",
                "RPostgres", "slackr",
                "PredictiveEcology/SpaDES.core@development (>= 1.1.1)",
-               "rspatial/terra@6a3ea837be88de5a66cd0577c6d79c1091562547 (>= 1.7-0)")
+               "terra (>= 1.7-3)")
 
 Require(unique(c(modulePkgs, otherPkgs)), require = FALSE, standAlone = TRUE, upgrade = FALSE)
 
@@ -187,9 +187,9 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
   source("07a-dataPrep_2001.R")
   source("07b-dataPrep_2011.R")
-  source("07c-dataPrep_fS.R")  ## TODO: resume (HERE)
+  source("07c-dataPrep_fS.R")
 
-  source("08a-ignitionFit.R")
+  source("08a-ignitionFit.R")  ## TODO: resume (HERE)
   source("08b-escapeFit.R")
 
   if (fit) {
