@@ -1,19 +1,21 @@
-Require::Require("reproducible")
+Require::Require("fs")
 Require::Require("googledrive")
 
 source("05-google-ids.R")
-dir.create(tempdir()) ## TODO: figure out why this gets deleted; required for upload
+tempdir(check = TRUE) ## TODO: figure out why this gets deleted; required for upload
 
-try(file.move(
-  file.path("outputs", studyAreaName, "figures", "spreadFit_coeffs.png"),
-  file.path("outputs", studyAreaName, "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png", studyAreaName, run))
+try(file_move(
+  file.path(config$paths[["outputPath"]], "figures", "spreadFit_coeffs.png"),
+  file.path(config$paths[["outputPath"]], "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png",
+                                                             config$context[["studyAreaName"]], config$context[["rep"]]))
 ))
 
 filesToUpload <- c(
-  file.path("outputs", studyAreaName, "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png", studyAreaName, run))
+  file.path(config$paths[["outputPath"]], "figures", sprintf("spreadFit_coeffs_%s_run_%02d.png",
+                                                             config$context[["studyAreaName"]], config$context[["rep"]]))
 )
 
-gid_results <- gdriveSims[studyArea == studyAreaName & simObject == "results", gid]
+gid_results <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "results", gid]
 lapply(filesToUpload, function(f) {
   retry(quote(drive_put(f, unique(as_id(gid_results), basename(f)))), retries = 5, exponentialDecayBase = 2)
 })

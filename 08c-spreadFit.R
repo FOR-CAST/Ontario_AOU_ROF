@@ -47,7 +47,8 @@ spreadFitObjects <- list(
   studyArea = fSsimDataPrep[["studyArea"]]
 )
 
-fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", run), config$paths[["outputPath"]], ext = "qs")
+fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", config$context[["rep"]]),
+                      config$paths[["outputPath"]], ext = "qs")
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
@@ -68,9 +69,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   #}
 
   if (isTRUE(upload_spreadOut)) {
-    if (!dir.exists(tempdir())) {
-      dir.create(tempdir()) ## TODO: why is this dir being removed in the first place?
-    }
+    tempdir(check = TRUE) ## TODO: why is this dir being removed in the first place?
     fdf <- googledrive::drive_put(media = fspreadOut, path = as_id(gdriveURL), name = basename(fspreadOut))
     gid_spreadOut <- as.character(fdf$id)
     rm(fdf)
