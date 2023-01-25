@@ -61,3 +61,6 @@
 [submodule "modules/fireSense_summary"]
 	path = modules/fireSense_summary
 	url = https://github.com/PredictiveEcology/fireSense_summary
+[submodule "modules/Quebec_fires_preamble"]
+	path = modules/Quebec_fires_preamble
+	url = https://github.com/ianmseddy/Quebec_fires_preamble
