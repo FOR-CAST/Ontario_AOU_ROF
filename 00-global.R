@@ -196,9 +196,10 @@ if (!"postprocess" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
     config$args[["reupload"]] <- TRUE
 
-    for (i in 1:nReps) {
-      rep <- i
-      config$context[["runName"]] <- gsub("rep[0-9][0-9]", sprintf("rep%02d", rep), config$context[["runName"]])
+    for (i in 1:config$params$.globals$reps) { ## TODO
+      config$context[["rep"]] <- i
+      config$update()
+      config$validate()
 
       ## prerun all spreadfits, for use with main sim runs on another machine
 
