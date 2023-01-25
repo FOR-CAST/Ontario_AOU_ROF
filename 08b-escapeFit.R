@@ -21,10 +21,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
 } else {
   escapeOut <- simInitAndSpades(
     times = list(start = 0, end = 1),
-    # ignitionSim <- simInit(times = list(start = 0, end = 1),
     params = escapeFitParams,
     modules = "fireSense_EscapeFit",
-    paths = escapeFitPaths,
     objects = escapeFitObjects
   )
 
