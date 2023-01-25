@@ -85,9 +85,9 @@ if (!"remotes" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
   install.packages("remotes")
 }
 
-Require.version <- "PredictiveEcology/Require@v0.2.6" ## use CRAN version
+Require.version <- "PredictiveEcology/Require@development"
 if (!"Require" %in% rownames(installed.packages(lib.loc = .libPaths()[1])) ||
-    packageVersion("Require", lib.loc = .libPaths()[1]) < "0.2.6") {
+    packageVersion("Require", lib.loc = .libPaths()[1]) < "0.2.6.9004") {
   remotes::install_github(Require.version)
 }
 
