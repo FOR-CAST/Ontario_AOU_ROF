@@ -69,7 +69,7 @@ ian:
   climatessp: 370 ## 245, 370, 585
   cloud:
     cachedir: ""
-    googleuser: ""
+    googleuser: "ianmseddy@gmail.com"
     usecloud: false
   ecozone: "plain" ## 'plain' or 'shield'
   inputpaths: null
