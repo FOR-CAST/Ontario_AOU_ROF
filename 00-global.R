@@ -196,7 +196,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
     config$args[["reupload"]] <- TRUE
 
-    for (i in 1:config$params$.globals$reps) { ## TODO
+    for (i in config$params[[".globals"]][["reps"]]) {
       config$context[["rep"]] <- i
       config$update()
       config$validate()
@@ -206,10 +206,13 @@ if (!"postprocess" %in% config$context[["mode"]]) {
       if (file.exists("Rplots.pdf")) {
         unlink("Rplots.pdf")
       }
+
+      figPath <- checkPath(file.path(config$paths[["outputPath"]], "figures"), create = TRUE)
+
       source("08c-spreadFit.R")
+
       if (file.exists("Rplots.pdf")) {
-        file.rename("Rplots.pdf", file.path(config$paths[["outputPath"]], "figures",
-                                            sprintf("spreadFit_plots_%s.pdf", config$context[["runName"]])))
+        file.rename("Rplots.pdf", file.path(figPath, sprintf("spreadFit_plots_%s.pdf", config$context[["runName"]])))
       }
     }
   } else {
