@@ -1,4 +1,4 @@
-gid_spreadOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "spreadOut" & runID == run, gid]
+gid_spreadOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "spreadOut" & runID == config$context[["rep"]], gid]
 upload_spreadOut <- config$args[["reupload"]] | length(gid_spreadOut) == 0
 
 ## TODO: remove this workaround
@@ -48,6 +48,7 @@ spreadFitObjects <- list(
 )
 
 fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", run), config$paths[["outputPath"]], ext = "qs")
+
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
     googledrive::drive_download(file = as_id(gid_spreadOut), path = fspreadOut)
@@ -58,7 +59,6 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
     times = list(start = 0, end = 1),
     params = spreadFitParams,
     modules = "fireSense_SpreadFit",
-    paths = spreadFitPaths,
     objects = spreadFitObjects
   )
 
