@@ -193,10 +193,10 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
   source("07b-dataPrep_2011.R")
   source("07c-dataPrep_fS.R")
-  options(opt)
 
   source("08a-ignitionFit.R")  ## TODO: resume (HERE)
   source("08b-escapeFit.R")
+  #options(opt)
 
   if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
@@ -207,13 +207,16 @@ if (!"postprocess" %in% config$context[["mode"]]) {
       config$update()
       config$validate()
 
+      logPath <- checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as needed below
+      prjPaths <- SpaDES.config::paths4spades(config$paths)
+
       ## prerun all spreadfits, for use with main sim runs on another machine
 
       if (file.exists("Rplots.pdf")) {
         unlink("Rplots.pdf")
       }
 
-      figPath <- checkPath(file.path(config$paths[["outputPath"]], "figures"), create = TRUE)
+      do.call(SpaDES.core::setPaths, prjPaths)
 
       source("08c-spreadFit.R")
 
