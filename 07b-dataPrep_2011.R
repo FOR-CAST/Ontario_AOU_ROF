@@ -39,7 +39,6 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   ## TODO: fix these upstream
   biomassMaps2011[["sufficientLight"]] <- as.data.frame(biomassMaps2011[["sufficientLight"]])
 } else {
-  opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
   biomassMaps2011 <- Cache(
     simInitAndSpades,
     times = list(start = year, end = year),
@@ -52,7 +51,6 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
     cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2011", config$context[["studyAreaName"]])
   )
-  options(opt)
 
   if (isUpdated(biomassMaps2011)) {
     biomassMaps2011@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
