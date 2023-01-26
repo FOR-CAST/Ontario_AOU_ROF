@@ -5,7 +5,9 @@ config.studyArea <- list(
     simYears = list(start = 2011, end = 2100)
   ),
   modules = list(
-    Ontario_preamble = "Ontario_preamble"
+    ## include ON and QC preambles, which are dropped below based on study area to be run
+    Ontario_preamble = "Ontario_preamble",
+    Quebec_fires_preamble = "Quebec_fires_preamble"
   ),
   options = list(
     ## TODO
@@ -29,10 +31,15 @@ config.studyArea <- list(
     canClimateData = list(
       studyAreaName = gsub("^(ON|QC).*", "\\1", config$context[["studyAreaName"]])
     ),
+    ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = list(
       studyAreaName = config$context[["studyAreaName"]],
       useAgeMapkNN = !grepl("ROF", config$context[["runName"]]), ## don't use kNN for ROF
       .resolution = ifelse(grepl("ROF", config$context[["studyAreaName"]]), 125, 250),
+      .useCache = FALSE #".inputObjects"
+    ),
+    Quebec_fires_preamble = list(
+      studyAreaName = config$context[["studyAreaName"]],
       .useCache = FALSE #".inputObjects"
     )
   ),
@@ -40,3 +47,14 @@ config.studyArea <- list(
     ## TODO
   )
 )
+
+## drop modules/params based on whether ON or QC is being run
+if (grepl("^ON_", config$context[["studyAreaName"]])) {
+  config.studyArea[["modules"]][["Quebec_fires_preamble"]] <- NULL
+  config.studyArea[["params"]][["Quebec_fires_preamble"]] <- NULL
+} else if (grepl("^QC_", config$context[["studyAreaName"]])) {
+  config.studyArea[["params"]][["Ontario_preamble"]] <- NULL
+  config.studyArea[["modules"]][["Ontario_preamble"]] <- NULL
+} else {
+  stop("Currently only study areas in ON and QC supported, and mush be prefixed by 'ON_' or 'QC_', respectively.")
+}

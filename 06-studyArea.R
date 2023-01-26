@@ -6,13 +6,25 @@ preambleObjects <- list(
   .runName = config$context[["runName"]]
 )
 
-preambleParams <- list(
-  # config$params[[".globals"]],
-  canClimateData = config$params[["canClimateData"]],
-  Ontario_preamble = config$params[["Ontario_preamble"]]
-)
+if (grepl("^ON", config$context[["studyAreaName"]])) {
+  preambleParams <- list(
+    # config$params[[".globals"]],
+    canClimateData = config$params[["canClimateData"]],
+    Ontario_preamble = config$params[["Ontario_preamble"]]
+  )
 
-preambleModules <- list("Ontario_preamble", "canClimateData")  ## TODO: use config$modules
+  preambleModules <- list("Ontario_preamble", "canClimateData") ## TODO: use config$modules
+} else if (grepl("^QC", config$context[["studyAreaName"]])) {
+  preambleParams <- list(
+    # config$params[[".globals"]],
+    canClimateData = config$params[["canClimateData"]],
+    Quebec_fires_preamble = config$params[["Quebec_fires_preamble"]]
+  )
+
+  preambleModules <- list("Quebec_fires_preamble", "canClimateData") ## TODO: use config$modules
+} else {
+  stop("Currently only ON and QC study areas supported.")
+}
 
 fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaName"]],
                                   "_", config$context[["climateGCM"]],

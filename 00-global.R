@@ -9,14 +9,14 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 
 ###### allow setting run context info from outside this script (e.g., bash script) -----------------
 if (exists(".mode", .GlobalEnv)) {
-  stopifnot(.mode %in% c("development", "postprocess", "production"))
+  stopifnot(all(.mode %in% c("development", "fit", "postprocess", "production")))
 } else {
   .mode <- c("development")
 
-  ## TODO: allow "fit" in config
-  # if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
-  #   .mode <- append(.mode, "fit")
-  # }
+  ## allow "fit" in config
+  if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
+   .mode <- append(.mode, "fit")
+  }
 }
 
 if (exists(".climateGCM", .GlobalEnv)) {
@@ -32,9 +32,9 @@ if (exists(".climateSSP", .GlobalEnv)) {
 }
 
 if (exists(".rep", .GlobalEnv)) {
-  .rep <- if (.mode == "postprocess") NA_integer_ else as.integer(.rep)
+  .rep <- if ("postprocess" %in% .mode) NA_integer_ else as.integer(.rep)
 } else {
-  .rep <- if (.mode == "postprocess") NA_integer_ else 1L
+  .rep <- if ("postprocess" %in% .mode) NA_integer_ else 1L
 }
 
 if (exists(".res", .GlobalEnv)) {
@@ -47,6 +47,7 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
   .studyAreaName <- "ON_AOU_6.2" ## ecoprovs in AOU: 6.1, 6.2, 6.5, 6.6 (omit 15.2)
   #.studyAreaName <- "ON_ROF_15.2" ## ecoprovs in ROF: 6.1, 6.2, 15.2 (omit 15.1)
   #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
+  #.studyAreaName <- "QC_boreal_6.2" ## ecoprovs in QC_boreal: 6.2, 6.3, 6.6
 }
 #####
 
@@ -97,7 +98,7 @@ setLinuxBinaryRepo()
 
 Require(c(
   "PredictiveEcology/SpaDES.project@transition (>= 0.0.7.9003)", ## TODO: use development once merged
-  "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9058)"
+  "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9062)"
 ), upgrade = FALSE, standAlone = TRUE)
 
 modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
@@ -192,7 +193,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   source("08a-ignitionFit.R")  ## TODO: resume (HERE)
   source("08b-escapeFit.R")
 
-  if (fit) {
+  if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
     config$args[["reupload"]] <- TRUE
 
