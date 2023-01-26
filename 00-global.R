@@ -51,7 +51,9 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
 }
 #####
 
-prjDir <- "~/GitHub/Ontario_AOU_ROF"
+prjDir <- switch(.user,
+                 ieddy = "C:/Ian/Git/Ontario_AOU_ROF",
+                 "~/GitHub/Ontario_AOU_ROF")
 
 stopifnot(identical(normalizePath(prjDir), normalizePath(getwd())))
 
