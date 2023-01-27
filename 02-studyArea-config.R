@@ -14,7 +14,7 @@ config.studyArea <- list(
   ),
   params = list(
     .globals = list(
-      sppEquivCol = "ON"
+      sppEquivCol = if (grepl("^ON", config$context[["studyAreaName"]])) "ON" else "LandR"
     ),
     Biomass_borealDataPrep = list(
       speciesTableAreas = c("WestON"),
