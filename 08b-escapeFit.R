@@ -26,10 +26,10 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     objects = escapeFitObjects
   )
 
-  if (isUpdated(escapeOut)) {
+  #if (isUpdated(escapeOut)) {
     escapeOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
     saveSimList(sim = escapeOut, filename = fescapeOut, fileBackend = 2)
-  }
+  #}
 
   if (isTRUE(upload_escapeOut)) {
     fdf <- googledrive::drive_put(media = fescapeOut, path = as_id(gdriveURL), name = basename(fescapeOut))
