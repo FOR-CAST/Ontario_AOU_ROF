@@ -1,6 +1,6 @@
 ## user + machine specific configs
 
-.fitUsing <- if (grepl("for-cast[.]ca", .nodename)) 3 else 0
+.fitUsing <- if (grepl("for-cast[.]ca", .nodename)) 4 else 0
 
 config.user <- switch(
   .user,
@@ -38,7 +38,7 @@ config.user <- switch(
           .nodename,
           "pinus.for-cast.ca" = {
             if (.fitUsing == 4) {
-              c(rep("localhost", 32), rep("picea.for-cast.ca", 16), rep("pseudotsuga.for-cast.ca", 52))
+              c(rep("localhost", 32), rep("picea.for-cast.ca", 52), rep("pseudotsuga.for-cast.ca", 16))
             } else if (.fitUsing == 3) {
               c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
             } else if (.fitUsing == 2) {
