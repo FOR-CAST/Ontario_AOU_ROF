@@ -28,6 +28,10 @@ ON_ROF_15.2,results,"",,,1shikUzt0xLBMgLbT6--_EW3gWmEVprFb
 ON_ROF_6.1,results,"",,,1cpO-k4YR2zX2bJU8MK7_Pyh0Qrwpw6UF
 ON_ROF_6.2,results,"",,,15rBW_nCzFpGZ4Fmziv81Ag_4DgMDKGBW
 QC_boreal_6.2,simOutPreamble,CanESM5,370,,1hZw452OVkHtWQkPcf5FkXstPe-1ITcow
+QC_boreal_6.2,biomassMaps2001,,,,1RfQe1Ft6A3zOEsLHYu5a1Y9aeTOloLZZ
+QC_boreal_6.2,results,"",,,1J73xue0l7BbY3NwaUOu3MmLeylgAeLLu
+QC_boreal_6.3,results,"",,,1WCpE2WGjb_4swwHl1VlmYxRUYCueOjiy
+QC_boreal_6.6,results,"",,,16SN6t1E_htNv499vC3ZwOnf11tYq8kEm
 ROF,simOutPreamble,CNRM-ESM2-1,370,,1K7s0eVAMCGLtyihRmqfi0YDaKtj3cRai
 ROF,simOutPreamble,CanESM5,370,,1IB5tRL87Kt9Vg0A_fK_qxy6y7dyhVKqK
 ROF,biomassMaps2001,"",,,1Fzb9ECBFytqWgDmV2oet88WqY25hfsMF
