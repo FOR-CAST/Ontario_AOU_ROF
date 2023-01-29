@@ -75,6 +75,8 @@ if (isTRUE(config$args[["usePrerun"]])) {
 }
 
 if (isTRUE(upload_fSsimDataPrep)) {
+  source("05-google-ids.R")
+
   fdf <- googledrive::drive_put(media = ffSsimDataPrep, path = as_id(gdriveURL), name = basename(ffSsimDataPrep))
   gid_fSsimDataPrep <- as.character(fdf$id)
   rm(fdf)

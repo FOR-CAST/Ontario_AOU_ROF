@@ -34,6 +34,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   #}
 
   if (isTRUE(upload_escapeOut)) {
+    source("05-google-ids.R")
+
     fdf <- googledrive::drive_put(media = fescapeOut, path = as_id(gdriveURL), name = basename(fescapeOut))
     gid_escapeOut <- as.character(fdf$id)
     rm(fdf)

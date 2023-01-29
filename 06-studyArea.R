@@ -54,6 +54,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   }
 
   if (isTRUE(upload_preamble)) {
+    source("05-google-ids.R")
+
     fdf <- googledrive::drive_put(media = fsimOutPreamble, path = as_id(gdriveURL), name = basename(fsimOutPreamble))
     gid_preamble <- as.character(fdf$id)
     rm(fdf)
@@ -82,6 +84,8 @@ if (isTRUE(firstRunMDCplots)) {
   ggplot2::ggsave(plot = ggMDC, filename = fggMDC)
 
   if (isTRUE(upload_preamble)) {
+    source("05-google-ids.R")
+
     googledrive::drive_put(
       media = fggMDC,
       path = unique(as_id(gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "results", gid])),

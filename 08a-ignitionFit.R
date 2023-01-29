@@ -61,6 +61,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   }
 
   if (isTRUE(upload_ignitionOut)) {
+    source("05-google-ids.R")
+
     fdf <- googledrive::drive_put(media = fignitionOut, path = as_id(gdriveURL), name = basename(fignitionOut))
     gid_ignitionOut <- as.character(fdf$id)
     rm(fdf)

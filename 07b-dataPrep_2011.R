@@ -60,6 +60,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   }
 
   if (isTRUE(upload_biomassMaps2011)) {
+    source("05-google-ids.R")
+
     fdf <- googledrive::drive_put(media = fbiomassMaps2011, path = as_id(gdriveURL), name = basename(fbiomassMaps2011))
     gid_biomassMaps2011 <- as.character(fdf$id)
     rm(fdf)

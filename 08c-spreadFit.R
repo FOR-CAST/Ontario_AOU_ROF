@@ -71,6 +71,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   #}
 
   if (isTRUE(upload_spreadOut)) {
+    source("05-google-ids.R")
+
     tempdir(check = TRUE) ## TODO: why is this dir being removed in the first place?
     fdf <- googledrive::drive_put(media = fspreadOut, path = as_id(gdriveURL), name = basename(fspreadOut))
     gid_spreadOut <- as.character(fdf$id)
