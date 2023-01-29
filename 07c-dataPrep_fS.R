@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_fSsimDataPrep <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "fSsimDataPrep", gid]
 upload_fSsimDataPrep <- config$args[["reupload"]] | length(gid_fSsimDataPrep) == 0
 

@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_spreadOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "spreadOut" & runID == config$context[["rep"]], gid]
 upload_spreadOut <- config$args[["reupload"]] | length(gid_spreadOut) == 0
 

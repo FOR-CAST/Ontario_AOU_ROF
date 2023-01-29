@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_biomassMaps2011 <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "biomassMaps2011", gid]
 upload_biomassMaps2011 <- config$args[["reupload"]] | length(gid_biomassMaps2011) == 0
 

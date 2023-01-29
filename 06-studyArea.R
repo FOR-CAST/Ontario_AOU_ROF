@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_preamble <- gdriveSims[studyArea == .studyAreaName & simObject == "simOutPreamble" &
                              gcm == .climateGCM & ssp == .climateSSP, gid]
 upload_preamble <- config$context[["rep"]] == 1 & (config$args[["reupload"]] | length(gid_preamble) == 0)

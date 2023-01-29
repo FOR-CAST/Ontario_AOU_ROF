@@ -163,8 +163,6 @@ quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
 
 SpaDES.config::authGoogle(tryToken = "landweb", tryEmail = config$args[["cloud"]][["googleUser"]])
 
-source("05-google-ids.R")
-
 ## helper functions
 source("R/cache_helpers.R")
 

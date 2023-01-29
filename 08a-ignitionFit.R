@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_ignitionOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "ignitionOut", gid]
 upload_ignitionOut <- config$args[["reupload"]] | length(gid_ignitionOut) == 0
 

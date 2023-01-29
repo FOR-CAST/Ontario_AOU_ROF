@@ -1,3 +1,5 @@
+source("05-google-ids.R")
+
 gid_escapeOut <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "escapeOut", gid]
 upload_escapeOut <- config$args[["reupload"]] | length(gid_escapeOut) == 0
 
