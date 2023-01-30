@@ -18,7 +18,7 @@ dataPrepParams2001 <- list(
 )
 dataPrepParams2001[[".globals"]][["dataYear"]] <- year
 dataPrepParams2001[[".globals"]][[".plotInitialTime"]] <- year
-dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
+dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
 
 dataPrepObjects <- list(
   .runName = config$context[["runName"]],

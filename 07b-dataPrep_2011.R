@@ -10,7 +10,7 @@ config$params$.globals
 dataPrepParams2011 <- dataPrepParams2001
 dataPrepParams2011[[".globals"]][["dataYear"]] <- year
 dataPrepParams2011[[".globals"]][[".plotInitialTime"]] <- year
-dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], year)
+dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
 dataPrepParams2011[["Biomass_speciesData"]][["types"]] <- "KNN" ## TODO: is this correct? what year for ONFRI?
 
 dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
