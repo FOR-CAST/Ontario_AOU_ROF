@@ -29,7 +29,7 @@ config.studyArea <- list(
       }
     ),
     canClimateData = list(
-      studyAreaName = gsub("^(ON|QC).*", "\\1", config$context[["studyAreaName"]])
+      ## TODO
     ),
     ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = list(
