@@ -5,13 +5,51 @@ upload_biomassMaps2011 <- config$args[["reupload"]] | length(gid_biomassMaps2011
 
 year <- 2011
 
-config$params$.globals
+## TODO: why isn't updating .globals sufficient to update indiv mmodule values???
+config$params <- list(
+  .globals = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesData = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesFactorial = list(
+    .plotInitialTime = year
+  ),
+  Biomass_borealDataPrep = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesParameters = list(
+    .plotInitialTime = year
+  )
+)
 
 dataPrepParams2011 <- dataPrepParams2001
+
+## begin param updates
 dataPrepParams2011[[".globals"]][["dataYear"]] <- year
 dataPrepParams2011[[".globals"]][[".plotInitialTime"]] <- year
 dataPrepParams2011[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
+
+dataPrepParams2011[["Biomass_speciesData"]][["dataYear"]] <- year
+dataPrepParams2011[["Biomass_speciesData"]][[".plotInitialTime"]] <- year
 dataPrepParams2011[["Biomass_speciesData"]][["types"]] <- "KNN" ## TODO: is this correct? what year for ONFRI?
+dataPrepParams2011[["Biomass_speciesData"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
+
+dataPrepParams2011[["Biomass_speciesFactorial"]][[".plotInitialTime"]] <- year
+
+dataPrepParams2011[["Biomass_borealDataPrep"]][["dataYear"]] <- year
+dataPrepParams2011[["Biomass_borealDataPrep"]][[".plotInitialTime"]] <- year
+dataPrepParams2011[["Biomass_borealDataPrep"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
+
+dataPrepParams2011[["Biomass_speciesParameters"]][[".plotInitialTime"]] <- year
+## end pram updates
 
 dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
 
@@ -49,8 +87,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
     objects = dataPrepObjects,
     loadOrder = unlist(dataPrepModules),
     #outputs = dataPrepOutputs2011,
-    useCloud = config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
+    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = NULL,#config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2011", config$context[["studyAreaName"]])
   )
 
@@ -74,3 +112,6 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
 }
 
 rm(dataPrepObjects, dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
+
+## restore original studyAreaName
+config$update()

@@ -28,7 +28,10 @@ fSdataPrepParams[["fireSense_dataPrepFit"]][["nonflammableLCC"]] <- simOutPreamb
 fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
 
 simOutPreamble[["rasterToMatch"]] <- raster::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
+standAgeMap2001 <- postProcess(biomassMaps2001[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
+standAgeMap2011 <- postProcess(biomassMaps2011[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
 rstLCC <- postProcess(biomassMaps2011[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
+rstLCC[] <- as.integer(rstLCC[])
 
 fSdataPrepObjects <- list(
   .runName = config$context[["runName"]],
@@ -42,8 +45,8 @@ fSdataPrepObjects <- list(
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rstLCC = rstLCC,
   sppEquiv = simOutPreamble[["sppEquiv"]],
-  standAgeMap2001 = biomassMaps2001[["standAgeMap"]],
-  standAgeMap2011 = biomassMaps2011[["standAgeMap"]],
+  standAgeMap2001 = standAgeMap2001,
+  standAgeMap2011 = standAgeMap2011,
   studyArea = simOutPreamble[["studyArea"]]
 )
 
@@ -62,9 +65,9 @@ if (isTRUE(config$args[["usePrerun"]])) {
     times =  list(start = 2011, end = 2011),
     params = fSdataPrepParams,
     objects = fSdataPrepObjects,
-    modules = "fireSense_dataPrepFit",
-    useCloud = config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
+    modules = "fireSense_dataPrepFit", ## TODO: use config$modules
+    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = NULL, #config$args[["cloud"]][["cacheDir"]],
     userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
   )
 
@@ -88,3 +91,5 @@ if (isTRUE(upload_fSsimDataPrep)) {
 
   source("R/upload_fSDatPrepFit_vegCoeffs.R")
 }
+
+rm(rstLCC, standAgeMap2001, standAgeMap2011)

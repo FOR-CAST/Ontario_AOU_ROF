@@ -12,13 +12,38 @@ dataPrepModules <- list(
   "Biomass_speciesParameters"
 ) ## TODO: use config$modules
 
+## TODO: why isn't updating .globals sufficient to update indiv mmodule values???
+config$params <- list(
+  .globals = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesData = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesFactorial = list(
+    .plotInitialTime = year
+  ),
+  Biomass_borealDataPrep = list(
+    dataYear = year,
+    .plotInitialTime = year,
+    .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
+  ),
+  Biomass_speciesParameters = list(
+    .plotInitialTime = year
+  )
+)
+
 dataPrepParams2001 <- list(
   .globals = config$params[[".globals"]],
-  Biomass_speciesData = config$params[["Biomass_speciesData"]]
+  Biomass_speciesData = config$params[["Biomass_speciesData"]],
+  Biomass_speciesFactorial = config$params[["Biomass_speciesFactorial"]],
+  Biomass_borealDataPrep = config$params[["Biomass_borealDataPrep"]],
+  Biomass_speciesParameters = config$params[["Biomass_speciesParameters"]]
 )
-dataPrepParams2001[[".globals"]][["dataYear"]] <- year
-dataPrepParams2001[[".globals"]][[".plotInitialTime"]] <- year
-dataPrepParams2001[[".globals"]][[".studyAreaName"]] <- paste0(config$context[["studyAreaName"]], "_", year)
 
 dataPrepObjects <- list(
   .runName = config$context[["runName"]],
@@ -68,8 +93,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
     loadOrder = unlist(dataPrepModules),
     # outputs = dataPrepOutputs2001,
     .plots = NA,
-    useCloud = config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
+    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = NULL,#config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2001", config$context[["studyAreaName"]])
   )
 
@@ -91,6 +116,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
     )
   }
 }
+
+## restore original studyAreaName
+config$update()
 
 ## PLOTTING
 if ("screen" %in% config$params[[".globals"]][[".plots"]]) {
