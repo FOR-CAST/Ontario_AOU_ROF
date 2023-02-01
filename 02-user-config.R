@@ -70,7 +70,7 @@ config.user <- switch(
   ieddy = list(
     args = list(
       cloud = list(
-        googleUser = "ianmseddy@@gmail.com",
+        googleUser = "ianmseddy@gmail.com",
         useCloud = FALSE
       ),
       notifications = list(
