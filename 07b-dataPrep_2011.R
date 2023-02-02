@@ -114,4 +114,5 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
 rm(dataPrepObjects, dataPrepOutputs2001, dataPrepParams2001, dataPrepOutputs2011, dataPrepParams2011)
 
 ## restore original studyAreaName
+config$params[[".globals"]][[".studyAreaName"]] <- config$context[["studyAreaName"]]
 config$update()

@@ -118,6 +118,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
 }
 
 ## restore original studyAreaName
+config$params[[".globals"]][[".studyAreaName"]] <- config$context[["studyAreaName"]]
 config$update()
 
 ## PLOTTING

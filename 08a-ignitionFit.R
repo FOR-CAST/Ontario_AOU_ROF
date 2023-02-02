@@ -7,6 +7,9 @@ upload_ignitionOut <- config$args[["reupload"]] | length(gid_ignitionOut) == 0
 
 biggestObj <- as.numeric(object.size(fSsimDataPrep[["fireSense_ignitionCovariates"]])) / 1e6 * 1.2
 
+config$params[["fireSense_IgnitionFit"]][["rescalers"]] <- NA ## TODO: add to config & test
+config$params[["fireSense_IgnitionFit"]][["rescaleVars"]] <- FALSE
+
 ignitionFitParams <- list(
   fireSense_IgnitionFit = config$params[["fireSense_IgnitionFit"]]
 )
