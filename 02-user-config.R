@@ -26,9 +26,9 @@ config.user <- switch(
       fireSense_IgnitionFit = list(
         cores = switch(
           .nodename,
-          "pinus.for-cast.ca" = 4L, ## 400 GB
-          "picea.for-cast.ca" = 8L,
-          "pseudotsuga.for-cast.ca" = 8L,
+          "pinus.for-cast.ca" = 8L, ## ~200 GB
+          "picea.for-cast.ca" = 16L,
+          "pseudotsuga.for-cast.ca" = 16L, ## ~400 GB
           1L
         )
       ),
