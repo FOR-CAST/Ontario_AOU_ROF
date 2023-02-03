@@ -65,6 +65,11 @@ QC_boreal_6.3,simOutPreamble,CanESM5,370,,1UTWdB8Hw52z98PBdxqz6LDKl_C4fQ-7R
 QC_boreal_6.3,biomassMaps2001,"",,,1PV7_FeVKXZxkXO-AKl90gdKmfuZYbdxb
 QC_boreal_6.3,biomassMaps2011,"",,,1g4ksUSV6JFNigIHYoMSoGB6UITxBDxo9
 QC_boreal_6.3,fSsimDataPrep,"",,,1dya14vumB-vClfY5yktp-wMiEmBIi23p
+QC_boreal_6.3,ignitionOut,"",,,1Wzrsd8K9U0ZEo9jM7N35OujBqXkPM2oL
+QC_boreal_6.3,escapeOut,"",,,1zaq74jsdWGHaQKBVgqywLIXnrhzsRSlM
+QC_boreal_6.3,spreadOut,,,3,1ciGfJ9Z4PM6bI9RpoffMNbPdIdivlN9Z
+QC_boreal_6.3,spreadOut,"",,1,15O01WDMsYxk3w0EDG5TKsBbC0jGRjdz9
+QC_boreal_6.3,spreadOut,"",,2,1pPqMqOnHjy3fpUQijAdWO8Ig7EdnVUrH
 QC_boreal_6.3,results,"",,,1WCpE2WGjb_4swwHl1VlmYxRUYCueOjiy
 QC_boreal_6.6,results,"",,,16SN6t1E_htNv499vC3ZwOnf11tYq8kEm
 ROF,simOutPreamble,CNRM-ESM2-1,370,,1K7s0eVAMCGLtyihRmqfi0YDaKtj3cRai
