@@ -76,7 +76,9 @@ config.user <- switch(
       notifications = list(
         slackChannel = ""
       ),
-      usePrerun = TRUE
+      usePrerun = TRUE,
+      upload_preamble = FALSE
+      spades.memoryUseInterval = FALSE
     ),
     options = list(
       reproducible.cacheSaveFormat = "qs"

@@ -49,7 +49,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
 
   if (isUpdated(simOutPreamble)) {
     simOutPreamble@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(simOutPreamble, fsimOutPreamble, fileBackend = 2)
+    saveSimList(simOutPreamble, fsimOutPreamble,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+                )
     amc::.gc()
   }
 

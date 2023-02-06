@@ -67,7 +67,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
 
   #if (isUpdated(spreadOut)) {
     spreadOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(spreadOut, fspreadOut, fileBackend = 2)
+    saveSimList(spreadOut, fspreadOut,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+                )
   #}
 
   if (isTRUE(upload_spreadOut)) {
