@@ -73,7 +73,9 @@ if (isTRUE(config$args[["usePrerun"]])) {
 
   if (isUpdated(fSsimDataPrep)) {
     fSsimDataPrep@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(fSsimDataPrep, ffSsimDataPrep, fileBackend = 2)
+    saveSimList(fSsimDataPrep, ffSsimDataPrep,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+                )
   }
 }
 

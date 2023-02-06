@@ -62,7 +62,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
 
   if (isUpdated(ignitionOut)) {
     ignitionOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(sim = ignitionOut, filename = fignitionOut, fileBackend = 2)
+    saveSimList(sim = ignitionOut, filename = fignitionOut,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+                )
   }
 
   if (isTRUE(upload_ignitionOut)) {

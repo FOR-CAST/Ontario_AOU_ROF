@@ -100,7 +100,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
 
   if (isUpdated(biomassMaps2001)) {
     biomassMaps2001@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(biomassMaps2001, fbiomassMaps2001, fileBackend = 2)
+    saveSimList(biomassMaps2001, fbiomassMaps2001,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+                )
   }
 
   if (isTRUE(upload_biomassMaps2001)) {

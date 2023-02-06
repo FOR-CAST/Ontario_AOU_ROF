@@ -30,7 +30,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
 
   #if (isUpdated(escapeOut)) {
     escapeOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(sim = escapeOut, filename = fescapeOut, fileBackend = 2)
+    saveSimList(sim = escapeOut, filename = fescapeOut,
+                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+    )
   #}
 
   if (isTRUE(upload_escapeOut)) {
