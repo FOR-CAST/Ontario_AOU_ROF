@@ -73,6 +73,7 @@ config.user <- switch(
         googleUser = "ianmseddy@gmail.com",
         useCloud = FALSE
       ),
+      spades.memoryUse = FALSE,
       notifications = list(
         slackChannel = ""
       ),
