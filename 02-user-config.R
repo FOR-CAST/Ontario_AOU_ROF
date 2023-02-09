@@ -1,6 +1,6 @@
 ## user + machine specific configs
 
-.fitUsing <- if (grepl("for-cast[.]ca", .nodename)) 4 else 0
+.fitUsing <- if (grepl("for-cast[.]ca", .nodename)) 5 else 0
 
 config.user <- switch(
   .user,
@@ -36,22 +36,23 @@ config.user <- switch(
         cores = switch(
           .nodename,
           "pinus.for-cast.ca" = {
-            if (.fitUsing == 4) {
-              c(rep("localhost", 32), rep("picea.for-cast.ca", 52), rep("pseudotsuga.for-cast.ca", 16))
-            } else if (.fitUsing == 3) {
-              c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67))
-            } else if (.fitUsing == 2) {
-              c(rep("pseudotsuga.for-cast.ca", 68), rep("picea.for-cast.ca", 32))
-            } else if (.fitUsing == 1) {
-              rep("pseudotsuga.for-cast.ca", 100)
-            }
+            switch(
+              .fitUsing,
+              `1` = rep("pseudotsuga.for-cast.ca", 100),
+              `2` = c(rep("picea.for-cast.ca", 32), rep("pseudotsuga.for-cast.ca", 68)),
+              `3` = c(rep("localhost", 8), rep("picea.for-cast.ca", 25), rep("pseudotsuga.for-cast.ca", 67)),
+              `4` = c(rep("localhost", 32), rep("picea.for-cast.ca", 48), rep("pseudotsuga.for-cast.ca", 20)),
+              `5` = c(rep("localhost", 32), rep("pseudotsuga.for-cast.ca", 68))
+            )
           },
           "picea.for-cast.ca" = {
-            if (.fitUsing == 3) {
-              c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67))
-            } else if (.fitUsing == 2) {
-              c(rep("localhost", 68), rep("pinus.for-cast.ca", 32))
-            }
+            switch(
+              .fitUsing,
+              `2` = c(rep("localhost", 68), rep("pinus.for-cast.ca", 32)),
+              `3` = c(rep("localhost", 25), rep("pinus.for-cast.ca", 8), rep("pseudotsuga.for-cast.ca", 67)),
+              `4` = c(rep("localhost", 48), rep("pinus.for-cast.ca", 32), rep("pseudotsuga.for-cast.ca", 20)),
+              `5` = c(rep("pinus.for-cast.ca", 32), rep("pseudotsuga.for-cast.ca", 68))
+            )
           },
           "pseudotsuga.for-cast.ca" = {
             rep("localhost", 100)

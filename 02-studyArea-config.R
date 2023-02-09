@@ -21,7 +21,7 @@ config.studyArea <- list(
       subsetDataAgeModel = 50,
       subsetDataBiomassModel = 50,
       overrideAgeInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
-      overrideBiomassInFires = if(grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE
+      overrideBiomassInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE
     ),
     Biomass_speciesData = list(
       types = if (grepl("ON", config$context[["studyAreaName"]])) {
