@@ -1,7 +1,6 @@
-sAN <- "ON_AOU_6.1"
-# sAN <- "ON_AOU_6.2"
-# sAN <- "ON_AOU_6.5"
-# sAN <- "ON_AOU_6.6"
+sAN <- "QC_boreal_6.2"
+# sAN <- "QC_boreal_6.3"
+# sAN <- "QC_boreal_6.6"
 
 fit <- TRUE
 

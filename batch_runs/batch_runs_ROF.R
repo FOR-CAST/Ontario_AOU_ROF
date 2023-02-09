@@ -1,7 +1,6 @@
-sAN <- "ON_AOU_6.1"
-# sAN <- "ON_AOU_6.2"
-# sAN <- "ON_AOU_6.5"
-# sAN <- "ON_AOU_6.6"
+# sAN <- "ON_ROF"
+sAN <- "ON_ROF_plain"
+# sAN <- "ON_ROF_shield"
 
 fit <- TRUE
 
