@@ -161,7 +161,7 @@ opts <- SpaDES.config::setProjectOptions(config)
 
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
 
-SpaDES.config::authGoogle(tryToken = "landweb", tryEmail = config$args[["cloud"]][["googleUser"]])
+SpaDES.config::authGoogle(tryToken = "eastern-boreal", tryEmail = config$args[["cloud"]][["googleUser"]])
 
 ## helper functions
 source("R/cache_helpers.R")
