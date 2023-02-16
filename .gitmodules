@@ -64,3 +64,6 @@
 [submodule "modules/Quebec_fires_preamble"]
 	path = modules/Quebec_fires_preamble
 	url = https://github.com/ianmseddy/Quebec_fires_preamble
+[submodule "modules/canFireRegimeZones"]
+	path = modules/canFireRegimeZones
+	url = https://github.com/PredictiveEcology/canFireRegimeZones
