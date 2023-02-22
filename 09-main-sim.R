@@ -81,8 +81,7 @@ rastersToSaveAnnually <- c(
   "mortalityMap",
   "pixelGroupMap",
   "rstCurrentBurn",
-  "simulatedBiomassMap",
-  "standAgeMap"
+  "simulatedBiomassMap"
 )
 
 annualRasters <- data.frame(
@@ -193,20 +192,18 @@ if (isUpdated(mainSim)) {
   # archive and upload --------------------------------------------------------------------------
   resultsDir <- file.path("outputs", config$context[["runName"]])
 
-  if (FALSE) { ## removed 2023-01: now being done via outputs
-    ## make annual standAgeMaps from cohortData
-    lapply(2011:2100, function(year) {
-      cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
-      cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
-      cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
-      cohortDataReduced <- unique(cohortDataReduced)
-      pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
-      names(pixelGroupMap) <- "pixelGroup"
-      standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
-      writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
-      TRUE
-    })
-  }
+  ## make annual standAgeMaps from cohortData
+  lapply(2011:2100, function(year) {
+    cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
+    cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
+    cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
+    cohortDataReduced <- unique(cohortDataReduced)
+    pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
+    names(pixelGroupMap) <- "pixelGroup"
+    standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
+    writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+    TRUE
+  })
 
   tarball <- paste0(resultsDir, ".tar.gz")
   #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
