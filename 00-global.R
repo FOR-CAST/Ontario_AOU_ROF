@@ -13,9 +13,8 @@ if (exists(".mode", .GlobalEnv)) {
 } else {
   .mode <- c("development")
 
-  ## allow "fit" in config
   if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
-   .mode <- append(.mode, "fit")
+   #.mode <- append(.mode, "fit")
   }
 }
 
