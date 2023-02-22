@@ -100,7 +100,7 @@ setLinuxBinaryRepo()
 
 Require(c(
   "PredictiveEcology/SpaDES.project@transition (>= 0.0.7.9018)", ## TODO: use development once merged
-  "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9066)"
+  "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9068)"
 ), upgrade = FALSE, standAlone = TRUE)
 
 modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
@@ -188,13 +188,18 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   source("06-studyArea.R")
   source("07a-dataPrep_2001.R")
 
-  opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
+  if ("fit" %in% config$context[["mode"]]) {
+    opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
+  }
   source("07b-dataPrep_2011.R")
   source("07c-dataPrep_fS.R")
 
   source("08a-ignitionFit.R")
   source("08b-escapeFit.R")
-  #options(opt)
+
+  # if ("fit" %in% config$context[["mode"]]) {
+  #   options(opt)
+  # }
 
   if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
