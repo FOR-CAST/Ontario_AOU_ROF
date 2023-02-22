@@ -33,7 +33,7 @@ dynamicParams[[".globals"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
 dynamicParams[["fireSense_dataPrepPredict"]][["missingLCCgroup"]] <- simOutPreamble[["missingLCCgroup"]]
 
 dynamicObjects <- list(
-  .runName = runName,
+  .runName = config$context[["runName"]],
   ATAstack = simOutPreamble[["ATAstack"]],
   biomassMap = biomassMaps2011$biomassMap,
   climateComponentsTouse = fSsimDataPrep[["climateComponentsToUse"]],
@@ -142,7 +142,7 @@ rm(
   spreadFitObjects, spreadOut        ## 08c-spreadFit.R
 )
 
-fsim <- simFile(runName, config$paths[["outputPath"]], ext = "qs")
+fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = "qs")
 
 tryCatch({
   mainSim <- simInitAndSpades(
@@ -151,7 +151,6 @@ tryCatch({
     objects = dynamicObjects,
     outputs = dynamicOutputs,
     params = dynamicParams,
-    paths = dynamicPaths,
     loadOrder = unlist(dynamicModules),
     debug = list(file = list(file = file.path(config$paths[["logPath"]], "sim.log"),
                              append = TRUE), debug = 1)
@@ -192,7 +191,7 @@ if (isUpdated(mainSim)) {
   qs::qsave(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.qs"))
 
   # archive and upload --------------------------------------------------------------------------
-  resultsDir <- file.path("outputs", runName)
+  resultsDir <- file.path("outputs", config$context[["runName"]])
 
   if (FALSE) { ## removed 2023-01: now being done via outputs
     ## make annual standAgeMaps from cohortData

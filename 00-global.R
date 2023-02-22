@@ -99,7 +99,7 @@ library(Require)
 setLinuxBinaryRepo()
 
 Require(c(
-  "PredictiveEcology/SpaDES.project@transition (>= 0.0.7.9003)", ## TODO: use development once merged
+  "PredictiveEcology/SpaDES.project@transition (>= 0.0.7.9018)", ## TODO: use development once merged
   "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9066)"
 ), upgrade = FALSE, standAlone = TRUE)
 
@@ -176,7 +176,6 @@ if (config$args[["delayStart"]] > 0) {
 }
 
 if (!"postprocess" %in% config$context[["mode"]]) {
-  source("06-studyArea.R")
 
   if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
@@ -186,6 +185,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
     config$args[["reupload"]] <- FALSE
   }
 
+  source("06-studyArea.R")
   source("07a-dataPrep_2001.R")
 
   opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
