@@ -175,7 +175,6 @@ if (config$args[["delayStart"]] > 0) {
 }
 
 if (!"postprocess" %in% config$context[["mode"]]) {
-
   if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
     config$args[["reupload"]] <- TRUE
