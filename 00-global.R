@@ -103,11 +103,23 @@ Require(c(
 ), upgrade = FALSE, standAlone = TRUE)
 
 modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
-otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp", "future", "future.callr", "logging",
+modulePkgs <- unique(gsub("development", "dev-stable", modulePkgs))
+
+otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp",
+               "PredictiveEcology/fireSenseUtils@dev-stable",
+               "future", "future.callr",
+               "PredictiveEcology/LandR@dev-stable",
+               "ianmseddy/LandR.CS@dev-stable",
+               "logging",
+               "PredictiveEcology/map@dev-stable",
+               "PredictiveEcology/pemisc@dev-stable",
                "Rcpp (>= 1.0.10)",
-               "PredictiveEcology/reproducible@development (>= 1.2.16.9023)",
+               "PredictiveEcology/quickPlot@dev-stable",
+               "PredictiveEcology/reproducible@dev-stable (>= 1.2.16.9023)",
+               #"PredictiveEcology/Require@dev-stable",
                "RPostgres", "slackr",
-               "PredictiveEcology/SpaDES.core@development (>= 1.1.1)",
+               "PredictiveEcology/SpaDES.core@dev-stable (>= 1.1.1)",
+               "PredictiveEcology/SpaDES.tools@dev-stable",
                "terra (>= 1.7-3)")
 
 Require(unique(c(modulePkgs, otherPkgs)), require = FALSE, standAlone = TRUE, upgrade = FALSE)

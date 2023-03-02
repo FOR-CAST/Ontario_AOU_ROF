@@ -193,20 +193,20 @@ if (isUpdated(mainSim)) {
   qs::qsave(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.qs"))
 
   # archive and upload --------------------------------------------------------------------------
-  resultsDir <- file.path("outputs", config$context[["runName"]])
+  resultsDir <- config$paths[["outputPath"]]
 
   ## make annual standAgeMaps from cohortData
-  lapply(2011:2100, function(year) {
-    cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
-    cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
-    cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
-    cohortDataReduced <- unique(cohortDataReduced)
-    pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
-    names(pixelGroupMap) <- "pixelGroup"
-    standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
-    writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
-    TRUE
-  })
+  # lapply(2011:2100, function(year) {
+  #   cohortData <- qs::qread(file = file.path(resultsDir, paste0("cohortData_", year, "_year", year, ".qs")))
+  #   cohortData[, bWeightedAge := floor(sum(age * B) / sum(B) / 10) * 10, .(pixelGroup)]
+  #   cohortDataReduced <- cohortData[, c("pixelGroup", "bWeightedAge")]
+  #   cohortDataReduced <- unique(cohortDataReduced)
+  #   pixelGroupMap <- raster(file.path(resultsDir, paste0("pixelGroupMap_", year, "_year", year, ".tif")))
+  #   names(pixelGroupMap) <- "pixelGroup"
+  #   standAgeMap <- rasterizeReduced(cohortDataReduced, pixelGroupMap, "bWeightedAge", mapCode = "pixelGroup")
+  #   writeRaster(standAgeMap, filename = file.path(resultsDir, paste0("standAgeMap_", year, ".tif")), overwrite = TRUE)
+  #   TRUE
+  # }) ## TODO: currently fails with error: "double free or corruption (!prev)"
 
   tarball <- paste0(resultsDir, ".tar.gz")
   #archive::archive_write_dir(archive = tarball, dir = resultsDir) ## doesn't work
