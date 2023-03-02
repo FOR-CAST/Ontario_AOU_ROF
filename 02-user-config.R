@@ -79,11 +79,11 @@ config.user <- switch(
         slackChannel = ""
       ),
       usePrerun = TRUE,
-      upload_preamble = FALSE,
-      spades.memoryUseInterval = NULL
+      upload_preamble = FALSE
     ),
     options = list(
-      reproducible.cacheSaveFormat = "qs"
+      reproducible.cacheSaveFormat = "qs",
+      spades.memoryUseInterval = FALSE
     ),
     params = list(
       .plotInitialTime = NA
