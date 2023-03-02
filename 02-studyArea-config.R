@@ -17,11 +17,12 @@ config.studyArea <- list(
       sppEquivCol = if (grepl("^ON", config$context[["studyAreaName"]])) "ON" else "LandR"
     ),
     Biomass_borealDataPrep = list(
+      forestedLCCClasses = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) c(9:10, 12, 14, 15:18) else 1:6,
+      overrideAgeInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
+      overrideBiomassInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
       speciesTableAreas = c("WestON"),
       subsetDataAgeModel = 50,
-      subsetDataBiomassModel = 50,
-      overrideAgeInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
-      overrideBiomassInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE
+      subsetDataBiomassModel = 50
     ),
     Biomass_speciesData = list(
       types = if (grepl("ON", config$context[["studyAreaName"]])) {
