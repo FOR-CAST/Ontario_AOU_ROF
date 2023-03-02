@@ -1,9 +1,9 @@
-sAN <- "ON_AOU_6.1"
-# sAN <- "ON_AOU_6.2"
+# sAN <- "ON_AOU_6.1"
+sAN <- "ON_AOU_6.2"
 # sAN <- "ON_AOU_6.5"
 # sAN <- "ON_AOU_6.6"
 
-fit <- TRUE
+fit <- FALSE
 
 gcm <- "CanESM5"
 # gcm <- "CNRM-ESM2-1"
@@ -17,7 +17,13 @@ Nreps <- 10L
 
 delay <- 0L * 3600L
 
-lapply(Nstart:Nreps, function(rep) {
+reps2run <- if (isTRUE(fit)) {
+  Nstart ## fitting loops already in script
+} else {
+  Nstart:Nreps
+}
+
+lapply(reps2run, function(rep) {
   cmd <- paste(
     sprintf("screen -d -m -S %s_%02d Rscript -e '.rep <- %d; .studyAreaName <- \"%s\"; .climateGCM <- \"%s\"; .climateSSP <- \"%d\";",
             sAN, rep, rep, sAN, gcm, ssp),
@@ -29,4 +35,4 @@ lapply(Nstart:Nreps, function(rep) {
   Sys.sleep(5)
 })
 
-rm(delay, fit, gcm, Nstart, Nreps, sAN, ssp)
+rm(delay, fit, gcm, Nstart, Nreps, reps2run, sAN, ssp)

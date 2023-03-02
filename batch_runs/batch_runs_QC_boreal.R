@@ -2,7 +2,7 @@ sAN <- "QC_boreal_6.2"
 # sAN <- "QC_boreal_6.3"
 # sAN <- "QC_boreal_6.6"
 
-fit <- TRUE
+fit <- FALSE
 
 gcm <- "CanESM5"
 # gcm <- "CNRM-ESM2-1"

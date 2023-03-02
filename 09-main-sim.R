@@ -94,6 +94,7 @@ annualRasters <- data.frame(
   stringsAsFactors = FALSE
 )
 annualRasters$file <- paste0(annualRasters$objectName, "_", annualRasters$saveTime, ".tif")
+annualRasters$arguments <- I(list(list(overwrite = TRUE, progress = FALSE)))
 
 objectsToSaveAnnually <- c(
   "cohortData" ## data.table
@@ -109,6 +110,7 @@ annualObjects <- data.frame(
   stringsAsFactors = FALSE
 )
 annualObjects$file <- paste0(annualObjects$objectName, "_", annualObjects$saveTime, ".qs")
+annualObjects$arguments <- I(list(list()))
 
 objectNamesToSaveAtEnd <- c(
   "gcsModel",
@@ -127,6 +129,7 @@ finalYearOutputs <- data.frame(
   file = paste0(objectNamesToSaveAtEnd, ".qs"),
   stringsAsFactors = FALSE
 )
+finalYearOutputs$arguments <- I(list(list()))
 
 dynamicOutputs <- rbind(annualRasters, annualObjects, finalYearOutputs)
 
