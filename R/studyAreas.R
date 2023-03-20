@@ -1,5 +1,5 @@
 library(Require)
-Require(c("ggplot2", "ggspatial", "raster", "reproducible", "sf", "sp"))
+Require(c("dplyr", "ggplot2", "ggspatial", "raster", "reproducible", "sf", "sp"))
 
 cacheDir <- checkPath("cache", create = TRUE)
 inputDir <- checkPath("inputs", create = TRUE)
@@ -82,13 +82,15 @@ ROF_ecoprov <- st_intersection(ROF, ecoprov)
 
 # maps ----------------------------------------------------------------------------------------
 
-alpha <- 0.3
+alpha <- 0.5
 cols <- c("forestgreen", "darkblue")
+lblsize <- 3
 
 ## plot AOU only
 AOU_gg <- ggplot(ON) +
   geom_sf(fill = "white", colour = "black", alpha = alpha) +
   geom_sf(data = AOU_ecoprov, aes(fill = ECOPROVINCE), alpha = alpha) +
+  geom_sf_text(data = AOU_ecoprov, aes(label = ECOPROVINCE), size = lblsize) +
   scale_fill_brewer(palette = "Greens") +
   annotation_north_arrow(location = "bl", which_north = "true",
                          pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
@@ -96,12 +98,13 @@ AOU_gg <- ggplot(ON) +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Ontario Area of Undertaking (AOU) by national ecoprovince") +
   theme_bw()
-ggsave(AOU_gg, filename = file.path(mapDir, "AOU_v2.png"), width = 8, height = 8)
+ggsave(AOU_gg, filename = file.path(mapDir, "AOU.png"), width = 8, height = 8)
 
 ## plot ROf only
 ROF_gg <- ggplot(ON) +
   geom_sf(fill = "white", colour = "black", alpha = alpha) +
   geom_sf(data = ROF_ecoprov, aes(fill = ECOPROVINCE), alpha = alpha) +
+  geom_sf_text(data = ROF_ecoprov, aes(label = ECOPROVINCE), size = lblsize) +
   scale_fill_brewer(palette = "Blues") +
   annotation_north_arrow(location = "bl", which_north = "true",
                          pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
@@ -112,13 +115,14 @@ ROF_gg <- ggplot(ON) +
 ggsave(ROF_gg, filename = file.path(mapDir, "RoF.png"), width = 8, height = 8)
 
 ## plot both areas
-ON_both <- rbind(AOU_ecoprov, ROF_ecoprov)
-ON_both[ON_both$NAME == 1, ]$NAME <- "AOU"
-ON_both[ON_both$NAME == 107, ]$NAME <- "ROF"
+ON_both <- rbind(
+  select(AOU_ecoprov, ECOPROVINCE) |> mutate(NAME = "AOU"),
+  select(ROF_ecoprov, ECOPROVINCE) |> mutate(NAME = "ROF")
+)
 ON_both_gg <- ggplot(ON) +
   geom_sf(fill = "white", colour = "black", alpha = alpha) +
   geom_sf(data = ON_both, aes(fill = NAME, col = NAME), alpha = alpha) +
-  geom_sf_text(data = ON_both, aes(label = ECOPROVINCE)) +
+  geom_sf_text(data = ON_both, aes(label = ECOPROVINCE), size = lblsize) +
   annotation_north_arrow(location = "bl", which_north = "true",
                          pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
                          style = north_arrow_fancy_orienteering) +
@@ -170,7 +174,7 @@ files2extract <- grep("STF_UA", files, value = TRUE)
 unzip(file.path(inputDir, "UA_SHP.zip"), files = files2extract, exdir = inputDir)
 
 ## 1. read in data
-## 2. remove most eastward polys + islands via subset
+## 2. remove most eastward polys + islands via manual subset
 ## 3. buffer 0 to get rid of 'lines'
 ## 4. buffer out, union the polys, they buffer back in (good enough approx of the study area)
 ## 5. remove holes
@@ -195,6 +199,7 @@ QC_boreal_ua_ecoprov <- st_intersection(QC_boreal_ua, ecoprov)
 QC_boreal_gg <- ggplot(QC) +
   geom_sf(fill = "white", colour = "black", alpha = alpha) +
   geom_sf(data = QC_boreal_ua_ecoprov, aes(fill = ECOPROVINCE), alpha = alpha) +
+  geom_sf_text(data = QC_boreal_ua_ecoprov, aes(label = ECOPROVINCE), size = lblsize) +
   scale_fill_brewer(palette = "Purples") +
   annotation_north_arrow(location = "bl", which_north = "true",
                          pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
@@ -202,4 +207,25 @@ QC_boreal_gg <- ggplot(QC) +
   xlab("Longitude") + ylab("Latitude") +
   ggtitle("Québec's western managed boreal forest by national ecoprovince") +
   theme_bw()
-ggsave(AOU_gg, filename = file.path(mapDir, "QC_boreal.png"), width = 8, height = 8)
+ggsave(QC_boreal_gg, filename = file.path(mapDir, "QC_boreal.png"), width = 8, height = 8)
+
+## plot AOU with boreal Québec
+cols2 <- c("forestgreen", "purple4") ## ROF = "darkblue"
+ON_QC <- rbind(
+  select(AOU_ecoprov, ECOPROVINCE) |> mutate(NAME = "ON AOU"),
+  # select(ROF_ecoprov, ECOPROVINCE) |> mutate(NAME = "ON ROF"),
+  select(QC_boreal_ua_ecoprov, ECOPROVINCE) |> mutate(NAME = "QC")
+)
+ON_QC_gg <- ggplot(rbind(ON, QC)) +
+  geom_sf(fill = "white", colour = "black", alpha = alpha) +
+  geom_sf(data = ON_QC, aes(fill = NAME, col = NAME), alpha = alpha) +
+  geom_sf_text(data = ON_QC, aes(label = ECOPROVINCE), size = lblsize) +
+  annotation_north_arrow(location = "bl", which_north = "true",
+                         pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("Ontario and western Québec managed boreal forests by national ecoprovince") +
+  scale_colour_manual(name = "Study Areas", values = cols2) +
+  scale_fill_manual(name = "Study Areas", values = cols2) +
+  theme_bw()
+ggsave(ON_QC_gg, filename = file.path(mapDir, "ON-QC.png"), width = 8, height = 8)
