@@ -1,6 +1,6 @@
-sAN <- "QC_boreal_6.2"
-# sAN <- "QC_boreal_6.3"
-# sAN <- "QC_boreal_6.6"
+#sAN <- "QC_boreal_6.2" ## 370 done; 585 running
+#sAN <- "QC_boreal_6.3" ## 370 done; 585 running
+sAN <- "QC_boreal_6.6" ## 370 done; 585 running
 
 fit <- FALSE
 
@@ -8,8 +8,8 @@ gcm <- "CanESM5"
 # gcm <- "CNRM-ESM2-1"
 
 # ssp <- 245
-ssp <- 370
-# ssp <- 585
+# ssp <- 370
+ssp <- 585
 
 Nstart <- 1L
 Nreps <- 10L

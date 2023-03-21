@@ -1,7 +1,7 @@
-# sAN <- "ON_AOU_6.1"
-sAN <- "ON_AOU_6.2"
-# sAN <- "ON_AOU_6.5"
-# sAN <- "ON_AOU_6.6"
+# sAN <- "ON_AOU_6.1" ## terrible ignition fits; sims can't run
+sAN <- "ON_AOU_6.2" ## 370 running; 585 done
+#sAN <- "ON_AOU_6.5" ## 370 done; 585 done
+#sAN <- "ON_AOU_6.6" ## 370 done; 585 running
 
 fit <- FALSE
 
@@ -9,8 +9,8 @@ gcm <- "CanESM5"
 # gcm <- "CNRM-ESM2-1"
 
 # ssp <- 245
-ssp <- 370
-# ssp <- 585
+# ssp <- 370
+ssp <- 585
 
 Nstart <- 1L
 Nreps <- 10L

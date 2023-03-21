@@ -114,7 +114,7 @@ otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp",
                "PredictiveEcology/pemisc@dev-stable",
                "Rcpp (>= 1.0.10)",
                "PredictiveEcology/quickPlot@dev-stable",
-               "PredictiveEcology/reproducible@dev-stable (>= 1.2.16.9023)",
+               "PredictiveEcology/reproducible@dev-stable (>= 1.2.16.9024)",
                "PredictiveEcology/Require@dev-stable",
                "RPostgres", "slackr",
                "PredictiveEcology/SpaDES.core@dev-stable (>= 1.1.1)",
@@ -241,7 +241,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
     source("09-main-sim.R")
   }
 } else {
-  # source("10-post-processing.R") ## TODO: update postprocessing script to work here
+  source("10-post-processing.R")
 }
 
 relOutputPath <- SpaDES.config:::.getRelativePath(prjPaths[["outputPath"]], prjDir)

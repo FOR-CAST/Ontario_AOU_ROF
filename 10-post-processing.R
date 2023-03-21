@@ -1,20 +1,14 @@
-moduleDir <- "modules"
+years <- unlist(config$args[["simYears"]])
+Nreps <- config$params[[".globals"]][["reps"]]
+studyAreaNames <- c("ON_AOU_6.5", "ON_AOU_6.6", "QC_boreal_6.2", "QC_boreal_6.3", "QC_boreal_6.6") ## TODO: "ON_AOU_6.2"
+climateScenarios <- c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")[1] ## TODO: other scenarios
 
-years <- c(2011, 2100)
-Nreps <- 5 ## adjust as needed
-studyAreaNames <- c("ROF", "ROF-kNN")[1] ## TODO #c("ROF_plain", "ROF_shield") #c("AOU", "ROF")
-climateScenarios <- c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")[1] ## TODO
-
-runName <- sprintf("%s_%s_run01", studyAreaNames[1], climateScenarios[1]) ## need a runName for gids
-
-source("01-packages.R")
-source("02-init.R")
-source("03-paths.R")
-source("04-options.R"); options(mc.cores = nReps);
-source("05-google-ids.R")
+options(mc.cores = max(Nreps))
 
 config$args[["usePrerun"]] <- TRUE
 doUpload <- TRUE
+
+source("05-google-ids.R")
 
 gid_results <- lapply(studyAreaNames, function(sAN) {
   gdriveSims[studyArea == sAN & simObject == "results", gid]
@@ -22,18 +16,40 @@ gid_results <- lapply(studyAreaNames, function(sAN) {
 names(gid_results) <- studyAreaNames
 
 ## postprocessing paths
-posthocPaths <- defaultPaths
-posthocPaths[["cachePath"]] <- file.path(cacheDir, "cache_posthoc")
-posthocPaths[["outputPath"]] <- dirname(defaultPaths[["outputPath"]])
+posthocPaths <- prjPaths
+posthocPaths[["outputPath"]] <- dirname(config$paths[["outputPath"]])
 
 do.call(setPaths, posthocPaths)
 
-posthocModules <- list("Biomass_summary", "fireSense_summary")
+## TODO: ensure files exist in the place the summary modules expect - fix in preamble + scripts
+lapply(studyAreaNames, function(sAN) {
+  outPathAbs <- checkPath(file.path(posthocPaths[["outputPath"]], sAN), create = TRUE)
+  figPathAbs <- checkPath(file.path(posthocPaths[["outputPath"]], sAN, "figures"), create = TRUE)
+
+  ## preamble
+  fromFile <- file.path(posthocPaths[["outputPath"]], paste0(sAN, "_", climateScenarios[1]), sprintf("rep%02d", 1),
+                        paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".qs"))
+  toFile <- file.path(outPathAbs,  paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".qs"))
+
+  if (!file.exists(toFile))
+    file.copy(fromFile, toFile)
+
+  ## fsDAtaPrep
+  fromFile <- file.path(posthocPaths[["outputPath"]], paste0(sAN, "_", climateScenarios[1]), sprintf("rep%02d", 1),
+                        paste0("fSsimDataPrep_", sAN, ".qs"))
+  toFile <- file.path(outPathAbs,  paste0("fSsimDataPrep_", sAN, ".qs"))
+
+  if (!file.exists(toFile))
+    file.copy(fromFile, toFile)
+})
+
+# posthocModules <- list("Biomass_summary", "fireSense_summary")
+posthocModules <- config$modules
 
 posthocParams <- list(
   Biomass_summary = list(
     climateScenarios = climateScenarios,
-    simOutputPath = config$paths[["outputPath"]], ## "outputs"
+    simOutputPath = posthocPaths[["outputPath"]], ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
     upload = doUpload,
@@ -41,7 +57,7 @@ posthocParams <- list(
   ),
   fireSense_summary = list(
     climateScenarios = climateScenarios,
-    simOutputPath = config$paths[["outputPath"]], ## "outputs"
+    simOutputPath = posthocPaths[["outputPath"]], ## "outputs"
     studyAreaNames = studyAreaNames,
     reps = Nreps,
     upload = doUpload
@@ -55,12 +71,13 @@ sppEquiv <- makeSppEquivON()
 treeSpecies <- unique(sppEquiv[, c("ON", "Type")])
 setnames(treeSpecies, "ON", "Species")
 
-## same RTM for all sims, so it doesn't matter which one we load
-sim_SA <- loadSimList(file.path("outputs", studyAreaNames[[1]],
-                                paste0("simOutPreamble_", studyAreaNames[[1]], "_",
-                                       gsub("SSP", "", climateScenarios[[1]]), ".qs")))
-rasterToMatch <- sim_SA$rasterToMatchReporting
-rm(sim_SA)
+## same RTM for all sims with given study area, so it doesn't matter which one we load
+# sim_SA <- loadSimList(file.path(posthocPaths[["outputPath"]],
+#                                 studyAreaNames[[1]],
+#                                 paste0("simOutPreamble_", studyAreaNames[[1]], "_",
+#                                        gsub("SSP", "", climateScenarios[[1]]), ".qs")))
+# rasterToMatch <- sim_SA$rasterToMatchReporting
+# rm(sim_SA)
 
 if (grepl("ROF", studyAreaName)) {
   if (unique(raster::res(rasterToMatch)) == 250) {
@@ -70,7 +87,7 @@ if (grepl("ROF", studyAreaName)) {
 }
 
 posthocObjects <- list(
-  rasterToMatch = rasterToMatch,
+  #rasterToMatch = rasterToMatch,
   treeSpecies = treeSpecies,
   uploadTo = gid_results
 )
@@ -84,32 +101,33 @@ posthocSim <- simInitAndSpades(
   paths = posthocPaths
 )
 
-
 # fires ---------------------------------------------------------------------------------------
 
-tmp <- loadSimList("outputs/ROF_shield_CanESM5_SSP370_run01/ROF_shield_CanESM5_SSP370_run01.qs")
+if (FALSE) {
+  tmp <- loadSimList("outputs/ROF_shield_CanESM5_SSP370_run01/ROF_shield_CanESM5_SSP370_run01.qs")
 
-r <- raster::raster(tmp$rasterToMatch)
-burnSummary = copy(tmp$burnSummary)
+  r <- raster::raster(tmp$rasterToMatch)
+  burnSummary = copy(tmp$burnSummary)
 
-bs <- burnSummary[ , .N, .(igLoc)]
+  bs <- burnSummary[ , .N, .(igLoc)]
 
-r[bs$igLoc] <- bs$N
+  r[bs$igLoc] <- bs$N
 
-raster::plot(r)
-
-
-myXYs <- raster::xyFromCell(object = r, cell = bs$igLoc)
-mySPs <- sp::SpatialPoints(coords = myXYs, proj4string = raster::crs(r))
-
-sp::plot(mySPs)
+  raster::plot(r)
 
 
-bm <- raster::raster("outputs/ROF_shield_CanESM5_SSP370_run01/burnMap_2100_year2100.tif")
-raster::plot(bm)
+  myXYs <- raster::xyFromCell(object = r, cell = bs$igLoc)
+  mySPs <- sp::SpatialPoints(coords = myXYs, proj4string = raster::crs(r))
 
-raster::setMinMax(bm)
-hist(bm[])
+  sp::plot(mySPs)
+
+
+  bm <- raster::raster("outputs/ROF_shield_CanESM5_SSP370_run01/burnMap_2100_year2100.tif")
+  raster::plot(bm)
+
+  raster::setMinMax(bm)
+  hist(bm[])
+}
 
 # simulation summaries ------------------------------------------------------------------------
 
