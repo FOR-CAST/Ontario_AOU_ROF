@@ -198,7 +198,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   source("07a-dataPrep_2001.R")
 
   if ("fit" %in% config$context[["mode"]]) {
-    opt <- options(spades.memoryUseInterval = NULL) ## TODO: periodically stalls during mem use setup; disable temporarily
+    opt <- options(spades.memoryUseInterval = FALSE) ## TODO: periodically stalls during mem use setup; disable temporarily
   }
   source("07b-dataPrep_2011.R")
   source("07c-dataPrep_fS.R")

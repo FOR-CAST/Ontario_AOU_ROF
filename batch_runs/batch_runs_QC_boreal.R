@@ -1,6 +1,6 @@
-#sAN <- "QC_boreal_6.2" ## 370 done; 585 running
-#sAN <- "QC_boreal_6.3" ## 370 done; 585 running
-sAN <- "QC_boreal_6.6" ## 370 done; 585 running
+sAN <- "QC_boreal_6.2" ## 370 done; 585 FAIL
+#sAN <- "QC_boreal_6.3" ## 370 done; 585 FAIL
+#sAN <- "QC_boreal_6.6" ## 370 done; 585 FAIL
 
 fit <- FALSE
 

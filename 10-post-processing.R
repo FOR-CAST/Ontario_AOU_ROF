@@ -1,12 +1,12 @@
 years <- unlist(config$args[["simYears"]])
 Nreps <- config$params[[".globals"]][["reps"]]
-studyAreaNames <- c("ON_AOU_6.5", "ON_AOU_6.6", "QC_boreal_6.2", "QC_boreal_6.3", "QC_boreal_6.6") ## TODO: "ON_AOU_6.2"
+studyAreaNames <- c("ON_AOU_6.2", "ON_AOU_6.5", "ON_AOU_6.6", "QC_boreal_6.2", "QC_boreal_6.3", "QC_boreal_6.6")
 climateScenarios <- c("CanESM5_SSP370", "CanESM5_SSP585", "CNRM-ESM2-1_SSP370", "CNRM-ESM2-1_SSP585")[1] ## TODO: other scenarios
 
 options(mc.cores = max(Nreps))
 
 config$args[["usePrerun"]] <- TRUE
-doUpload <- TRUE
+doUpload <- FALSE ## TODO: fix uploads; TRUE
 
 source("05-google-ids.R")
 
@@ -79,12 +79,12 @@ setnames(treeSpecies, "ON", "Species")
 # rasterToMatch <- sim_SA$rasterToMatchReporting
 # rm(sim_SA)
 
-if (grepl("ROF", studyAreaName)) {
-  if (unique(raster::res(rasterToMatch)) == 250) {
-    ## ROF uses 125m pixels
-    rasterToMatch <- raster::disaggregate(rasterToMatch, fact = 2)
-  }
-}
+# if (grepl("ROF", .studyAreaName)) {
+#   if (unique(raster::res(rasterToMatch)) == 250) {
+#     ## ROF uses 125m pixels
+#     rasterToMatch <- raster::disaggregate(rasterToMatch, fact = 2)
+#   }
+# }
 
 posthocObjects <- list(
   #rasterToMatch = rasterToMatch,
