@@ -58,9 +58,7 @@ stopifnot(identical(normalizePath(prjDir), normalizePath(getwd())))
 
 options(
   Ncpus = .ncores,
-  repos = c(CRAN = "https://cran.rstudio.com"),
-  Require.RPackageCache = "default", ## will use default package cache directory: `RequirePkgCacheDir()`
-  Require.usepak = FALSE ## pkg deps too complicated for pak
+  repos = c(CRAN = "https://cloud.r-project.org")
 )
 
 # install and load packages -------------------------------------------------------------------
@@ -75,6 +73,7 @@ if (!"remotes" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
   install.packages("remotes")
 }
 
+## TODO: manage tempdir on a per machine basis via project's .Renviron
 if (!"tmpdir" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
   remotes::install_github("achubaty/tmpdir")
 }
