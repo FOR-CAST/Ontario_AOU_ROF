@@ -12,10 +12,8 @@ dynamicModules <- list(
   "fireSense_SpreadPredict",
   "Biomass_core",
   "Biomass_regeneration",
-  ifelse(isTRUE(config$args[["useLandR.CS"]]), "gmcsDataPrep", "")
+  "gmcsDataPrep"
 )
-dynamicModules <- lapply(dynamicModules, function(m) if (nzchar(m)) m)
-dynamicModules[sapply(dynamicModules, is.null)] <- NULL ## this is bananas!
 
 dynamicParams <- list(
   .globals = config$params[[".globals"]],
@@ -63,6 +61,7 @@ dynamicObjects <- list(
   speciesLayers = biomassMaps2011[["speciesLayers"]], ## TODO: does Biomass_core actually need this?
   sppColorVect = biomassMaps2011[["sppColorVect"]],
   sppEquiv = fSsimDataPrep[["sppEquiv"]],
+  standAgeMap = biomassMaps2011[["standAgeMap"]],
   studyArea = biomassMaps2011[["studyArea"]],
   studyAreaLarge = biomassMaps2011[["studyAreaLarge"]],
   studyAreaPSP = simOutPreamble[["studyAreaPSP"]],
