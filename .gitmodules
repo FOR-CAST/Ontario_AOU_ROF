@@ -67,3 +67,6 @@
 [submodule "modules/canFireRegimeZones"]
 	path = modules/canFireRegimeZones
 	url = https://github.com/PredictiveEcology/canFireRegimeZones
+[submodule "modules/historicFires"]
+	path = modules/historicFires
+	url = https://github.com/PredictiveEcology/historicFires

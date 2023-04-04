@@ -14,7 +14,8 @@ config.studyArea <- list(
   ),
   params = list(
     .globals = list(
-      sppEquivCol = if (grepl("^ON", config$context[["studyAreaName"]])) "ON" else "LandR"
+      sppEquivCol = if (grepl("^ON", config$context[["studyAreaName"]])) "ON" else "LandR",
+      .runInitialTime = max(historicFireYears) + 1 ## fireSense simulates fires for years w/o data; TODO: add to config
     ),
     Biomass_borealDataPrep = list(
       forestedLCCClasses = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) c(9:10, 12, 14, 15:18) else 1:6,
@@ -33,6 +34,9 @@ config.studyArea <- list(
     ),
     canClimateData = list(
       ## TODO
+    ),
+    historicFires = list( ## TODO: add to config
+      staticFireYears = 2011:2020 ## historicFireYears
     ),
     ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = list(

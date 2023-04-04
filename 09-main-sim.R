@@ -5,6 +5,7 @@
 times <- config$args[["simYears"]]
 
 dynamicModules <- list(
+  "historicFires",
   "fireSense_dataPrepPredict",
   "fireSense",
   "fireSense_IgnitionPredict",
@@ -24,7 +25,8 @@ dynamicParams <- list(
   fireSense_EscapePredict = config$params[["fireSense_EscapePredict"]],
   fireSense_IgnitionPredict = config$params[["fireSense_IgnitionPredict"]],
   fireSense_SpreadPredict = config$params[["fireSense_SpreadPredict"]],
-  gmcsDataPrep = config$params[["gmcsDataPrep"]]
+  gmcsDataPrep = config$params[["gmcsDataPrep"]],
+  historicFires = config$params[["historicFires"]]
 )
 
 dynamicParams[[".globals"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
