@@ -1,7 +1,7 @@
 # sAN <- "ON_AOU_6.1" ## terrible ignition fits; sims can't run
-sAN <- "ON_AOU_6.2" ## 370 running; 585 done
+#sAN <- "ON_AOU_6.2" ## 370 running; 585 done
 #sAN <- "ON_AOU_6.5" ## 370 done; 585 done
-#sAN <- "ON_AOU_6.6" ## 370 done; 585 running
+sAN <- "ON_AOU_6.6" ## 370 done; 585 done
 
 fit <- FALSE
 
