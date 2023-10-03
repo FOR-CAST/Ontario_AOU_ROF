@@ -20,7 +20,10 @@ config.user <- switch(
     ),
     options = list(
       reproducible.cacheSaveFormat = "qs",
-      reproducible.conn = SpaDES.config::dbConnCache("postgresql")
+      reproducible.conn = SpaDES.config::dbConnCache("postgresql"),
+      reproducible.useTerra = TRUE, ## TODO: set this upstream in SpaDES.config
+      spades.memoryUseInterval = FALSE, ## TODO: temp workaround for broken memuse
+      spades.useRequire = FALSE ## TODO: set this upstream in SpaDES.config
     ),
     params = list(
       fireSense_IgnitionFit = list(

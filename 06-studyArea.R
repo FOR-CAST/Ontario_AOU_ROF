@@ -31,7 +31,7 @@ if (grepl("^ON", config$context[["studyAreaName"]])) {
 fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaName"]],
                                   "_", config$context[["climateGCM"]],
                                   "_", config$context[["climateSSP"]]),
-                           prjPaths[["outputPath"]], ext = "qs")
+                           prjPaths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   if (!file.exists(fsimOutPreamble)) {
@@ -48,10 +48,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   )
 
   if (isUpdated(simOutPreamble)) {
-    simOutPreamble@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
-    saveSimList(simOutPreamble, fsimOutPreamble,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
-                )
+    simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
+    saveSimList(simOutPreamble, fsimOutPreamble)
     amc::.gc()
   }
 

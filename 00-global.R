@@ -1,11 +1,12 @@
 # project basics ------------------------------------------------------------------------------
 
-if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## GITHUB_PAT
+if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## RENV_PATHS_CACHE etc.
 if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
 
-.ncores <- min(parallel::detectCores() / 2, 24L)
-.nodename <- Sys.info()[["nodename"]]
-.user <- Sys.info()[["user"]]
+.ncores <- min(parallelly::availableCores(constraints = "connections") / 2, 32L)
+
+.nodename <- SpaDES.config::machine()
+.user <- SpaDES.config::user()
 
 ###### allow setting run context info from outside this script (e.g., bash script) -----------------
 if (exists(".mode", .GlobalEnv)) {
@@ -14,7 +15,7 @@ if (exists(".mode", .GlobalEnv)) {
   .mode <- c("development")
 
   if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
-   #.mode <- append(.mode, "fit")
+   .mode <- append(.mode, "fit")
   }
 }
 
@@ -48,35 +49,17 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
   #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
   #.studyAreaName <- "QC_boreal_6.2" ## ecoprovs in QC_boreal: 6.2, 6.3, 6.6
 }
+
 #####
 
-prjDir <- switch(.user,
-                 ieddy = "C:/Ian/Git/Ontario_AOU_ROF",
-                 "~/GitHub/Ontario_AOU_ROF")
+prjDir <- SpaDES.config::findProjectPath()
 
-stopifnot(identical(normalizePath(prjDir), normalizePath(getwd())))
+stopifnot(identical(prjDir, getwd()))
 
 options(
   Ncpus = .ncores,
   repos = c(CRAN = "https://cloud.r-project.org")
 )
-
-# install and load packages -------------------------------------------------------------------
-
-pkgDir <- file.path(tools::R_user_dir(basename(prjDir), "data"), "packages",
-                    version$platform, getRversion()[, 1:2])
-dir.create(pkgDir, recursive = TRUE, showWarnings = FALSE)
-.libPaths(pkgDir, include.site = FALSE)
-message("Using libPaths:\n", paste(.libPaths(), collapse = "\n"))
-
-if (!"remotes" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
-  install.packages("remotes")
-}
-
-## TODO: manage tempdir on a per machine basis via project's .Renviron
-if (!"tmpdir" %in% rownames(installed.packages(lib.loc = .libPaths()[1]))) {
-  remotes::install_github("achubaty/tmpdir")
-}
 
 ## set new temp dir in scratch directory (existing /tmp too small for large callr ops in postprocessing)
 ## see https://github.com/r-lib/callr/issues/172
@@ -85,48 +68,16 @@ if (grepl("for-cast[.]ca", .nodename) && !grepl("larix", .nodename)) {
   tmpdir::setTmpDir(newTmpDir, rmOldTempDir = TRUE)
 }
 
-Require.version <- "PredictiveEcology/Require@dev-stable"
-if (!"Require" %in% rownames(installed.packages(lib.loc = .libPaths()[1])) ||
-    packageVersion("Require", lib.loc = .libPaths()[1]) < "0.2.6.9004") {
-  remotes::install_github(Require.version)
-}
+## load packages ------------------------------------------------------------------------------
 
-library(Require)
-
-setLinuxBinaryRepo()
-
-Require(c(
-  "PredictiveEcology/SpaDES.project@transition (>= 0.0.7.9018)", ## TODO: use development once merged
-  "PredictiveEcology/SpaDES.config@development (>= 0.0.2.9068)"
-), upgrade = FALSE, standAlone = TRUE)
-
-modulePkgs <- unname(unlist(packagesInModules(modulePath = file.path(prjDir, "modules"))))
-modulePkgs <- unique(gsub("development", "dev-stable", modulePkgs))
-
-otherPkgs <- c("archive", "details", "DBI", "s-u/fastshp",
-               "PredictiveEcology/fireSenseUtils@dev-stable",
-               "future", "future.callr",
-               "PredictiveEcology/LandR@dev-stable",
-               "ianmseddy/LandR.CS@dev-stable",
-               "logging",
-               "PredictiveEcology/map@dev-stable",
-               "PredictiveEcology/pemisc@dev-stable",
-               "Rcpp (>= 1.0.10)",
-               "PredictiveEcology/quickPlot@dev-stable",
-               "PredictiveEcology/reproducible@dev-stable (>= 1.2.16.9024)",
-               "PredictiveEcology/Require@dev-stable",
-               "RPostgres", "slackr",
-               "PredictiveEcology/SpaDES.core@dev-stable (>= 1.1.1)",
-               "PredictiveEcology/SpaDES.tools@dev-stable",
-               "terra (>= 1.7-3)")
-
-Require(unique(c(modulePkgs, otherPkgs)), require = FALSE, standAlone = TRUE, upgrade = FALSE)
-
-## NOTE: always load packages LAST, after installation above;
-##       ensure plyr loaded before dplyr or there will be problems
-Require(c("data.table", "plyr", "pryr", "SpaDES.core",
-          "googledrive", "httr", "LandR", "magrittr", "sessioninfo", "slackr"),
-        upgrade = FALSE, standAlone = TRUE)
+library(data.table)
+library(plyr)
+library(pryr)
+library(SpaDES.config)
+library(future.callr)
+library(googledrive)
+library(httr)
+library(SpaDES.core)
 
 # configure project ---------------------------------------------------------------------------
 
@@ -134,11 +85,13 @@ config <- SpaDES.config::useConfig(projectName = "LandRfS", projectPath = prjDir
                                    climateGCM = .climateGCM, climateSSP = .climateSSP,
                                    mode = .mode, rep = .rep, res = .res,
                                    studyAreaName = .studyAreaName)
+config$modules <- modifyList(config$modules, list(historicFires = "historicFires"))  ## TODO: update in SpaDES.config
+config$validate()
 
 ## apply user and machine context settings here
 source("02-studyArea-config.R")
 config$args <- config.studyArea$args
-config$modules <- modifyList2(config$modules, config.studyArea$modules) ## TODO: update in SpaDES.config
+config$modules <- modifyList(config$modules, config.studyArea$modules) ## TODO: update in SpaDES.config
 config$options <- config.studyArea$options
 config$params <- config.studyArea$params
 config$paths <- config.studyArea$paths
@@ -159,7 +112,7 @@ names(config$modules)
 
 # project paths -------------------------------------------------------------------------------
 config$paths
-stopifnot(identical(checkPath(config$paths[["projectPath"]]), getwd()))
+stopifnot(identical(checkPath(config$paths[["projectPath"]]), prjDir))
 
 checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as needed below
 
@@ -246,6 +199,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 relOutputPath <- SpaDES.config:::.getRelativePath(prjPaths[["outputPath"]], prjDir)
 rrFile <- file.path(relOutputPath, "INFO.md")
 cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
-cat(SpaDES.project::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
+cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
 
 DBI::dbDisconnect(getOption("reproducible.conn"))
+unlink(newTmpDir, recursive = TRUE)

@@ -73,7 +73,8 @@ dataPrepOutputs2001 <- data.frame(
                   "rawBiomassMap2001_borealDataPrep.rds"))
 )
 
-fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", config$context[["studyAreaName"]]),
+                            config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
@@ -99,7 +100,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
   )
 
   if (isUpdated(biomassMaps2001)) {
-    biomassMaps2001@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    biomassMaps2001@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(biomassMaps2001, fbiomassMaps2001,
                 fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0))
   }

@@ -52,7 +52,8 @@ fSdataPrepObjects <- list(
 
 amc::.gc()
 
-ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]),
+                          config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {
@@ -72,7 +73,7 @@ if (isTRUE(config$args[["usePrerun"]])) {
   )
 
   if (isUpdated(fSsimDataPrep)) {
-    fSsimDataPrep@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    fSsimDataPrep@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(fSsimDataPrep, ffSsimDataPrep,
                 fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
                 )

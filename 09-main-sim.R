@@ -145,7 +145,7 @@ rm(
   spreadFitObjects, spreadOut        ## 08c-spreadFit.R
 )
 
-fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = "qs")
+fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 tryCatch({
   mainSim <- simInitAndSpades(
@@ -165,12 +165,11 @@ tryCatch({
 
   DBI::dbDisconnect(getOption("reproducible.conn"))
 
-  if (requireNamespace("slackr") & file.exists("~/.slackr")) {
-    slackr::slackr_setup()
-    slackr::slackr_msg(
-      paste0("ERROR in simulation `", config$context[["runName"]], "` on host `", .nodename, "`.\n",
-             "```\n", e$message, "\n```"),
-      channel = config$args[["notifications"]][["slackChannel"]], preformatted = FALSE
+  if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+    notifications::notify_google(
+      paste0("ERROR in simulation `", config$context[["runName"]],
+             "` on host `", config$context[["machine"]], "`.\n",
+             "```\n", e$message, "\n```")
     )
 
     stop(e$message)
@@ -178,7 +177,7 @@ tryCatch({
 })
 
 if (isUpdated(mainSim)) {
-  mainSim@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+  mainSim@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
 
   message("Saving simulation to: ", fsim)
   saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
@@ -218,4 +217,10 @@ if (isUpdated(mainSim)) {
 
 # end-of-sim notifications --------------------------------------------------------------------
 
-SpaDES.project::notify_slack(config$context[["runName"]], config$args[["notifications"]][["slackChannel"]])
+if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+  notifications::notify_google(
+    paste0("Simulation `", config$context[["runName"]],
+           "` completed on host `", config$context[["machine"]], "`",
+           if (nzchar(Sys.getenv("STY"))) paste0(" (screen `", Sys.getenv("STY"), "`)"), ".")
+  )
+}

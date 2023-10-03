@@ -43,7 +43,8 @@ ignitionFitObjects <- list(
   ignitionFitRTM = fSsimDataPrep[["ignitionFitRTM"]]
 )
 
-fignitionOut <- simFile(paste0("ignitionOut_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+fignitionOut <- simFile(paste0("ignitionOut_", config$context[["studyAreaName"]]),
+                        config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   if (!file.exists(fignitionOut)) {
@@ -61,7 +62,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   )
 
   if (isUpdated(ignitionOut)) {
-    ignitionOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    ignitionOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(sim = ignitionOut, filename = fignitionOut,
                 fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
                 )
@@ -88,12 +89,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
 
   # end-of-sim notifications --------------------------------------------------------------------
 
-  if (requireNamespace("slackr") & file.exists("~/.slackr")) {
-    slackr::slackr_setup()
-    slackr::slackr_msg(
-      paste0("fireSense_IgnitionFit for `", config$context[["studyAreaName"]], "` completed on host `", Sys.info()[["nodename"]], "`."),
-      channel = config$args[["notifications"]][["slackChannel"]], preformatted = FALSE
+  if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+    notifications::notify_google(
+      paste0("fireSense_IgnitionFit for `", config$context[["studyAreaName"]], "` completed on host `", machine(), "`.")
     )
   }
 }
-

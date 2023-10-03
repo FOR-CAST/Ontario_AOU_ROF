@@ -50,7 +50,7 @@ spreadFitObjects <- list(
 )
 
 fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", config$context[["rep"]]),
-                      config$paths[["outputPath"]], ext = "qs")
+                      config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {
@@ -66,7 +66,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   )
 
   #if (isUpdated(spreadOut)) {
-    spreadOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    spreadOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(spreadOut, fspreadOut,
                 fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
                 )
@@ -88,11 +88,9 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
 
   source("R/upload_spreadFit.R")
 
-  if (requireNamespace("slackr") & file.exists("~/.slackr")) {
-    slackr::slackr_setup()
-    slackr::slackr_msg(
-      paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", Sys.info()[["nodename"]], "`."),
-      channel = config$args[["notifications"]][["slackChannel"]], preformatted = FALSE
+    if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+      notifications::notify_google(
+        paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", machine(), "`.")
     )
   }
 }

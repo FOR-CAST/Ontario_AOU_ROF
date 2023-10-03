@@ -13,7 +13,8 @@ escapeFitObjects <- list(
   fireSense_escapeCovariates = fSsimDataPrep[["fireSense_escapeCovariates"]]
 )
 
-fescapeOut <- simFile(paste0("escapeOut_", config$context[["studyAreaName"]]), config$paths[["outputPath"]], ext = "qs")
+fescapeOut <- simFile(paste0("escapeOut_", config$context[["studyAreaName"]]),
+                      config$paths[["outputPath"]], ext = "rds") ## TODO use qs
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   if (!file.exists(fescapeOut)) {
@@ -29,7 +30,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   )
 
   #if (isUpdated(escapeOut)) {
-    escapeOut@.xData[["._sessionInfo"]] <- projectSessionInfo(prjDir)
+    escapeOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(sim = escapeOut, filename = fescapeOut,
                 fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
     )
