@@ -15,7 +15,7 @@ config.user <- switch(
       notifications = list(
         slackChannel = "@alex.chubaty"
       ),
-      reupload = TRUE,
+      reupload = FALSE, ## TODO: don't reupload for now, while updating + testing
       usePrerun = FALSE
     ),
     options = list(
