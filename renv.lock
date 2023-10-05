@@ -470,7 +470,7 @@
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "Require",
       "RemoteRef": "development",
-      "RemoteSha": "ec918195b2764d2c7d4809aabf08a0a33f723b2e",
+      "RemoteSha": "79ab3addf6303bccfe2274f8244b9cb03f215612",
       "Requirements": [
         "R",
         "data.table",
@@ -478,7 +478,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "7983d46d7d15abb71dfb959d1a5dfd37"
+      "Hash": "0c26a347a6bb578f82d375ef2edbf239"
     },
     "RhpcBLASctl": {
       "Package": "RhpcBLASctl",
@@ -512,19 +512,20 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.0.2.9006",
+      "Version": "2.0.2.9007",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
-      "RemoteRef": "development",
-      "RemoteSha": "a29570146bad995df4690f0193e120cce812f91f",
+      "RemoteRef": "saveSimList",
+      "RemoteSha": "296358b47a6b2ef6d47a820aa4a53cbea302cc81",
       "Requirements": [
         "R",
         "Require",
         "crayon",
         "data.table",
+        "fs",
         "igraph",
         "lobstr",
         "methods",
@@ -536,7 +537,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "b90a40e85ebcc9b78c260ddcdadd0b14"
+      "Hash": "690e17155ba6f8b144e546f1d208dae6"
     },
     "SpaDES.install": {
       "Package": "SpaDES.install",
