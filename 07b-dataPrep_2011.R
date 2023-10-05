@@ -98,10 +98,10 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
     saveSimList(
       biomassMaps2011,
       fbiomassMaps2011,
-      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
-      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      inputs = FALSE,
+      outputs = FALSE,
       cache = FALSE,
-      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+      files = FALSE
     )
   }
 

@@ -77,10 +77,10 @@ if (isTRUE(config$args[["usePrerun"]])) {
     saveSimList(
       fSsimDataPrep,
       ffSsimDataPrep,
-      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
-      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      inputs = FALSE,
+      outputs = FALSE,
       cache = FALSE,
-      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+      files = FALSE
     )
   }
 }
