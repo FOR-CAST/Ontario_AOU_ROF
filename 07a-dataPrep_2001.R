@@ -99,10 +99,16 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2001)) {
     userTags = c("dataPrep2001", config$context[["studyAreaName"]])
   )
 
-  if (isUpdated(biomassMaps2001)) {
+  if (isUpdated(biomassMaps2001) || isFALSE(config$args[["useCache"]])) {
     biomassMaps2001@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(biomassMaps2001, fbiomassMaps2001,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0))
+    saveSimList(
+      biomassMaps2001,
+      fbiomassMaps2001,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+    )
   }
 
   if (isTRUE(upload_biomassMaps2001)) {

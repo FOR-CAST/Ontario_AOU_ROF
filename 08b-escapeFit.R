@@ -29,10 +29,15 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     objects = escapeFitObjects
   )
 
-  #if (isUpdated(escapeOut)) {
+  #if (isUpdated(escapeOut) || isFALSE(config$args[["useCache"]])) {
     escapeOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(sim = escapeOut, filename = fescapeOut,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
+    saveSimList(
+      escapeOut,
+      fescapeOut,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
     )
   #}
 

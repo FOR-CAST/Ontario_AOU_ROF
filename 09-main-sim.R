@@ -176,11 +176,18 @@ tryCatch({
   }
 })
 
-if (isUpdated(mainSim)) {
+if (isUpdated(mainSim) || isFALSE(config$args[["useCache"]])) {
   mainSim@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
 
   message("Saving simulation to: ", fsim)
-  saveSimList(sim = mainSim, filename = fsim, fileBackend = 2)
+  saveSimList(
+    mainSim,
+    fsim,
+    inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+    outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+    cache = FALSE,
+    files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+  )
 
   # save simulation stats -----------------------------------------------------------------------
 

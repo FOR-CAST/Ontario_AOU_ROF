@@ -49,9 +49,16 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
     objects = preambleObjects
   )
 
-  if (isUpdated(simOutPreamble)) {
+  if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(simOutPreamble, fsimOutPreamble)
+    saveSimList(
+      simOutPreamble,
+      fsimOutPreamble,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+    )
     amc::.gc()
   }
 

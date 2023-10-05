@@ -72,11 +72,16 @@ if (isTRUE(config$args[["usePrerun"]])) {
     userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
   )
 
-  if (isUpdated(fSsimDataPrep)) {
+  if (isUpdated(fSsimDataPrep) || isFALSE(config$args[["useCache"]])) {
     fSsimDataPrep@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(fSsimDataPrep, ffSsimDataPrep,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
-                )
+    saveSimList(
+      fSsimDataPrep,
+      ffSsimDataPrep,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+    )
   }
 }
 

@@ -61,11 +61,16 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
     userTags = c("ignitionFit")
   )
 
-  if (isUpdated(ignitionOut)) {
+  if (isUpdated(ignitionOut) || isFALSE(config$args[["useCache"]])) {
     ignitionOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(sim = ignitionOut, filename = fignitionOut,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
-                )
+    saveSimList(
+      ignitionOut,
+      fignitionOut,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+    )
   }
 
   if (isTRUE(upload_ignitionOut)) {

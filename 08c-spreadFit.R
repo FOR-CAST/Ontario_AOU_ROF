@@ -65,11 +65,16 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
     objects = spreadFitObjects
   )
 
-  #if (isUpdated(spreadOut)) {
+  #if (isUpdated(spreadOut) || isFALSE(config$args[["useCache"]])) {
     spreadOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(spreadOut, fspreadOut,
-                fileBackend = ifelse(isTRUE(config$args[["reupload"]]), 2, 0)
-                )
+    saveSimList(
+      spreadOut,
+      fspreadOut,
+      inputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      outputs = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE),
+      cache = FALSE,
+      files = ifelse(isTRUE(config$args[["reupload"]]), TRUE, FALSE)
+    )
   #}
 
   if (isTRUE(upload_spreadOut)) {
