@@ -3506,26 +3506,27 @@
     },
     "reproducible": {
       "Package": "reproducible",
-      "Version": "2.0.8.9004",
+      "Version": "2.0.8.9005",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "b317158dcfa24e63e0d57e7f2e35ac0c52dc72f7",
-      "RemoteSha": "b317158dcfa24e63e0d57e7f2e35ac0c52dc72f7",
+      "RemoteRef": "development",
+      "RemoteSha": "57624a73fbd6353d4a84102812fd96d0a0f9f55f",
       "Requirements": [
         "R",
         "data.table",
         "digest",
         "filelock",
         "fpCompare",
+        "fs",
         "lobstr",
         "methods",
         "stats",
         "utils"
       ],
-      "Hash": "4cbeb1534c2c1e06fe0a97b3be189e06"
+      "Hash": "2db85cfd5a1c9a61f829dca539139f0a"
     },
     "rgdal": {
       "Package": "rgdal",
