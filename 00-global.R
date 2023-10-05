@@ -126,7 +126,7 @@ quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
 SpaDES.config::authGoogle(tryToken = "eastern-boreal", tryEmail = config$args[["cloud"]][["googleUser"]])
 
 ## helper functions
-source("R/cache_helpers.R")
+# source("R/cache_helpers.R") ## TODO: remove; now in reproducible
 
 # begin simulations ---------------------------------------------------------------------------
 

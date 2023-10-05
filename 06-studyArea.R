@@ -8,6 +8,8 @@ preambleObjects <- list(
   .runName = config$context[["runName"]]
 )
 
+config$params[["canClimateData"]][[".useCache"]] <- FALSE ## TODO: event caching broken
+
 if (grepl("^ON", config$context[["studyAreaName"]])) {
   preambleParams <- list(
     # config$params[[".globals"]],

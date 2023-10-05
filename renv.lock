@@ -133,15 +133,15 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.0.9066",
+      "Version": "1.1.0.9067",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "development",
-      "RemoteSha": "adf85407c2279be4bc837ff50bbc0c731627f4a6",
-      "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.tools@development",
+      "RemoteSha": "e9eb446f4ea63ed70117ef897784f43af8492f5b",
+      "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
         "R",
@@ -170,7 +170,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "2085f028ba99167b4433dbae21ce0913"
+      "Hash": "52c60e2ee6fc1fc98700dc34b85f5f92"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -1111,27 +1111,25 @@
     },
     "climateData": {
       "Package": "climateData",
-      "Version": "0.0.0.9007",
+      "Version": "1.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
-      "RemoteRef": "3b5d02ef378228b9e4786aad4e770ab1b1786120",
-      "RemoteSha": "3b5d02ef378228b9e4786aad4e770ab1b1786120",
+      "RemoteRef": "development",
+      "RemoteSha": "5e90ee3b85087cc79e70ff1a610cc30d87b42cc0",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
         "data.table",
-        "magrittr",
-        "raster",
+        "methods",
         "reproducible",
-        "sp",
         "stats",
         "terra",
         "utils"
       ],
-      "Hash": "217222fe3c5d886d88a9a0c824df8fd8"
+      "Hash": "e549ba6d8d7d12f0ff84b8b44144f47f"
     },
     "clipr": {
       "Package": "clipr",
@@ -3514,7 +3512,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "development",
+      "RemoteRef": "b317158dcfa24e63e0d57e7f2e35ac0c52dc72f7",
       "RemoteSha": "b317158dcfa24e63e0d57e7f2e35ac0c52dc72f7",
       "Requirements": [
         "R",
@@ -3527,7 +3525,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "cb53f99c81a47040e709e80dc7805cd9"
+      "Hash": "4cbeb1534c2c1e06fe0a97b3be189e06"
     },
     "rgdal": {
       "Package": "rgdal",
