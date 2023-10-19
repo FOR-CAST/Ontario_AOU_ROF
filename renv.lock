@@ -539,6 +539,30 @@
       ],
       "Hash": "690e17155ba6f8b144e546f1d208dae6"
     },
+    "SpaDES.docs": {
+      "Package": "SpaDES.docs",
+      "Version": "0.0.1.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "PredictiveEcology",
+      "RemoteRepo": "SpaDES.docs",
+      "RemoteRef": "development",
+      "RemoteSha": "9ed030792bf51b4a502d3bc1d74307f45fcf0705",
+      "Remotes": "PredictiveEcology/Require",
+      "Requirements": [
+        "R",
+        "Require",
+        "data.table",
+        "kableExtra",
+        "knitr",
+        "modelr",
+        "pander",
+        "stringi",
+        "utils"
+      ],
+      "Hash": "00943141dad3bb75e447d7698e156f22"
+    },
     "SpaDES.install": {
       "Package": "SpaDES.install",
       "Version": "0.0.9.9002",
@@ -2816,6 +2840,24 @@
       ],
       "Hash": "c075218a4fc802bab009a7f5e01bb686"
     },
+    "modelr": {
+      "Package": "modelr",
+      "Version": "0.1.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "broom",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "tibble",
+        "tidyr",
+        "tidyselect",
+        "vctrs"
+      ],
+      "Hash": "4f50122dc256b1b6996a4703fecea821"
+    },
     "multcomp": {
       "Package": "multcomp",
       "Version": "1.4-25",
@@ -2979,6 +3021,23 @@
       ],
       "Hash": "2a0dc8c6adfb6f032e4d4af82d258ab5"
     },
+    "openxlsx": {
+      "Package": "openxlsx",
+      "Version": "4.2.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "grDevices",
+        "methods",
+        "stats",
+        "stringi",
+        "utils",
+        "zip"
+      ],
+      "Hash": "c03b4c18d42da881fb8e15a085c2b9d6"
+    },
     "pROC": {
       "Package": "pROC",
       "Version": "1.18.4",
@@ -2991,6 +3050,24 @@
         "plyr"
       ],
       "Hash": "4b0115a395ea29f88b1c128dc483ced2"
+    },
+    "pander": {
+      "Package": "pander",
+      "Version": "0.6.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "digest",
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats",
+        "tools",
+        "utils"
+      ],
+      "Hash": "737924139a1e4fc96356ff377c754c35"
     },
     "parallelly": {
       "Package": "parallelly",
