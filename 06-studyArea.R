@@ -8,6 +8,7 @@ preambleObjects <- list(
   .runName = config$context[["runName"]]
 )
 
+config$params[["Ontario_preamble"]][[".useCache"]] <- FALSE ## TODO: caching broken for SpatRaster attributes
 config$params[["canClimateData"]][[".useCache"]] <- FALSE ## TODO: event caching broken
 
 if (grepl("^ON", config$context[["studyAreaName"]])) {
@@ -35,7 +36,7 @@ fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaN
                                   "_", config$context[["climateSSP"]]),
                            prjPaths[["outputPath"]], ext = "rds") ## TODO use qs
 
-if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
+if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
   if (!file.exists(fsimOutPreamble)) {
     googledrive::drive_download(file = as_id(gid_preamble), path = fsimOutPreamble)
   }
@@ -78,6 +79,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
 
 firstRunMDCplots <- if (config$context[["rep"]] == 1 && config$args[["reupload"]]) TRUE else FALSE
 
+## TODO move to canClimateData
 if (isTRUE(firstRunMDCplots)) {
   ggMDC <- fireSenseUtils::compareMDC(
     historicalMDC = simOutPreamble[["historicalClimateRasters"]][["MDC"]],
@@ -104,3 +106,8 @@ if (isTRUE(firstRunMDCplots)) {
 }
 
 nSpecies <- length(unique(simOutPreamble[["sppEquiv"]][["LandR"]]))
+
+stopifnot(
+  !is.null(attr(simOutPreamble[["standAgeMap2001"]], "imputedPixID")),
+  !is.null(attr(simOutPreamble[["standAgeMap2011"]], "imputedPixID"))
+)
