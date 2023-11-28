@@ -46,8 +46,8 @@ if (FALSE) {
   renv::install(paste0(cranPkgs$Package, "@", cranPkgs$Version))
   renv::install(paste0(ghPkgs$GithubUsername, "/", ghPkgs$GithubRepo, "@", ghPkgs$GithubSHA1))
 
-  renv::settings$ignored.packages(c("SpaDES", "SpaDES.project"))
-  renv::settings$snapshot.type("explicit")
+  renv::settings$ignored.packages(c("SpaDES", "SpaDES.project")) ## per-machine
+  renv::settings$snapshot.type("explicit") ## per-machine
 
   renv::snapshot()
 
