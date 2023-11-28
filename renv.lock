@@ -263,10 +263,10 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "achubaty",
+      "RemoteUsername": "ianmseddy",
       "RemoteRepo": "PSPclean",
       "RemoteRef": "development",
-      "RemoteSha": "142a7fc3eb5dac5df9ed024bfc84741615344316",
+      "RemoteSha": "198105f6c3089061056b6e36d8873cff109c51fc",
       "Remotes": "PredictiveEcology/LandR@development",
       "Requirements": [
         "R",
@@ -276,7 +276,7 @@
         "sf",
         "sp"
       ],
-      "Hash": "4decb9d37b44208e17fa71551cb69909"
+      "Hash": "f9b72a5beab95ea5c03f5a0063fb94f7"
     },
     "R.methodsS3": {
       "Package": "R.methodsS3",

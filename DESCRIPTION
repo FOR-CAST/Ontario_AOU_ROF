@@ -339,11 +339,11 @@ Imports:
     zoo (== 1.8-12)
 Remotes: 
     achubaty/amc@3330753132d4dca15011e4e64db5ccea28e3b8c4,
-    achubaty/PSPclean@142a7fc3eb5dac5df9ed024bfc84741615344316,
     achubaty/tmpdir@5d0cbefc4f5b26ee6a746fbeb3a7226a5d947d9c,
     FOR-CAST/notifications@1c38b2b0190eed24ec0b0a59ac0f362a7ab8d3e9,
     FOR-CAST/workflowtools@345e7891111f8612b69bd4f9b181455f9735549d,
     ianmseddy/LandR.CS@04bdff81d15a82e6902acdd1f9ca9f42ebe0dbac,
+    ianmseddy/PSPclean@198105f6c3089061056b6e36d8873cff109c51fc,
     PredictiveEcology/climateData@eea608a3e4bda4d3a6327fdbee2698f44e4c5261,
     PredictiveEcology/fireSenseUtils@a3f7758a527ba2651b0a1145fdb238066605ed32,
     PredictiveEcology/LandR@e9eb446f4ea63ed70117ef897784f43af8492f5b,
