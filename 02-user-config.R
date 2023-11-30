@@ -21,6 +21,7 @@ config.user <- switch(
     options = list(
       reproducible.cacheSaveFormat = "rds", ## TODO: use qs once Cache is fixed (reproducible#359)
       reproducible.conn = SpaDES.config::dbConnCache("postgresql"),
+      reproducible.gdalwarp = TRUE, ## TODO: set this upstream in SpaDES.config
       reproducible.useTerra = TRUE, ## TODO: set this upstream in SpaDES.config
       spades.memoryUseInterval = FALSE, ## TODO: temp workaround for broken memuse
       spades.useRequire = FALSE ## TODO: set this upstream in SpaDES.config

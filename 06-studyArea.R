@@ -111,3 +111,6 @@ stopifnot(
   !is.null(attr(simOutPreamble[["standAgeMap2001"]], "imputedPixID")),
   !is.null(attr(simOutPreamble[["standAgeMap2011"]], "imputedPixID"))
 )
+
+## cleanup
+terra::tmpFiles(remove = TRUE)

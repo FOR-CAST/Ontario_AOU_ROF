@@ -25,7 +25,8 @@ config$params <- list(
     .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
   ),
   Biomass_speciesFactorial = list(
-    .plotInitialTime = year
+    .plotInitialTime = year,
+    .plots = c("png") ## saving ggplot object as qs is slow; creates massive files
   ),
   Biomass_borealDataPrep = list(
     dataYear = year,
