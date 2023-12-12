@@ -139,7 +139,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
-      "RemoteRef": "development",
+      "RemoteRef": "62d8cfda8972a8f10c8d442a25346bd0f025561f",
       "RemoteSha": "62d8cfda8972a8f10c8d442a25346bd0f025561f",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
@@ -170,7 +170,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "6bbd259e03c72d3ff9aae56aec932a82"
+      "Hash": "c91ec2d7b0b2d7654e2438a50ae7b5f1"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -489,15 +489,15 @@
     },
     "SpaDES.config": {
       "Package": "SpaDES.config",
-      "Version": "0.0.3",
+      "Version": "1.0.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.config",
       "RemoteRef": "development",
-      "RemoteSha": "91a9e9f538a99a15559cca8a4ca79c24025c78e2",
-      "Remotes": "PredictiveEcology/fireSenseUtils@development, PredictiveEcology/LandR@development, PredictiveEcology/LandWebUtils@development, PredictiveEcology/pemisc@development, PredictiveEcology/reproducible@development, PredictiveEcology/Require@development, PredictiveEcology/scfmutils@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.project@transition",
+      "RemoteSha": "1ed1bfd60f2db1064a8151cfe96e862d63a35a13",
+      "Remotes": "PredictiveEcology/fireSenseUtils@development, PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/reproducible@development, PredictiveEcology/scfmutils@development, PredictiveEcology/SpaDES.core@development",
       "Requirements": [
         "R",
         "R6",
@@ -505,10 +505,9 @@
         "fs",
         "methods",
         "rprojroot",
-        "tools",
         "utils"
       ],
-      "Hash": "302b317705ce82dc25b4109528bdf406"
+      "Hash": "38a3bea4b1033c48baf680069597a6c0"
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
@@ -956,6 +955,24 @@
         "stats"
       ],
       "Hash": "9a052fbcbe97a98ceb18dbfd30ebd96e"
+    },
+    "box": {
+      "Package": "box",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "tools"
+      ],
+      "Hash": "ce8187a260e8e3abc2294284badc3b76"
+    },
+    "brew": {
+      "Package": "brew",
+      "Version": "1.0-8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d69a786e85775b126bddbee185ae6084"
     },
     "brio": {
       "Package": "brio",
@@ -1612,14 +1629,14 @@
     },
     "fireSenseUtils": {
       "Package": "fireSenseUtils",
-      "Version": "0.0.5.9050",
+      "Version": "0.0.5.9056",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "fireSenseUtils",
       "RemoteRef": "development",
-      "RemoteSha": "a3f7758a527ba2651b0a1145fdb238066605ed32",
+      "RemoteSha": "9aaf8dbeca71e863de8fad30f490220553e36420",
       "Remotes": "jeffreyevans/spatialEco, PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development, PredictiveEcology/quickPlot@development, PredictiveEcology/Require@development, PredictiveEcology/reproducible@development",
       "Requirements": [
         "DEoptim",
@@ -1648,7 +1665,7 @@
         "terra",
         "utils"
       ],
-      "Hash": "169bc19d5df30260753c8e3887105af2"
+      "Hash": "e68e0013a400d13efee8dade5123205e"
     },
     "fontawesome": {
       "Package": "fontawesome",
@@ -3754,6 +3771,32 @@
         "wk"
       ],
       "Hash": "fcd529f183c4163a91430d7b7bbaece5"
+    },
+    "roxygen2": {
+      "Package": "roxygen2",
+      "Version": "7.2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R6",
+        "brew",
+        "cli",
+        "commonmark",
+        "cpp11",
+        "desc",
+        "knitr",
+        "methods",
+        "pkgload",
+        "purrr",
+        "rlang",
+        "stringi",
+        "stringr",
+        "utils",
+        "withr",
+        "xml2"
+      ],
+      "Hash": "7b153c746193b143c14baa072bae4e27"
     },
     "rpart": {
       "Package": "rpart",

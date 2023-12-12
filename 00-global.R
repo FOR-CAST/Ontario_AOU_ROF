@@ -73,7 +73,7 @@ if (grepl("for-cast[.]ca", .nodename) && !grepl("larix", .nodename)) {
 library(data.table)
 library(plyr)
 library(pryr)
-library(SpaDES.config)
+# library(SpaDES.config)
 library(future.callr)
 library(googledrive)
 library(httr)
@@ -81,10 +81,13 @@ library(SpaDES.core)
 
 # configure project ---------------------------------------------------------------------------
 
-config <- SpaDES.config::useConfig(projectName = "LandRfS", projectPath = prjDir,
-                                   climateGCM = .climateGCM, climateSSP = .climateSSP,
-                                   mode = .mode, rep = .rep, res = .res,
-                                   studyAreaName = .studyAreaName)
+box::use(box/prjcfg)
+config <- prjcfg$landrfsConfig$new(
+  projectName = "LandRfS", projectPath = prjDir,
+  climateGCM = .climateGCM, climateSSP = .climateSSP,
+  mode = .mode, rep = .rep, res = .res,
+  studyAreaName = .studyAreaName
+)$update()$validate()
 config$modules <- modifyList(config$modules, list(historicFires = "historicFires"))  ## TODO: update in SpaDES.config
 config$validate()
 
@@ -147,13 +150,15 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   }
 
   source("06-studyArea.R")
-  source("07a-dataPrep_2001.R")
+  # source("07a-dataPrep_2001.R")
 
   if ("fit" %in% config$context[["mode"]]) {
     opt <- options(spades.memoryUseInterval = FALSE) ## TODO: periodically stalls during mem use setup; disable temporarily
   }
-  source("07b-dataPrep_2011.R")
-  source("07c-dataPrep_fS.R")
+  # source("07b-dataPrep_2011.R")
+  # source("07c-dataPrep_fS.R")
+
+  source("07-allDataPrep.R")
 
   source("08a-ignitionFit.R")
   source("08b-escapeFit.R")
