@@ -27,7 +27,7 @@ fSdataPrepParams[["fireSense_dataPrepFit"]][["missingLCCgroup"]] <- simOutPreamb
 fSdataPrepParams[["fireSense_dataPrepFit"]][["nonflammableLCC"]] <- simOutPreamble[["nonflammableLCC"]]
 fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
 
-simOutPreamble[["rasterToMatch"]] <- raster::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
+simOutPreamble[["rasterToMatch"]] <- terra::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
 standAgeMap2001 <- postProcess(biomassMaps2001[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
 standAgeMap2011 <- postProcess(biomassMaps2011[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
 rstLCC <- postProcess(biomassMaps2011[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])

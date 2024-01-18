@@ -2,16 +2,13 @@ library(data.table)
 
 options(Ncpus = min(parallel::detectCores() / 2, 24L))
 
-## TODO: recent versions of Require can't make snapshots (Require#93)
-# debugonce(Require::pkgSnapshot)
 # Require::pkgSnapshot("packages_latest.txt")
-## reset `libPaths = .libPaths()` after the checkLibPaths() call, then continue
 # pkgs <- read.csv("packageVersions_2023-03-21.txt")
 # cranPkgs <- ghPkgs <- pkgs[is.na(pkgs$GithubUsername), ]
 # ghPkgs <- pkgs[!is.na(pkgs$GithubUsername), ]
 
-## using renv:
-# renv::snapshot(type = "all")
+renv::snapshot(type = "all")
+
 pkgs <- jsonlite::fromJSON(txt = "renv.lock")[["Packages"]] |>
   lapply(as.data.frame) |>
   rbindlist(fill = TRUE)
