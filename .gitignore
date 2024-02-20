@@ -24,10 +24,10 @@ outputs
 outputs/
 outputs*/
 
-## OAuth tokens
+## tokens and secrets
 .httr-oauth
-.httr-oauth-SUSPENDED
 *.json
+.secrets
 
 ## misc OS files
 Thumbs.db

@@ -4,6 +4,7 @@ options(Ncpus = min(parallel::detectCores() / 2, 24L))
 
 # Require::pkgSnapshot("packages_latest.txt")
 # pkgs <- read.csv("packageVersions_2023-03-21.txt")
+# colnames(pkgs) |> gsub("Github", "Remote", x = _) |> gsub("SHA1", "Sha", x =_) -> colnames(pkgs)
 # cranPkgs <- ghPkgs <- pkgs[is.na(pkgs$GithubUsername), ]
 # ghPkgs <- pkgs[!is.na(pkgs$GithubUsername), ]
 
@@ -38,6 +39,7 @@ usethis::use_description(fields = list(
 if (FALSE) {
   ## first run only ------------------------
   # install.packages("renv")
+  # file.move(".Rprofile", ".Rprofile-old")
   renv::init(bare = TRUE)
 
   renv::install(paste0(cranPkgs$Package, "@", cranPkgs$Version))
