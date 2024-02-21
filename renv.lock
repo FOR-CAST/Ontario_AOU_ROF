@@ -1151,14 +1151,14 @@
     },
     "climateData": {
       "Package": "climateData",
-      "Version": "1.0.9",
+      "Version": "2.0.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
-      "RemoteRef": "development",
-      "RemoteSha": "51654c0cc8acb5d86065bb58775b46306ac82cfe",
+      "RemoteRef": "rework",
+      "RemoteSha": "4a2e386f7787a9e99b989a205859507194d8a65f",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "DBI",
@@ -1166,14 +1166,20 @@
         "RSQLite",
         "data.table",
         "dplyr",
+        "fs",
         "methods",
+        "parallel",
+        "parallelly",
+        "purrr",
         "reproducible",
+        "sf",
         "stats",
         "terra",
         "tibble",
+        "tools",
         "utils"
       ],
-      "Hash": "97853e19393a2d8f31f2a03f10a4540d"
+      "Hash": "9933f5cbb5a465895c3ca21653ff29ba"
     },
     "clipr": {
       "Package": "clipr",
@@ -3638,7 +3644,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "modsForLargeArchives",
+      "RemoteRef": "23624ae897d39e3f24bb32523f1fd4a6b9772b5e",
       "RemoteSha": "23624ae897d39e3f24bb32523f1fd4a6b9772b5e",
       "Requirements": [
         "R",
@@ -3652,7 +3658,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "fad6ed3e795b04e266029dfbe888a4ff"
+      "Hash": "46d3609599cbe0308afbff6d38d1bab0"
     },
     "rgdal": {
       "Package": "rgdal",
