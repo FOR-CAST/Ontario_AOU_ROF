@@ -91,7 +91,7 @@ config <- prjcfg$landrfsConfig$new(
 config$modules <- modifyList(config$modules, list(historicFires = "historicFires"))  ## TODO: update in SpaDES.config
 config$validate()
 
-## apply user and machine context settings here
+## apply study area context settings here
 source("02-studyArea-config.R")
 config$args <- config.studyArea$args
 config$modules <- modifyList(config$modules, config.studyArea$modules) ## TODO: update in SpaDES.config
@@ -127,9 +127,6 @@ opts <- SpaDES.config::setProjectOptions(config)
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
 
 SpaDES.config::authGoogle(tryToken = "eastern-boreal", tryEmail = config$args[["cloud"]][["googleUser"]])
-
-## helper functions
-# source("R/cache_helpers.R") ## TODO: remove; now in reproducible
 
 # begin simulations ---------------------------------------------------------------------------
 
