@@ -285,7 +285,7 @@ landrfsConfig <- R6::R6Class(
         reproducible.showSimilar = TRUE,
         reproducible.useCache = TRUE,
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
-        reproducible.useGDAL = FALSE, ## using terra
+        reproducible.useGDAL = FALSE, ## NOTE: using GDAL may be faster
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
         spades.futurePlan = "callr",
@@ -295,7 +295,7 @@ landrfsConfig <- R6::R6Class(
         spades.qsThreads = 4,
         spades.recoveryMode = FALSE,
         spades.scratchPath = normPath(self$paths[["scratchPath"]]),
-        spades.useRequire = FALSE ## don't use Require; assume all pkgs installed
+        spades.useRequire = FALSE ## don't use Require; using renv so assume all pkgs installed
       )
 
       # parameters ---------------------------------------------------------------------------------
@@ -371,7 +371,7 @@ landrfsConfig <- R6::R6Class(
         canClimateData = list(
           climateGCM = self$context$climateGCM,
           climateSSP = self$context$climateSSP,
-          historicalFireYears = 1991:2020,
+          historicalFireYears = 1971:2022, ## TODO: using more years for sampling
           studyAreaName = self$context$studyAreaName,
           .useCache = ".inputObjects"
         ),
@@ -382,7 +382,7 @@ landrfsConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## sim(start)
         ),
         fireSense_dataPrepFit = list(
-          fireYears = 2001:2020,
+          fireYears = 2001:2022, ## TODO:
           igAggFactor = 10000 / self$context$pixelSize,
           useCentroids = TRUE,
           useFireRaster = TRUE,

@@ -19,20 +19,20 @@ config.user <- switch(
       usePrerun = FALSE
     ),
     options = list(
+      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## too slow; not needed if renv sandbox disabled
+      renv.config.sandbox.enabled = FALSE, ## copying pkgs to sandbox is too slow during cluster setup
       reproducible.cacheSaveFormat = "rds", ## TODO: use qs once Cache is fixed (reproducible#359)
       reproducible.conn = SpaDES.config::dbConnCache("postgresql"),
-      # reproducible.gdalwarp = TRUE, ## TODO: breaks w/ sf objects in canClimateData
-      reproducible.useTerra = TRUE, ## TODO: set this upstream in SpaDES.config
-      spades.memoryUseInterval = FALSE, ## TODO: temp workaround for broken memuse
-      spades.useRequire = FALSE ## TODO: set this upstream in SpaDES.config
+      reproducible.gdalwarp = TRUE,
+      spades.memoryUseInterval = FALSE ## TODO: temp workaround for broken memuse
     ),
     params = list(
       fireSense_IgnitionFit = list(
         cores = switch(
           .nodename,
-          "pinus.for-cast.ca" = 8L, ## ~200 GB
+          "pinus.for-cast.ca" = 8L, ## TODO: update mem estimate: ~200 GB
           "picea.for-cast.ca" = 16L,
-          "pseudotsuga.for-cast.ca" = 16L, ## ~400 GB
+          "pseudotsuga.for-cast.ca" = 16L, ## TODO: update mem estimate: ~400 GB
           1L
         )
       ),
