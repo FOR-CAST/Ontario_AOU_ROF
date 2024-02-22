@@ -1157,8 +1157,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
-      "RemoteRef": "rework",
-      "RemoteSha": "c243d9bb22003e39945ddb005971ae670e30de1f",
+      "RemoteRef": "development",
+      "RemoteSha": "834339c96538b24c014d9b8f2a59090eff6765ec",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "DBI",
@@ -1179,7 +1179,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "7cef13b9aafb825dd10ce7b6dd3cf979"
+      "Hash": "d1667e3e28fe6ebd44f74507b2d0fde9"
     },
     "clipr": {
       "Package": "clipr",
@@ -4733,7 +4733,7 @@
       "RemoteUsername": "FOR-CAST",
       "RemoteRepo": "workflowtools",
       "RemoteRef": "main",
-      "RemoteSha": "345e7891111f8612b69bd4f9b181455f9735549d",
+      "RemoteSha": "850581b88d83e61df5d04a602aba02fe7c211cb6",
       "Requirements": [
         "R",
         "data.table",
@@ -4750,7 +4750,7 @@
         "usethis",
         "utils"
       ],
-      "Hash": "f5392ea5e012b1b93cbee83936cbb616"
+      "Hash": "bf2f0ac908b945ae4395a6a5a4286032"
     },
     "xfun": {
       "Package": "xfun",
