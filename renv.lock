@@ -1158,7 +1158,7 @@
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
       "RemoteRef": "rework",
-      "RemoteSha": "4a2e386f7787a9e99b989a205859507194d8a65f",
+      "RemoteSha": "c243d9bb22003e39945ddb005971ae670e30de1f",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "DBI",
@@ -1179,7 +1179,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "9933f5cbb5a465895c3ca21653ff29ba"
+      "Hash": "7cef13b9aafb825dd10ce7b6dd3cf979"
     },
     "clipr": {
       "Package": "clipr",
