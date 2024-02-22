@@ -122,6 +122,9 @@ checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as
 prjPaths <- SpaDES.config::paths4spades(config$paths)
 
 # project options -----------------------------------------------------------------------------
+
+data.table::setDTthreads(1L) ## TODO: why is SpaDES.core / reproducible not setting this correctly?
+
 opts <- SpaDES.config::setProjectOptions(config)
 
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
