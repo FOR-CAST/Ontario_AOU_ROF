@@ -44,10 +44,10 @@ if (exists(".res", .GlobalEnv)) {
 }
 
 if (!exists(".studyAreaName", .GlobalEnv)) {
-  .studyAreaName <- "ON_AOU_6.2" ## ecoprovs in AOU: 6.1, 6.2, 6.5, 6.6 (omit 15.2)
-  #.studyAreaName <- "ON_ROF_15.2" ## ecoprovs in ROF: 6.1, 6.2, 15.2 (omit 15.1)
+  .studyAreaName <- "ON_AOU_5" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
+  #.studyAreaName <- "ON_ROF_5" ## FRTs in ROF: 1, 5 (small parts of 2)
   #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
-  #.studyAreaName <- "QC_boreal_6.2" ## ecoprovs in QC_boreal: 6.2, 6.3, 6.6
+  #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
 }
 
 #####
@@ -150,14 +150,13 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   }
 
   source("06-studyArea.R")
-  # source("07a-dataPrep_2001.R")
 
   if ("fit" %in% config$context[["mode"]]) {
     opt <- options(spades.memoryUseInterval = FALSE) ## TODO: periodically stalls during mem use setup; disable temporarily
   }
+  # source("07a-dataPrep_2001.R")
   # source("07b-dataPrep_2011.R")
   # source("07c-dataPrep_fS.R")
-
   source("07-allDataPrep.R")
 
   source("08a-ignitionFit.R")

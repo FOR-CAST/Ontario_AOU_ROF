@@ -97,7 +97,7 @@ if (isTRUE(upload_fSsimDataPrep)) {
     gdriveSims
   )
 
-  source("R/upload_fSDatPrepFit_vegCoeffs.R")
+  source("R/upload_fSDatPrepFit_vegCoeffs.R") ## TODO: add to the module
 }
 
 rm(rstLCC, standAgeMap2001, standAgeMap2011)

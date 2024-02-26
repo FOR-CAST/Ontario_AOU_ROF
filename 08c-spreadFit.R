@@ -91,11 +91,11 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
     )
   }
 
-  source("R/upload_spreadFit.R")
+  source("R/upload_spreadFit.R") ## TODO: add to the module
 
-    if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
-      notifications::notify_google(
-        paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", machine(), "`.")
+  if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+    notifications::notify_google(
+      paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", machine(), "`.")
     )
   }
 }

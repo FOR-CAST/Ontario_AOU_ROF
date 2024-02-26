@@ -278,16 +278,19 @@ landrfsConfig <- R6::R6Class(
         reproducible.cacheSaveFormat = "rds", ## can be "qs" or "rds"
         reproducible.conn = dbConnCache("sqlite"), ## "sqlite" or "postgresql"
         reproducible.destinationPath = normPath(self$paths[["inputPath"]]),
+        reproducible.gdalwarp = TRUE,
         reproducible.inputPaths = NULL,
         reproducible.nThreads = 2,
         reproducible.overwrite = TRUE,
         reproducible.quick = FALSE,
-        reproducible.showSimilar = TRUE,
+        # reproducible.shapefileRead = "terra::vect",
+        reproducible.showSimilar = FALSE,
         reproducible.useCache = TRUE,
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
-        reproducible.useGDAL = FALSE, ## NOTE: using GDAL may be faster
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
+        spades.allowInitDuringSimInit = TRUE,
+        spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         spades.memoryUseInterval = 10, ## track memory use every 10 seconds
         spades.messagingNumCharsModule = 36,
@@ -353,7 +356,8 @@ landrfsConfig <- R6::R6Class(
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_speciesFactorial = list(
-          factorialSize = "small" ## TODO: use medium?
+          factorialSize = "small", ## TODO: use medium?
+          .plots = c("png") ## saving ggplot object as qs is slow; creates massive files
         ),
         Biomass_speciesParameters = list(
           constrainGrowthCurve = c(0, 1),
@@ -362,6 +366,7 @@ landrfsConfig <- R6::R6Class(
           GAMMiterations = 2,
           GAMMknots = 3,
           minimumPlotsPerGamm = 65,
+          PSPdataTypes = "all", ## will use all within studyAreaANPP
           quantileAgeSubset = 98,
           speciesFittingApproach = "focal"
         ),
@@ -385,8 +390,7 @@ landrfsConfig <- R6::R6Class(
           fireYears = 2001:2022, ## TODO:
           igAggFactor = 10000 / self$context$pixelSize,
           useCentroids = TRUE,
-          useFireRaster = TRUE,
-          usePCA = FALSE,
+          usePiecewiseRegression = FALSE, ## pw reg is the old approach
           whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit"),
           .studyAreaName = self$context$studyAreaName,
           .useCache = ".inputObjects"

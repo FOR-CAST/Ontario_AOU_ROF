@@ -89,7 +89,7 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   firstRunIgnitionFit <- if (config$context[["rep"]] == 1) TRUE else FALSE
 
   if (isTRUE(firstRunIgnitionFit)) {
-    source("R/upload_ignitionFit.R")
+    source("R/upload_ignitionFit.R") ## TODO: add to the module
   }
 
   # end-of-sim notifications --------------------------------------------------------------------
