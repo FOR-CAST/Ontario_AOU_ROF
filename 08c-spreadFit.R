@@ -50,7 +50,7 @@ spreadFitObjects <- list(
 )
 
 fspreadOut <- simFile(paste0("spreadOut_", config$context[["studyAreaName"]], "_", config$context[["rep"]]),
-                      config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                      config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_spreadOut)) {
   if (!file.exists(fspreadOut)) {

@@ -44,7 +44,7 @@ ignitionFitObjects <- list(
 )
 
 fignitionOut <- simFile(paste0("ignitionOut_", config$context[["studyAreaName"]]),
-                        config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                        config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_ignitionOut)) {
   if (!file.exists(fignitionOut)) {

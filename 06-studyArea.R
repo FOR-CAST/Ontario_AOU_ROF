@@ -34,7 +34,7 @@ if (grepl("^ON", config$context[["studyAreaName"]])) {
 fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaName"]],
                                   "_", config$context[["climateGCM"]],
                                   "_", config$context[["climateSSP"]]),
-                           prjPaths[["outputPath"]], ext = "rds") ## TODO use qs
+                           prjPaths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
   if (!file.exists(fsimOutPreamble)) {

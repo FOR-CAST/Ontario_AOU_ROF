@@ -19,7 +19,7 @@ config.user <- switch(
       usePrerun = FALSE
     ),
     options = list(
-      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## too slow; not needed if renv sandbox disabled
+      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## can be slow, but sometimes needed
       renv.config.sandbox.enabled = FALSE, ## copying pkgs to sandbox is too slow during cluster setup
       reproducible.cacheSaveFormat = "rds", ## TODO: use qs once Cache is fixed (reproducible#359)
       reproducible.conn = SpaDES.config::dbConnCache("postgresql"),

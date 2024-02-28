@@ -53,7 +53,7 @@ fSdataPrepObjects <- list(
 amc::.gc()
 
 ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]),
-                          config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                          config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {

@@ -105,12 +105,12 @@ annualObjects <- data.frame(
   expand.grid(
     objectName = objectsToSaveAnnually,
     saveTime = seq(times$start, times$end, 1),
-    fun = "qsave",
-    package = "qs"
+    fun = "saveRDS", ## TODO: use "qsave"
+    package = "base" ## TODO: use "qs"
   ),
   stringsAsFactors = FALSE
 )
-annualObjects$file <- paste0(annualObjects$objectName, "_", annualObjects$saveTime, ".qs")
+annualObjects$file <- paste0(annualObjects$objectName, "_", annualObjects$saveTime, ".rds") ## TODO: use ".qs"
 annualObjects$arguments <- I(list(list()))
 
 objectNamesToSaveAtEnd <- c(
@@ -125,9 +125,9 @@ objectNamesToSaveAtEnd <- c(
 finalYearOutputs <- data.frame(
   objectName = objectNamesToSaveAtEnd,
   saveTime = times$end,
-  fun = "qsave",
-  package = "qs",
-  file = paste0(objectNamesToSaveAtEnd, ".qs"),
+  fun = "saveRDS", ## TODO: use "qsave"
+  package = "base", ## TODO: use "qs"
+  file = paste0(objectNamesToSaveAtEnd, ".rds"), ## TODO: use ".qs"
   stringsAsFactors = FALSE
 )
 finalYearOutputs$arguments <- I(list(list()))
@@ -145,7 +145,7 @@ rm(
   spreadFitObjects, spreadOut        ## 08c-spreadFit.R
 )
 
-fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 tryCatch({
   mainSim <- simInitAndSpades(
@@ -193,11 +193,13 @@ if (isUpdated(mainSim) || isFALSE(config$args[["useCache"]])) {
 
   elapsed <- elapsedTime(mainSim)
   data.table::fwrite(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.csv"))
-  qs::qsave(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.qs"))
+  # qs::qsave(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.qs"))
+  saveRDS(elapsed, file.path(config$paths[["logPath"]], "elapsedTime_summaries.rds")) ## TODO: use qs
 
   memory <- memoryUse(mainSim, max = TRUE)
   data.table::fwrite(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.csv"))
-  qs::qsave(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.qs"))
+  # qs::qsave(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.qs"))
+  saveRDS(memory, file.path(config$paths[["logPath"]], "memoryUsed_summaries.rds")) ## TODO: use qs
 
   # archive and upload --------------------------------------------------------------------------
   resultsDir <- config$paths[["outputPath"]]

@@ -233,6 +233,7 @@ landrfsConfig <- R6::R6Class(
           useCloud = FALSE ## TODO: cloudCache spams Google Drive folder; doesn't respect drive path
         ),
         delayStart = 0,
+        fsimext = "rds", ## TODO: use qs once spades.core is fixed
         simYears = list(start = 2011, end = 2100),
         notifications = list(
           slackChannel = ""
@@ -356,8 +357,7 @@ landrfsConfig <- R6::R6Class(
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_speciesFactorial = list(
-          factorialSize = "small", ## TODO: use medium?
-          .plots = c("png") ## saving ggplot object as qs is slow; creates massive files
+          factorialSize = "small" ## TODO: use medium?
         ),
         Biomass_speciesParameters = list(
           constrainGrowthCurve = c(0, 1),
@@ -480,7 +480,7 @@ landrfsConfig <- R6::R6Class(
 
         self$params <- list(
           .globals = list(
-            .plots = c("object", "png", "raw") ## don't plot to screen
+            .plots = c("png") ## don't plot to screen; saving obj/raw is very slow
           )
         )
       } else if ("postprocess" %in% self$context[["mode"]]) {

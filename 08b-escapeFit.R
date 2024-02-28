@@ -14,7 +14,7 @@ escapeFitObjects <- list(
 )
 
 fescapeOut <- simFile(paste0("escapeOut_", config$context[["studyAreaName"]]),
-                      config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                      config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_preamble)) {
   if (!file.exists(fescapeOut)) {

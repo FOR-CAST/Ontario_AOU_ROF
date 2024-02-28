@@ -27,8 +27,7 @@ config$params <- list(
     .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
   ),
   Biomass_speciesFactorial = list(
-    .plotInitialTime = year,
-    .plots = c("png") ## saving ggplot object as qs is slow; creates massive files
+    .plotInitialTime = year
   ),
   Biomass_borealDataPrep = list(
     dataYear = year,
@@ -77,7 +76,7 @@ dataPrepOutputs2001 <- data.frame(
 )
 
 fbiomassMaps2001 <- simFile(paste0("biomassMaps2001_", config$context[["studyAreaName"]]),
-                            config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                            config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_biomassMaps2001)) {
   if (!file.exists(fbiomassMaps2001)) {
@@ -95,10 +94,9 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_biomassMaps2001)) {
     modules = dataPrepModules,
     objects = dataPrepObjects,
     loadOrder = unlist(dataPrepModules),
-    # outputs = dataPrepOutputs2001,
     .plots = NA,
-    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = NULL,#config$args[["cloud"]][["cacheDir"]],
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2001", config$context[["studyAreaName"]])
   )
 
@@ -218,7 +216,7 @@ dataPrepOutputs2011 <- data.frame(
 )
 
 fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", config$context[["studyAreaName"]]),
-                            config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                            config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {
@@ -236,9 +234,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
     modules = dataPrepModules,
     objects = dataPrepObjects,
     loadOrder = unlist(dataPrepModules),
-    #outputs = dataPrepOutputs2011,
-    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = NULL,#config$args[["cloud"]][["cacheDir"]],
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("dataPrep2011", config$context[["studyAreaName"]])
   )
 
@@ -331,7 +328,7 @@ fSdataPrepObjects <- list(
 gc()
 
 ffSsimDataPrep <- simFile(paste0("fSsimDataPrep_", config$context[["studyAreaName"]]),
-                          config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                          config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]])) {
   if (!file.exists(ffSsimDataPrep)) {
@@ -345,8 +342,8 @@ if (isTRUE(config$args[["usePrerun"]])) {
     params = fSdataPrepParams,
     objects = fSdataPrepObjects,
     modules = "fireSense_dataPrepFit", ## TODO: use config$modules
-    useCloud = FALSE, #config$args[["cloud"]][["useCloud"]],
-    cloudFolderID = NULL, #config$args[["cloud"]][["cacheDir"]],
+    useCloud = config$args[["cloud"]][["useCloud"]],
+    cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
   )
 

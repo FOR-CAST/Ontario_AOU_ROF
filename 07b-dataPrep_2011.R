@@ -69,7 +69,7 @@ dataPrepOutputs2011 <- data.frame(
 )
 
 fbiomassMaps2011 <- simFile(paste0("biomassMaps2011_", config$context[["studyAreaName"]]),
-                            config$paths[["outputPath"]], ext = "rds") ## TODO use qs
+                            config$paths[["outputPath"]], ext = config$args[["fsimext"]])
 
 if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_biomassMaps2011)) {
   if (!file.exists(fbiomassMaps2011)) {

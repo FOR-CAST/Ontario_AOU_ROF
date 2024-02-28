@@ -28,16 +28,16 @@ lapply(studyAreaNames, function(sAN) {
 
   ## preamble
   fromFile <- file.path(posthocPaths[["outputPath"]], paste0(sAN, "_", climateScenarios[1]), sprintf("rep%02d", 1),
-                        paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".qs"))
-  toFile <- file.path(outPathAbs,  paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".qs"))
+                        paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".", config$args[["fsimext"]]))
+  toFile <- file.path(outPathAbs,  paste0("simOutPreamble_", sAN, "_", gsub("SSP", "", climateScenarios[1]), ".", config$args[["fsimext"]]))
 
   if (!file.exists(toFile))
     file.copy(fromFile, toFile)
 
   ## fsDAtaPrep
   fromFile <- file.path(posthocPaths[["outputPath"]], paste0(sAN, "_", climateScenarios[1]), sprintf("rep%02d", 1),
-                        paste0("fSsimDataPrep_", sAN, ".qs"))
-  toFile <- file.path(outPathAbs,  paste0("fSsimDataPrep_", sAN, ".qs"))
+                        paste0("fSsimDataPrep_", sAN, ".", config$args[["fsimext"]]))
+  toFile <- file.path(outPathAbs,  paste0("fSsimDataPrep_", sAN, ".", config$args[["fsimext"]]))
 
   if (!file.exists(toFile))
     file.copy(fromFile, toFile)
@@ -75,7 +75,7 @@ setnames(treeSpecies, "ON", "Species")
 # sim_SA <- loadSimList(file.path(posthocPaths[["outputPath"]],
 #                                 studyAreaNames[[1]],
 #                                 paste0("simOutPreamble_", studyAreaNames[[1]], "_",
-#                                        gsub("SSP", "", climateScenarios[[1]]), ".qs")))
+#                                        gsub("SSP", "", climateScenarios[[1]]), ".", config$args[["fsimext"]])))
 # rasterToMatch <- sim_SA$rasterToMatchReporting
 # rm(sim_SA)
 
@@ -104,7 +104,8 @@ posthocSim <- simInitAndSpades(
 # fires ---------------------------------------------------------------------------------------
 
 if (FALSE) {
-  tmp <- loadSimList("outputs/ROF_shield_CanESM5_SSP370_run01/ROF_shield_CanESM5_SSP370_run01.qs")
+  tmp <- loadSimList(file.path("outputs", "ROF_shield_CanESM5_SSP370_run01",
+                               paste0("ROF_shield_CanESM5_SSP370_run01.", config$args[["fsimext"]])))
 
   r <- raster::raster(tmp$rasterToMatch)
   burnSummary = copy(tmp$burnSummary)
