@@ -317,6 +317,7 @@ fSdataPrepObjects <- list(
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
+  historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rstLCC = rstLCC,
   sppEquiv = simOutPreamble[["sppEquiv"]],
