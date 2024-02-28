@@ -67,3 +67,6 @@
 [submodule "modules/historicFires"]
 	path = modules/historicFires
 	url = https://github.com/PredictiveEcology/historicFires
+[submodule "modules/fireSense_hindcast"]
+	path = modules/fireSense_hindcast
+	url = https://github.com/PredictiveEcology/fireSense_hindcast
