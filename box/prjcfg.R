@@ -387,8 +387,10 @@ landrfsConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## sim(start)
         ),
         fireSense_dataPrepFit = list(
-          fireYears = 2001:2022, ## TODO:
+          fireYears = 2001:2022,
           igAggFactor = 10000 / self$context$pixelSize,
+          ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
+          spreadFuelClassCol = "FuelClass", ## TODO: use improved classification
           useCentroids = TRUE,
           usePiecewiseRegression = FALSE, ## pw reg is the old approach
           whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit"),
@@ -407,11 +409,11 @@ landrfsConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## sim(start)
         ),
         fireSense_IgnitionFit = list(
-          family = quote(MASS::negative.binomial(theta = 1, link = "identity")),
-          iterDEoptim = 300,
+          # iterDEoptim = 300, ## default: 500
           rescalers = NULL,
-          rescaleVars = FALSE,
-          studyAreaName = self$context$studyAreaName
+          rescaleVars = TRUE,
+          .studyAreaName = self$context$studyAreaName,
+          .useCache = "run"
         ),
         fireSense_IgnitionPredict = list(
           .runInitialTime = self$args$simYears$start ## sim(start)
@@ -420,15 +422,16 @@ landrfsConfig <- R6::R6Class(
           cloudFolderID_DE = self$args$cloud$cacheDir,
           DEoptimTests = c("adTest", "snll_fs"),
           doObjFunAssertions = FALSE,
-          iterDEoptim = 150L,
-          iterStep = 150L,
-          iterThresh = 396L,
+          iterDEoptim = 150L, ## default 500L
+          iterStep = 150L, ## default 25L
+          iterThresh = 396L, ## default 96L
           libPathDEoptim = file.path(projectPath, "renv", "library",
                                      paste0("R-", getRversion()[, 1:2]), version$platform),
           mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
           mutuallyExclusive = list("youngAge" = c("class", "nonForest")),
           objFunCoresInternal = 1L,
           objfunFireReps = 100,
+          rep = self$config$context$rep,
           rescaleAll = TRUE,
           trace = 1,
           SNLL_FS_thresh = NULL, # NULL means 'autocalibrate' to find suitable threshold value
