@@ -659,6 +659,22 @@
       ],
       "Hash": "5b250ad4c5863ee4a68e280fcb0a3600"
     },
+    "TMB": {
+      "Package": "TMB",
+      "Version": "1.9.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "RcppEigen",
+        "graphics",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "061ba6d7509e7148871b31b44e47c69b"
+    },
     "XML": {
       "Package": "XML",
       "Version": "3.99-0.16",
@@ -2147,6 +2163,24 @@
         "utils"
       ],
       "Hash": "d3f51d74d159ef4c1fda20caa27581d6"
+    },
+    "glmmTMB": {
+      "Package": "glmmTMB",
+      "Version": "1.1.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "RcppEigen",
+        "TMB",
+        "lme4",
+        "methods",
+        "mgcv",
+        "nlme",
+        "numDeriv"
+      ],
+      "Hash": "ddc0099666aba16c7db48556ff1bc2f6"
     },
     "globals": {
       "Package": "globals",
