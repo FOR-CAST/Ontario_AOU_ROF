@@ -73,3 +73,6 @@
 [submodule "modules/NRV_summary"]
 	path = modules/NRV_summary
 	url = https://github.com/FOR-CAST/NRV_summary
+[submodule "modules/birds_BRT"]
+	path = modules/birds_BRT
+	url = https://github.com/FOR-CAST/birds_BRT
