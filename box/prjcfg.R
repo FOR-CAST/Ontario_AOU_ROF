@@ -102,13 +102,14 @@ landrfsContext <- R6::R6Class(
   active = list(
     #' @field mode  Character string giving the project run mode.
     #'              One of 'development', 'postprocess', or 'production'.
-    #'              If 'development' may also include 'fit' (e.g., `c('development', 'fit')`).
+    #'              May also include 'fit' (e.g., `c('development', 'fit')`),
+    #'              and one of 'frv' or 'hrv' for future and hisotric range of variability studies.
     mode = function(value) {
       if (missing(value)) {
         return(private[[".mode"]])
       } else {
         stopifnot(
-          all(tolower(value) %in% c("development", "fit", "postprocess", "production"))
+          all(tolower(value) %in% c("development", "fit", "frv", "hrv", "postprocess", "production"))
         )
         private[[".mode"]] <- tolower(value)
 
@@ -254,6 +255,7 @@ landrfsConfig <- R6::R6Class(
         Biomass_speciesFactorial = "Biomass_speciesFactorial",
         Biomass_speciesParameters = "Biomass_speciesParameters",
         # Biomass_summary = "Biomass_summary", ## post-processing
+        # birds_BRT = "birds_BRT", ## post-processing
         canClimateData = "canClimateData",
         fireSense = "fireSense",
         fireSense_dataPrepFit = "fireSense_dataPrepFit",
@@ -265,7 +267,8 @@ landrfsConfig <- R6::R6Class(
         fireSense_SpreadFit = "fireSense_SpreadFit",
         fireSense_SpreadPredict = "fireSense_SpreadPredict",
         # fireSense_summary = "fireSense_summary", ## post-processing
-        gmcsDataPrep = "gmcsDataPrep"
+        gmcsDataPrep = "gmcsDataPrep"#,
+        # NRV_summary = "NRV_summary ## post-processing
       )
 
       # options ------------------------------------------------------------------------------------
@@ -370,9 +373,6 @@ landrfsConfig <- R6::R6Class(
           quantileAgeSubset = 98,
           speciesFittingApproach = "focal"
         ),
-        Biomass_summary = list(
-          ## TODO
-        ),
         canClimateData = list(
           climateGCM = self$context$climateGCM,
           climateSSP = self$context$climateSSP,
@@ -445,9 +445,6 @@ landrfsConfig <- R6::R6Class(
         fireSense_SpreadPredict = list(
           .runInitialTime = self$args$simYears$start ## sim(start)
         ),
-        fireSense_summary = list(
-          ## TODO
-        ),
         gmcsDataPrep = list(
           doPlotting = TRUE,
           yearOfFirstClimateImpact = self$args$simYears$start ## sim(start)
@@ -486,8 +483,19 @@ landrfsConfig <- R6::R6Class(
             .plots = c("png") ## don't plot to screen; saving obj/raw is very slow
           )
         )
+
+        if ("hrv" %in% self$context[["mode"]]) {
+          self$modules <- list("fireSense_hindcast")
+
+          self$params <- list(
+            fireSense_hindcast = list(
+              ## TODO
+            )
+          )
+        }
       } else if ("postprocess" %in% self$context[["mode"]]) {
-        self$modules <- list("Biomass_summary", "fireSense_summary")
+        self$modules <- list("Biomass_summary", "fireSense_summary",
+                             "bird_BRT")
 
         self$params <- list(
           .globals = list(
@@ -496,7 +504,20 @@ landrfsConfig <- R6::R6Class(
           Biomass_summary = list(
             ## TODO
           ),
+          bird_BRT = list(
+            ## TODO
+          ),
           fireSense_summary = list(
+            ## TODO
+          )
+        )
+      }
+
+      if (any(c("frv", "hrv") %in% self$context[["mode"]])) {
+        self$modules <- c("NRV_summary")
+
+        self$params <- list(
+          NRV_summary = list(
             ## TODO
           )
         )

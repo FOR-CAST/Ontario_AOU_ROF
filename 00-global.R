@@ -11,9 +11,9 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 ## allow setting run context info from outside this script (e.g., bash script) ----------------
 
 if (exists(".mode", .GlobalEnv)) {
-  stopifnot(all(.mode %in% c("development", "fit", "postprocess", "production")))
+  stopifnot(all(.mode %in% c("development", "fit", "frv", "hrv", "postprocess", "production")))
 } else {
-  .mode <- c("development")
+  .mode <- c("development", "hrv")
 
   if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
    .mode <- append(.mode, "fit")
