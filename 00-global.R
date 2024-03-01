@@ -1,6 +1,6 @@
 # project basics ------------------------------------------------------------------------------
 
-if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## RENV_PATHS_CACHE etc.
+if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## GITHUB_PAT, RENV_PATHS_CACHE, TMPDIR, etc.
 if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
 
 .ncores <- min(parallelly::availableCores(constraints = "connections") / 2, 32L)
@@ -8,7 +8,8 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 .nodename <- SpaDES.config::machine()
 .user <- SpaDES.config::user()
 
-###### allow setting run context info from outside this script (e.g., bash script) -----------------
+## allow setting run context info from outside this script (e.g., bash script) ----------------
+
 if (exists(".mode", .GlobalEnv)) {
   stopifnot(all(.mode %in% c("development", "fit", "postprocess", "production")))
 } else {
