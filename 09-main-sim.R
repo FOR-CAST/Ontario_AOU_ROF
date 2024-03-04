@@ -40,14 +40,14 @@ dynamicObjects <- list(
   CMInormal = simOutPreamble[["CMInormal"]],
   CMIstack = simOutPreamble[["CMIstack"]],
   cohortData = fSsimDataPrep[["cohortData2011"]],
-  covMinMax_spread = spreadOut[["covMinMax_spread"]],
-  covMinMax_ignition = ignitionOut[["covMinMax_ignition"]],
+  covMinMax_spread = fireSenseFit[["covMinMax_spread"]],
+  covMinMax_ignition = fireSenseFit[["covMinMax_ignition"]],
   ecoregion = biomassMaps2011[["ecoregion"]],
   ecoregionMap = biomassMaps2011[["ecoregionMap"]],
   flammableRTM = fSsimDataPrep[["flammableRTM"]],
-  fireSense_IgnitionFitted = ignitionOut[["fireSense_IgnitionFitted"]],
-  fireSense_EscapeFitted = escapeOut[["fireSense_EscapeFitted"]],
-  fireSense_SpreadFitted = spreadOut[["fireSense_SpreadFitted"]],
+  fireSense_IgnitionFitted = fireSenseFit[["fireSense_IgnitionFitted"]],
+  fireSense_EscapeFitted = fireSenseFit[["fireSense_EscapeFitted"]],
+  fireSense_SpreadFitted = fireSenseFit[["fireSense_SpreadFitted"]],
   landcoverDT = fSsimDataPrep[["landcoverDT"]],
   nonForest_timeSinceDisturbance = fSsimDataPrep[["nonForest_timeSinceDisturbance2011"]],
   minRelativeB = biomassMaps2011[["minRelativeB"]],
@@ -140,9 +140,7 @@ rm(
   biomassMaps2001,                   ## 07a-dataPrep_2001.R
   biomassMaps2011,                   ## 07b-dataPrep_2011.R
   fSdataPrepObjects, fSsimDataPrep,  ## 07c-dataPrep_fS.R
-  ignitionFitObjects, ignitionOut,   ## 08a-ignitionFit.R
-  escapeFitObjects, escapeOut,       ## 08b-escapeFit.R
-  spreadFitObjects, spreadOut        ## 08c-spreadFit.R
+  fireSenseFit                       ## 08-fireSense_fit.R
 )
 
 fsim <- simFile(config$context[["runName"]], config$paths[["outputPath"]], ext = config$args[["fsimext"]])

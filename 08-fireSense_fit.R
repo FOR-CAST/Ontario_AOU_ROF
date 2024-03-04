@@ -91,12 +91,8 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_fireSenseFit)) {
   ## TODO: put this in the module to allow running all three fit modules together
   if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
     notifications::notify_google(
-      paste0("fireSense_IgnitionFit for `", config$context[["studyAreaName"]], "` completed on host `", machine(), "`.")
+      paste0("fireSense fit for `", config$context[["studyAreaName"]], "` completed on host `",
+             SpaDES.config::machine(), "`.")
     )
-
-    notifications::notify_google(
-      paste0("`fireSense_SpreadFit` for `", config$context[["runName"]], "` completed on host `", machine(), "`.")
-    )
-
   }
 }
