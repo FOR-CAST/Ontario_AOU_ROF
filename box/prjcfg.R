@@ -382,7 +382,7 @@ landrfsConfig <- R6::R6Class(
           historicalFireYears = 1971:2022, ## TODO: using more years for sampling
           projectedType = "forecast",
           studyAreaName = self$context$studyAreaName,
-          .useCache = ".inputObjects"
+          .useCache = FALSE ## c(".inputObjects", "init")
         ),
         fireSense = list(
           plotIgnitions = FALSE,
