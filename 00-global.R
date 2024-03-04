@@ -13,11 +13,7 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 if (exists(".mode", .GlobalEnv)) {
   stopifnot(all(.mode %in% c("development", "fit", "frv", "hrv", "postprocess", "production")))
 } else {
-  .mode <- c("development", "hrv")
-
-  if (.user %in% c("achubaty") && grepl("for-cast[.]ca", .nodename)) {
-   .mode <- append(.mode, "fit")
-  }
+  .mode <- if (interactive()) c("development", "hrv") else c("production", "hrv")
 }
 
 if (exists(".climateGCM", .GlobalEnv)) {
@@ -51,7 +47,7 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
   #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
 }
 
-#####
+## paths and options --------------------------------------------------------------------------
 
 library(SpaDES.config)
 
@@ -64,12 +60,7 @@ options(
   repos = c(CRAN = "https://cloud.r-project.org")
 )
 
-## set new temp dir in scratch directory (existing /tmp too small for large callr ops in postprocessing)
-## see https://github.com/r-lib/callr/issues/172
-if (grepl("for-cast[.]ca", .nodename) && !grepl("larix", .nodename)) {
-  newTmpDir <- file.path("/mnt/scratch", .user, basename(prjDir), "tmp")
-  tmpdir::setTmpDir(newTmpDir, rmOldTempDir = TRUE)
-}
+## load packages ------------------------------------------------------------------------------
 
 library(data.table)
 library(plyr)
@@ -81,6 +72,8 @@ library(SpaDES.core)
 
 # configure project ---------------------------------------------------------------------------
 
+## TODO: implement exptTbl stuff to pass values to config
+
 box::use(box/prjcfg)
 config <- prjcfg$landrfsConfig$new(
   projectName = "LandRfS", projectPath = prjDir,
@@ -88,8 +81,6 @@ config <- prjcfg$landrfsConfig$new(
   mode = .mode, rep = .rep, res = .res,
   studyAreaName = .studyAreaName
 )$update()$validate()
-config$modules <- modifyList(config$modules, list(historicFires = "historicFires"))  ## TODO: update in SpaDES.config
-config$validate()
 
 ## apply study area context settings here
 source("02-studyArea-config.R")
@@ -152,9 +143,6 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   source("07-allDataPrep.R")
 
   if ("fit" %in% config$context[["mode"]]) {
-    config$args[["usePrerun"]] <- FALSE
-    config$args[["reupload"]] <- TRUE
-
     for (i in config$params[[".globals"]][["reps"]]) {
       config$context[["rep"]] <- i
       config$update()$validate()
@@ -190,4 +178,4 @@ cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
 cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
 
 DBI::dbDisconnect(getOption("reproducible.conn"))
-unlink(newTmpDir, recursive = TRUE)
+
