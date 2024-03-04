@@ -274,7 +274,9 @@ landrfsConfig <- R6::R6Class(
       # options ------------------------------------------------------------------------------------
       private[[".options"]] <- list(
         encoding = "UTF-8",
+        future.availableCores.fallback = parallelly::availableCores(constraints = "connections", omit = 1L),
         future.globals.maxSize = 1000*1024^2, ## 1000 MiB (0.98 GiB)
+        future.plan = "callr",
         LandR.assertions = TRUE,
         LandR.verbose = 1,
         rasterMaxMemory = 5e+12,
@@ -296,7 +298,8 @@ landrfsConfig <- R6::R6Class(
         spades.allowInitDuringSimInit = TRUE,
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
-        spades.memoryUseInterval = 10, ## track memory use every 10 seconds
+        # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
+        spades.memoryUseInterval = FALSE, ## TODO: broken in recent versions of SpaDES.core
         spades.messagingNumCharsModule = 36,
         spades.moduleCodeChecks = TRUE,
         spades.qsThreads = 4,
