@@ -489,14 +489,14 @@
     },
     "SpaDES.config": {
       "Package": "SpaDES.config",
-      "Version": "1.0.3",
+      "Version": "1.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.config",
       "RemoteRef": "development",
-      "RemoteSha": "1ed1bfd60f2db1064a8151cfe96e862d63a35a13",
+      "RemoteSha": "ab16aca12b4e61e2db19e0d97e544a7aeac37270",
       "Remotes": "PredictiveEcology/fireSenseUtils@development, PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/reproducible@development, PredictiveEcology/scfmutils@development, PredictiveEcology/SpaDES.core@development",
       "Requirements": [
         "R",
@@ -507,7 +507,7 @@
         "rprojroot",
         "utils"
       ],
-      "Hash": "38a3bea4b1033c48baf680069597a6c0"
+      "Hash": "10132daa325c9ea20d347874b64fe317"
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
@@ -582,6 +582,30 @@
         "utils"
       ],
       "Hash": "7153ce4b1e529bee304756ecbd23e7ba"
+    },
+    "SpaDES.project": {
+      "Package": "SpaDES.project",
+      "Version": "0.0.8.9030",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "PredictiveEcology",
+      "RemoteRepo": "SpaDES.project",
+      "RemoteRef": "transition",
+      "RemoteSha": "c06e3fb1a406e327a5504be6c3e71834f4d24c32",
+      "Remotes": "PredictiveEcology/SpaDES.config@development, PredictiveEcology/SpaDES.core@useCache2",
+      "Requirements": [
+        "R",
+        "Require",
+        "data.table",
+        "fs",
+        "methods",
+        "rprojroot",
+        "rstudioapi",
+        "tools",
+        "utils"
+      ],
+      "Hash": "6f1765e4fb55b3a14cded94f70533feb"
     },
     "SpaDES.tools": {
       "Package": "SpaDES.tools",
