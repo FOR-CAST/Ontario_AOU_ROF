@@ -296,7 +296,8 @@ landrfsConfig <- R6::R6Class(
         spades.allowInitDuringSimInit = TRUE,
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
-        spades.memoryUseInterval = 10, ## track memory use every 10 seconds
+        # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
+        spades.memoryUseInterval = FALSE, ## TODO: broken with recent SpaDES.core versions; hangs indefinitely
         spades.messagingNumCharsModule = 36,
         spades.moduleCodeChecks = TRUE,
         spades.qsThreads = 4,
@@ -377,6 +378,7 @@ landrfsConfig <- R6::R6Class(
           climateGCM = self$context$climateGCM,
           climateSSP = self$context$climateSSP,
           historicalFireYears = 1971:2022, ## TODO: using more years for sampling
+          projectedType = "forecast",
           studyAreaName = self$context$studyAreaName,
           .useCache = ".inputObjects"
         ),
@@ -485,11 +487,10 @@ landrfsConfig <- R6::R6Class(
         )
 
         if ("hrv" %in% self$context[["mode"]]) {
-          self$modules <- list("fireSense_hindcast")
-
           self$params <- list(
-            fireSense_hindcast = list(
-              ## TODO
+            canClimateData = list(
+              projectedFireYears = 1501:2000, ## TODO: not real calendar years!
+              projectedType = "hindcast"
             )
           )
         }
@@ -514,7 +515,7 @@ landrfsConfig <- R6::R6Class(
       }
 
       if (any(c("frv", "hrv") %in% self$context[["mode"]])) {
-        self$modules <- c("NRV_summary")
+        # self$modules <- c("NRV_summary") ## TODO
 
         self$params <- list(
           NRV_summary = list(

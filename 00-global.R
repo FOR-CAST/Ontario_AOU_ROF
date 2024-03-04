@@ -53,6 +53,8 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
 
 #####
 
+library(SpaDES.config)
+
 prjDir <- SpaDES.config::findProjectPath()
 
 stopifnot(identical(prjDir, getwd()))
@@ -69,12 +71,9 @@ if (grepl("for-cast[.]ca", .nodename) && !grepl("larix", .nodename)) {
   tmpdir::setTmpDir(newTmpDir, rmOldTempDir = TRUE)
 }
 
-## load packages ------------------------------------------------------------------------------
-
 library(data.table)
 library(plyr)
 library(pryr)
-# library(SpaDES.config)
 library(future.callr)
 library(googledrive)
 library(httr)
@@ -99,13 +98,11 @@ config$modules <- modifyList(config$modules, config.studyArea$modules) ## TODO: 
 config$options <- config.studyArea$options
 config$params <- config.studyArea$params
 config$paths <- config.studyArea$paths
-config$update()
-config$validate()
+config$update()$validate()
 
 ## apply user and machine context settings here
 source("02-user-config.R")
 config$args <- config.user$args
-#config$modules <- config.user$modules ## no modules should differ among users/machines
 config$options <- config.user$options
 config$params <- config.user$params
 config$paths <- config.user$paths
@@ -152,20 +149,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
   source("06-studyArea.R")
 
-  if ("fit" %in% config$context[["mode"]]) {
-    opt <- options(spades.memoryUseInterval = FALSE) ## TODO: periodically stalls during mem use setup; disable temporarily
-  }
-  # source("07a-dataPrep_2001.R")
-  # source("07b-dataPrep_2011.R")
-  # source("07c-dataPrep_fS.R")
   source("07-allDataPrep.R")
-
-  source("08a-ignitionFit.R")
-  source("08b-escapeFit.R")
-
-  # if ("fit" %in% config$context[["mode"]]) {
-  #   options(opt)
-  # }
 
   if ("fit" %in% config$context[["mode"]]) {
     config$args[["usePrerun"]] <- FALSE
@@ -173,8 +157,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
     for (i in config$params[[".globals"]][["reps"]]) {
       config$context[["rep"]] <- i
-      config$update()
-      config$validate()
+      config$update()$validate()
 
       logPath <- checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as needed below
       prjPaths <- SpaDES.config::paths4spades(config$paths)
@@ -187,14 +170,14 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
       do.call(SpaDES.core::setPaths, prjPaths)
 
-      source("08c-spreadFit.R")
+      source("08-fireSense_fit.R")
 
       if (file.exists("Rplots.pdf")) {
         file.rename("Rplots.pdf", file.path(figPath, sprintf("spreadFit_plots_%s.pdf", config$context[["runName"]])))
       }
     }
   } else {
-    source("08c-spreadFit.R")
+    source("08-fireSense_fit.R")
     source("09-main-sim.R")
   }
 } else {
