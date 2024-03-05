@@ -175,5 +175,6 @@ rrFile <- file.path(relOutputPath, "INFO.md")
 cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
 cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
 
+## cleanup
 DBI::dbDisconnect(getOption("reproducible.conn"))
 
