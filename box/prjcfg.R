@@ -399,7 +399,7 @@ landrfsConfig <- R6::R6Class(
           usePiecewiseRegression = FALSE, ## pw reg is the old approach
           whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit"),
           .studyAreaName = self$context$studyAreaName,
-          .useCache = ".inputObjects"
+          .useCache = FALSE # ".inputObjects"
         ),
         fireSense_dataPrepPredict = list(
           nonForestCanBeYoungAge = TRUE,
