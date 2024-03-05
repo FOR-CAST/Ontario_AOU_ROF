@@ -343,6 +343,7 @@ if (isTRUE(config$args[["usePrerun"]])) {
     params = fSdataPrepParams,
     objects = fSdataPrepObjects,
     modules = "fireSense_dataPrepFit", ## TODO: use config$modules
+    useCache = FALSE, ## TODO: error in .robustDigest: [subset] invalid name(s)
     useCloud = config$args[["cloud"]][["useCloud"]],
     cloudFolderID = config$args[["cloud"]][["cacheDir"]],
     userTags = c("fireSense_dataPrepFit", config$context[["studyAreaName"]])
