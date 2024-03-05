@@ -2,14 +2,12 @@ source("05-google-ids.R")
 
 gid_preamble <- gdriveSims[studyArea == .studyAreaName & simObject == "simOutPreamble" &
                              gcm == .climateGCM & ssp == .climateSSP, gid]
-upload_preamble <- config$context[["rep"]] == 1 & (config$args[["reupload"]] | length(gid_preamble) == 0)
+# upload_preamble <- config$context[["rep"]] == 1 & (config$args[["reupload"]] | length(gid_preamble) == 0)
+upload_preamble <- FALSE ## TODO: restore uploads
 
 preambleObjects <- list(
   .runName = config$context[["runName"]]
 )
-
-config$params[["Ontario_preamble"]][[".useCache"]] <- FALSE ## TODO: caching broken for SpatRaster attributes
-config$params[["canClimateData"]][[".useCache"]] <- FALSE ## TODO: event caching broken
 
 if (grepl("^ON", config$context[["studyAreaName"]])) {
   preambleParams <- list(

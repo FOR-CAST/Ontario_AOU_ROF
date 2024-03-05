@@ -3,7 +3,7 @@
 source("05-google-ids.R")
 
 gid_biomassMaps2001 <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "biomassMaps2001", gid]
-upload_biomassMaps2001 <- config$args[["reupload"]] | length(gid_biomassMaps2001) == 0
+upload_biomassMaps2001 <- config$args[["reupload"]] # | length(gid_biomassMaps2001) == 0
 
 year <- 2001
 
@@ -148,7 +148,7 @@ if ("screen" %in% config$params[[".globals"]][[".plots"]]) {
 source("05-google-ids.R")
 
 gid_biomassMaps2011 <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "biomassMaps2011", gid]
-upload_biomassMaps2011 <- config$args[["reupload"]] | length(gid_biomassMaps2011) == 0
+upload_biomassMaps2011 <- config$args[["reupload"]] # | length(gid_biomassMaps2011) == 0
 
 year <- 2011
 
@@ -274,7 +274,7 @@ config$update()
 source("05-google-ids.R")
 
 gid_fSsimDataPrep <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "fSsimDataPrep", gid]
-upload_fSsimDataPrep <- config$args[["reupload"]] | length(gid_fSsimDataPrep) == 0
+upload_fSsimDataPrep <- config$args[["reupload"]] # | length(gid_fSsimDataPrep) == 0
 
 ## 07c-dataPrep_fS ---------------------------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 source("05-google-ids.R")
 
 gid_fireSenseFit <- gdriveSims[studyArea == config$context[["studyAreaName"]] & simObject == "fireSenseFit", gid]
-upload_fireSenseFit <- config$args[["reupload"]] | length(gid_fireSenseFit) == 0
+upload_fireSenseFit <- config$args[["reupload"]] # | length(gid_fireSenseFit) == 0
 
 fSFitParams <- list(
   fireSense_IgnitionFit = config$params[["fireSense_IgnitionFit"]],
