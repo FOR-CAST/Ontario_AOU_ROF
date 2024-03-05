@@ -305,7 +305,7 @@ Imports:
     sys (== 3.4.2),
     systemfonts (== 1.0.5),
     tensor (== 1.5),
-    terra (== 1.7-65),
+    terra (== 1.7-71),
     testthat (== 3.2.1),
     TH.data (== 1.1-2),
     tibble (== 3.2.1),
