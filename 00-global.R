@@ -47,9 +47,17 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
   #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
 }
 
-## paths and options --------------------------------------------------------------------------
+## packages, paths and options --------------------------------------------------------------------------
+
+library(data.table)
+library(plyr)
+library(pryr)
+library(future.callr)
+library(googledrive)
+library(httr)
 
 library(SpaDES.config)
+library(SpaDES.core)
 
 prjDir <- SpaDES.config::findProjectPath()
 
@@ -59,16 +67,6 @@ options(
   Ncpus = .ncores,
   repos = c(CRAN = "https://cloud.r-project.org")
 )
-
-## load packages ------------------------------------------------------------------------------
-
-library(data.table)
-library(plyr)
-library(pryr)
-library(future.callr)
-library(googledrive)
-library(httr)
-library(SpaDES.core)
 
 # configure project ---------------------------------------------------------------------------
 
