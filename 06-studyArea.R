@@ -50,14 +50,21 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
 
   if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    saveSimList(
-      simOutPreamble,
-      fsimOutPreamble,
-      inputs = FALSE,
-      outputs = FALSE,
-      cache = FALSE,
-      files = FALSE
-    )
+    ## TODO: saveSimList() now failing after resampling rasters for hindcast:
+    ## error in evaluating the argument 'object' in selecting a method for function '.robustDigest':
+    ##   [subset] invalid name(s)
+    tryCatch({
+      saveSimList(
+        simOutPreamble,
+        fsimOutPreamble,
+        inputs = FALSE,
+        outputs = FALSE,
+        cache = FALSE,
+        files = FALSE
+      )
+    }, error = function(e) {
+      message(crayon::red(e)) ## TODO: .robustDigest failure per above
+    })
     amc::.gc()
   }
 
