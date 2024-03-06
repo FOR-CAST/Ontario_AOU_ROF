@@ -1984,6 +1984,19 @@
       ],
       "Hash": "fc0b272e5847c58cd5da9b20eedbd026"
     },
+    "gbm": {
+      "Package": "gbm",
+      "Version": "2.1.9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "lattice",
+        "parallel",
+        "survival"
+      ],
+      "Hash": "4ec58dd8bac38fad91b9d6a7da19a006"
+    },
     "gdalUtilities": {
       "Package": "gdalUtilities",
       "Version": "1.2.5",
@@ -2682,6 +2695,24 @@
         "stats"
       ],
       "Hash": "b64ec208ac5bc1852b285f665d6368b3"
+    },
+    "landscapemetrics": {
+      "Package": "landscapemetrics",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "RcppArmadillo",
+        "cli",
+        "ggplot2",
+        "methods",
+        "stats",
+        "terra",
+        "tibble"
+      ],
+      "Hash": "eefed06a6d4472f65ae0a990928db27d"
     },
     "later": {
       "Package": "later",
