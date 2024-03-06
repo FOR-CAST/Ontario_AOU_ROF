@@ -1,9 +1,9 @@
 ## project-specific studyArea and other config
-.historicFireYears <- 2011:2020
+.historicFireYears <- 2011:2022 ## TODO: change this for HRV
 
 config.studyArea <- list(
   args = list(
-    simYears = list(start = 2011, end = 2100)
+    simYears = list(start = 2011, end = 2100) ## TODO: change this for HRV
   ),
   modules = list(
     ## include ON and QC preambles, which are dropped below based on study area to be run
@@ -37,7 +37,7 @@ config.studyArea <- list(
       ## TODO
     ),
     historicFires = list( ## TODO: add to config
-      staticFireYears = .historicFireYears
+      staticFireYears = .historicFireYears  ## TODO: not for HRV
     ),
     ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = list(
