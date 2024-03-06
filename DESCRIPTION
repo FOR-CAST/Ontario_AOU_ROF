@@ -173,7 +173,7 @@ Imports:
     lwgeom (== 0.2-14),
     magick (== 2.8.3),
     magrittr (== 2.0.3),
-    map (== 0.0.5),
+    map (== 1.0.0),
     markdown (== 1.12),
     MASS (== 7.3-60.0.1),
     Matrix (== 1.6-5),
@@ -319,7 +319,7 @@ Imports:
     tidyr (== 1.3.1),
     tidyselect (== 1.2.0),
     tidyterra (== 0.5.2),
-    tiler (== 0.2.6),
+    tiler (== 0.3.1),
     timechange (== 0.3.0),
     tinytex (== 0.49),
     TMB (== 1.9.10),
@@ -358,7 +358,7 @@ Remotes:
     PredictiveEcology/climateData@cfecab82871ade097afe979983a9c8a996eef952,
     PredictiveEcology/fireSenseUtils@d6a3ca5f306367d1497dcb85c191bdddc3f36d78,
     PredictiveEcology/LandR@62d8cfda8972a8f10c8d442a25346bd0f025561f,
-    PredictiveEcology/map@3bdbf62d2027d509cfee6d301fa444204786c207,
+    PredictiveEcology/map@731deb8e456b66d503df95be433d0470e179666e,
     PredictiveEcology/pemisc@f37031e0e692d62a46b3e111f5f4a6c1374fe0fa,
     PredictiveEcology/peutils@d40d97c594c01014101c1edacd48bcace89dcb97,
     PredictiveEcology/quickPlot@735b7a4c5fa4cbb0dfdadb8265d03c4f11f0d6c5,
@@ -370,7 +370,6 @@ Remotes:
     PredictiveEcology/SpaDES.install@2a901551d35da742d13169576d27f73ce4bf6c00,
     PredictiveEcology/SpaDES.project@c06e3fb1a406e327a5504be6c3e71834f4d24c32,
     PredictiveEcology/SpaDES.tools@84711a47adab87e34e3d2f05f5998d545605b7f5,
-    ropensci/tiler@af03464f48b7e216c6fdf7a644a80d2c25645f4e,
     s-u/fastshp@3e0eb833f6292013423d93c71f7c26f6dc2d70f1
 Encoding: UTF-8
 Language: en-CA

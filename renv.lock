@@ -2885,35 +2885,33 @@
     },
     "map": {
       "Package": "map",
-      "Version": "0.0.5",
+      "Version": "1.0.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "map",
-      "RemoteRef": "3bdbf62d2027d509cfee6d301fa444204786c207",
-      "RemoteSha": "3bdbf62d2027d509cfee6d301fa444204786c207",
-      "Remotes": "ropensci/tiler, gearslaboratory/gdalUtils, PredictiveEcology/pemisc@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.tools@development, rspatial/terra@6a3ea837be88de5a66cd0577c6d79c1091562547",
+      "RemoteRef": "transition",
+      "RemoteSha": "731deb8e456b66d503df95be433d0470e179666e",
+      "Remotes": "ropensci/tiler, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "R",
         "backports",
         "data.table",
         "fastdigest",
-        "fasterize",
         "methods",
         "parallelly",
         "pemisc",
         "quickPlot",
         "raster",
         "reproducible",
-        "rgeos",
         "sf",
-        "sp",
         "stats",
+        "terra",
         "tiler",
         "utils"
       ],
-      "Hash": "68fecc62a1bb16db932f748e5f08322f"
+      "Hash": "7c98ba549981760db9326b9ab914293d"
     },
     "markdown": {
       "Package": "markdown",
@@ -4613,21 +4611,15 @@
     },
     "tiler": {
       "Package": "tiler",
-      "Version": "0.2.6",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "ropensci",
-      "RemoteRepo": "tiler",
-      "RemoteRef": "af03464f48b7e216c6fdf7a644a80d2c25645f4e",
-      "RemoteSha": "af03464f48b7e216c6fdf7a644a80d2c25645f4e",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "png",
         "raster",
-        "rgdal",
         "sp"
       ],
-      "Hash": "8a0fa11a8c6316118d755bdddbbad3d4"
+      "Hash": "8405060e9ffbb758603f203111a077fc"
     },
     "timechange": {
       "Package": "timechange",
