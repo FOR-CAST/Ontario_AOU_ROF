@@ -82,11 +82,11 @@ if (isTRUE(config$args[["usePrerun"]]) & isFALSE(upload_fireSenseFit)) {
     )
   }
 
-  if (isTRUE(config$context[["rep"]] == 1)) {
-    source("R/upload_ignitionFit.R") ## TODO: add to the module -- but need to ensure only run once
-  }
-
-  source("R/upload_spreadFit.R") ## TODO: add to the module
+  # if (isTRUE(config$context[["rep"]] == 1)) {
+  #   source("R/upload_ignitionFit.R") ## TODO: add to the module -- but need to ensure only run once
+  # }
+  #
+  # source("R/upload_spreadFit.R") ## TODO: add to the module
 
   ## TODO: put this in the module to allow running all three fit modules together
   if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {

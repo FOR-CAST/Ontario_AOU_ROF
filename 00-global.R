@@ -145,6 +145,8 @@ if (!"postprocess" %in% config$context[["mode"]]) {
       config$context[["rep"]] <- i
       config$update()$validate()
 
+      config$params[["fireSense_SpreadFit"]][["rep"]] <- i
+
       logPath <- checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as needed below
       prjPaths <- SpaDES.config::paths4spades(config$paths)
 
