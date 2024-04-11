@@ -513,15 +513,15 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.0.3.9007",
+      "Version": "2.0.4.9007",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
       "RemoteRef": "sequentialCaching",
-      "RemoteSha": "07b936bfc6cd0e63478d9c4001d5b0fe7e6ecdcd",
-      "Remotes": "PredictiveEcology/reproducible@modsForLargeArchives",
+      "RemoteSha": "88ad63d85a26185ba03441faaf3bb4600dc57ff4",
+      "RemoteHost": "api.github.com",
+      "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@modsForLargeArchives",
       "Requirements": [
         "R",
         "Require",
@@ -539,7 +539,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "b34a47570ccee51e5d099d8feca5c173"
+      "Hash": "8142de8bdcd0a5dc6043d0ae0bc71227"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
