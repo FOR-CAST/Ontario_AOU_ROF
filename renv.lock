@@ -139,7 +139,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
-      "RemoteRef": "lccFix",
+      "RemoteRef": "a2a90057c07d7c26c2158c97f1cba79490160697",
       "RemoteSha": "a2a90057c07d7c26c2158c97f1cba79490160697",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
@@ -170,7 +170,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "b9269d151c590fc5fc504a8f9bd37979"
+      "Hash": "f85f49eca55801e21e8497dbba61d5d3"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -1722,15 +1722,15 @@
     },
     "fireSenseUtils": {
       "Package": "fireSenseUtils",
-      "Version": "0.0.5.9058",
+      "Version": "0.0.5.9065",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "fireSenseUtils",
-      "RemoteRef": "development",
-      "RemoteSha": "d6a3ca5f306367d1497dcb85c191bdddc3f36d78",
-      "Remotes": "jeffreyevans/spatialEco, PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development, PredictiveEcology/Require@development, PredictiveEcology/reproducible@development",
+      "RemoteRef": "lccFix",
+      "RemoteSha": "2a95af019c4ebe5c563104083aafdadfde934df2",
+      "Remotes": "PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development, PredictiveEcology/Require@development, PredictiveEcology/reproducible@development",
       "Requirements": [
         "DEoptim",
         "EnvStats",
@@ -1750,7 +1750,6 @@
         "purrr",
         "qs",
         "quickPlot",
-        "raster",
         "reproducible",
         "sf",
         "sp",
@@ -1758,7 +1757,7 @@
         "terra",
         "utils"
       ],
-      "Hash": "7f9aa1ecd262f2e85bd9c1d15c581aa4"
+      "Hash": "61a48d919cb67a7d83fdd67a005e79fb"
     },
     "fontawesome": {
       "Package": "fontawesome",
