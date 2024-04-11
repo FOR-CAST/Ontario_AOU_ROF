@@ -5,7 +5,7 @@ box::use(DBI[dbConnect,dbDisconnect])
 box::use(pemisc[availableMemory])
 
 #' @keywords internal
-.landrfsRunName <- function(context, withRep = TRUE) {
+.onnrvRunName <- function(context, withRep = TRUE) {
   .runName <- paste0(
     context$studyAreaName,
     paste0("_", context$climateGCM),
@@ -22,16 +22,16 @@ box::use(pemisc[availableMemory])
   return(.runName)
 }
 
-#' LandR-fireSense project context class
+#' Ontario NRV project context class
 #'
-#' This extends the `projContext` class by setting various defaults for LandR-fireSense
+#' This extends the `projContext` class by setting various defaults for Ontario NRV
 #' and employing custom field validation.
 #'
 #' @export
 #' @importFrom R6 R6Class
-#' @rdname landrfsContext-class
-landrfsContext <- R6::R6Class(
-  "landrfsContext",
+#' @rdname onnrvContext-class
+onnrvContext <- R6::R6Class(
+  "onnrvContext",
   inherit = projContext,
 
   public = list(
@@ -42,8 +42,11 @@ landrfsContext <- R6::R6Class(
     #'
     #' @param climateSSP Numeric CMIP climate scenario SSP. E.g., `370` or `585`.
     #'
-    #' @param mode Character string. One of 'development', 'postprocess', or 'production'.
-    #'             If 'development', may also include 'fit' (e.g., `c('development', 'fit)`).
+    #' @param mode Character string. One of 'production', 'development', or 'postprocess',
+    #'             May also include 'fit' (e.g., `c('development', 'fit')`).
+    #'
+    #' @param nrvType Character string specifying 'hrv' for historic,
+    #'                or 'frv' for future range of variability.
     #'
     #' @param rep Integer denoting the replicate ID for the current run.
     #'
@@ -52,8 +55,10 @@ landrfsContext <- R6::R6Class(
     #'
     #' @param studyAreaName Character string identifying a study area.
     #'
-    initialize = function(projectPath, climateGCM = NA_character_, climateSSP = NA_character_,
-                          mode = "development", rep = 1L, res = 250, studyAreaName = NA_character_) {
+    initialize = function(projectPath, mode = "development",
+                          climateGCM = NA_character_, climateSSP = NA_integer_,
+                          nrvType = "hrv",
+                          rep = 1L, res = 250, studyAreaName = NA_character_) {
       stopifnot(
         res %in% c(125, 250)
       )
@@ -61,16 +66,17 @@ landrfsContext <- R6::R6Class(
       private[[".pixelSize"]] <- res
       private[[".projectPath"]] <- normPath(projectPath)
 
-      self$machine <- Sys.info()[["nodename"]]
-      self$user <- Sys.info()[["user"]]
+      self$machine <- machine()
+      self$user <- user()
 
       self$mode <- mode
       self$climateGCM <- climateGCM
       self$climateSSP <- climateSSP
+      self$nrvType <- nrvType
       self$rep <- rep
       self$studyAreaName <- studyAreaName ## will set studyAreaHash
 
-      self$runName <- .landrfsRunName(self)
+      self$runName <- .onnrvRunName(self)
 
       return(invisible(self))
     },
@@ -87,6 +93,7 @@ landrfsContext <- R6::R6Class(
         rep = self$rep,
         climateGCM = self$climateGCM,
         climateSSP = self$climateSSP,
+        nrvType = self$nrvType,
         pixelSize = self$pixelSize,
         runName = self$runName
       )
@@ -102,14 +109,13 @@ landrfsContext <- R6::R6Class(
   active = list(
     #' @field mode  Character string giving the project run mode.
     #'              One of 'development', 'postprocess', or 'production'.
-    #'              May also include 'fit' (e.g., `c('development', 'fit')`),
-    #'              and one of 'frv' or 'hrv' for future and hisotric range of variability studies.
+    #'              May also include 'fit' (e.g., `c('development', 'fit')`).
     mode = function(value) {
       if (missing(value)) {
         return(private[[".mode"]])
       } else {
         stopifnot(
-          all(tolower(value) %in% c("development", "fit", "frv", "hrv", "postprocess", "production"))
+          all(tolower(value) %in% c("development", "fit", "postprocess", "production"))
         )
         private[[".mode"]] <- tolower(value)
 
@@ -126,7 +132,27 @@ landrfsContext <- R6::R6Class(
         return(private[[".climateGCM"]])
       } else {
         private[[".climateGCM"]] <- value
-        self$runName <- .landrfsRunName(self)
+        self$runName <- .onnrvRunName(self)
+      }
+    },
+
+    #' @field nrvType Character string specifying 'hrv' for historic
+    #'                or 'frv' for future range of variability.
+    nrvType = function(value) {
+      if (missing(value)) {
+        return(private[[".nrvType"]])
+      } else {
+        value <- tolower(value)
+        stopifnot(value %in% c("hrv", "frv"))
+
+        if (value == "frv") {
+          if (is.na(self$climateGCM) || is.na(self$climateSSP)) {
+            stop("climateGCM and climateSSP must be specified for FRV runs")
+          }
+        }
+
+        private[[".nrvType"]] <- value
+        self$runName <- .onnrvRunName(self)
       }
     },
 
@@ -135,8 +161,8 @@ landrfsContext <- R6::R6Class(
       if (missing(value)) {
         return(private[[".climateSSP"]])
       } else {
-        private[[".climateSSP"]] <- value
-        self$runName <- .landrfsRunName(self)
+        private[[".climateSSP"]] <- as.integer(value)
+        self$runName <- .onnrvRunName(self)
       }
     },
 
@@ -147,7 +173,7 @@ landrfsContext <- R6::R6Class(
       } else {
         stopifnot(value %in% c(125, 250))
         private[[".pixelSize"]] <- value
-        self$runName <- .landrfsRunName(self)
+        self$runName <- .onnrvRunName(self)
       }
     },
 
@@ -160,7 +186,7 @@ landrfsContext <- R6::R6Class(
           warning("unable to set context$rep because context$mode is 'postprocess'")
         } else {
           private[[".rep"]] <- as.integer(value)
-          self$runName <- .landrfsRunName(self)
+          self$runName <- .onnrvRunName(self)
         }
       }
     },
@@ -171,7 +197,7 @@ landrfsContext <- R6::R6Class(
         return(private[[".studyAreaName"]])
       } else {
         private[[".studyAreaName"]] <- value
-        self$runName <- .landrfsRunName(self)
+        self$runName <- .onnrvRunName(self)
       }
     }
   ),
@@ -179,14 +205,15 @@ landrfsContext <- R6::R6Class(
   private = list(
     .climateGCM = NA_character_,
     .climateSSP = NA_integer_,
+    .nrvType = "hrv",
     .pixelSize = 125,
     .studyAreaHash = NA_character_
   )
 )
 
-#' LandR-fireSense project configuration class
+#' Ontario NRV project configuration class
 #'
-#' This extends the `projConfig` class by setting various LandR-fireSense config defaults,
+#' This extends the `projConfig` class by setting various Ontario NRV config defaults,
 #' and implements custom validation and finalizer methods.
 #'
 #' @note See note in `?projConfig` describing the list-update mechanism of assignment to
@@ -194,13 +221,12 @@ landrfsContext <- R6::R6Class(
 #'
 #' @export
 #' @importFrom R6 R6Class
-#' @importFrom tools R_user_dir
-#' @rdname landrfsConfig-class
-landrfsConfig <- R6::R6Class(
-  "landrfsConfig",
+#' @rdname onnrvConfig-class
+onnrvConfig <- R6::R6Class(
+  "onnrvConfig",
   inherit = projConfig,
   public = list(
-    #' @description Create an new `landrfsConfig` object
+    #' @description Create an new `onnrvConfig` object
     #'
     #' @param projectName character string of length 1 giving the name of the project.
     #'
@@ -211,7 +237,7 @@ landrfsConfig <- R6::R6Class(
     initialize = function(projectName, projectPath, ...) {
       dots <- list(...)
 
-      self$context <- landrfsContext$new(projectPath = projectPath, ...)
+      self$context <- onnrvContext$new(projectPath = projectPath, ...)
 
       ## do paths first as these may be used below
       # paths ---------------------------------------------------------------------------------------
@@ -240,7 +266,7 @@ landrfsConfig <- R6::R6Class(
           slackChannel = ""
         ),
         reupload = FALSE,
-        useCache = FALSE,
+        useCache = FALSE, ## simulation caching
         useLandR.CS = TRUE,
         usePrerun = TRUE
       )
@@ -279,6 +305,11 @@ landrfsConfig <- R6::R6Class(
         future.plan = "callr",
         LandR.assertions = TRUE,
         LandR.verbose = 1,
+        map.dataPath = self$paths$inputPath, # not used yet
+        map.maxNumCores = pemisc::optimalClusterNum(20000, parallel::detectCores() / 2),
+        map.overwrite = TRUE,
+        map.tilePath = FALSE, ## TODO: use self$paths$tilePath once parallel tile creation works
+        map.useParallel = TRUE, ## TODO: streamline useParallel: used directly for post-processing
         rasterMaxMemory = 5e+12,
         rasterTmpDir = normPath(file.path(self$paths[["scratchPath"]], "raster")),
         reproducible.cacheSaveFormat = "rds", ## can be "qs" or "rds"
@@ -311,11 +342,14 @@ landrfsConfig <- R6::R6Class(
       # parameters ---------------------------------------------------------------------------------
       private[[".params_full"]] <- list(
         .globals = list(
-          fireTimestep = 1L,
-          initialB = NA,
+          fireTimestep = 1L, ## TODO: where is this used?
+          initialB = 10, ## NA
           reps = 1L:10L,
           sppEquivCol = "LandR",
           successionTimestep = 10,
+          summaryInterval = 50,
+          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end), ## TODO: confirm
+          vegLeadingProportion = 0.8,
           .plotInitialTime = self$args$simYears$start,
           .plots = c("object", "png", "raw", "screen"),
           .sslVerify = 0L, ## TODO: temporary to deal with NFI server SSL issues
@@ -325,6 +359,7 @@ landrfsConfig <- R6::R6Class(
         Biomass_borealDataPrep = list(
           biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
                                             (logAge + cover | ecoregionGroup))),
+          dataYear = 2011,
           ecoregionLayerField = "ECOREGION", # "ECODISTRIC"
           exportModels = "all",
           fixModelBiomass = TRUE,
@@ -340,26 +375,28 @@ landrfsConfig <- R6::R6Class(
           subsetDataAgeModel = 100,
           subsetDataBiomassModel = 100,
           useCloudCacheForStats = FALSE, ## TODO: re-enable once errors in species levels resolved
-          .plotInitialTime = self$args$simYears$start, ## sim(start)
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_core = list(
           growthAndMortalityDrivers = ifelse(isTRUE(self$args[["useLandR.CS"]]), "LandR.CS", "LandR"),
           growthInitialTime = self$args$simYears$start, ## start(sim)
+          initialBiomassSource = "cohortData",
+          seedingAlgorithm = "wardDispersal",
           vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
           .maxMemory = if (format(pemisc::availableMemory(), units = "GiB") > 130) 5 else 2, ## GB
-          .plotInitialTime = self$args$simYears$start, ## sim(start)
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_regeneration = list(
-          fireInitialTime = self$args$simYears$start + 1, ## start(sim, "year") + 1
-          .plotInitialTime = self$args$simYears$start, ## sim(start)
+          fireInitialTime = self$args$simYears$start + 1, ## start(sim) + 1
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_speciesData = list(
-          dataYear = self$args$simYears$start,
+          dataYear = 2011,
           types = "KNN",
-          .plotInitialTime = self$args$simYears$start, ## sim(start)
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = c(".inputObjects", "init")
         ),
         Biomass_speciesFactorial = list(
@@ -388,7 +425,7 @@ landrfsConfig <- R6::R6Class(
           plotIgnitions = FALSE,
           whichModulesToPrepare = c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict"),
           .plotInterval = NA,
-          .runInitialTime = self$args$simYears$start ## sim(start)
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_dataPrepFit = list(
           fireYears = 2001:2022,
@@ -404,13 +441,13 @@ landrfsConfig <- R6::R6Class(
         fireSense_dataPrepPredict = list(
           nonForestCanBeYoungAge = TRUE,
           whichModulesToPrepare = c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict"),
-          .runInitialTime = self$args$simYears$start ## sim(start)
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_EscapeFit = list(
           ##
         ),
         fireSense_EscapePredict = list(
-          .runInitialTime = self$args$simYears$start ## sim(start)
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_IgnitionFit = list(
           # iterDEoptim = 300, ## default: 500
@@ -420,7 +457,7 @@ landrfsConfig <- R6::R6Class(
           .useCache = "run"
         ),
         fireSense_IgnitionPredict = list(
-          .runInitialTime = self$args$simYears$start ## sim(start)
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_SpreadFit = list(
           cloudFolderID_DE = self$args$cloud$cacheDir,
@@ -447,11 +484,11 @@ landrfsConfig <- R6::R6Class(
           .plotSize = list(height = 1600, width = 2000)
         ),
         fireSense_SpreadPredict = list(
-          .runInitialTime = self$args$simYears$start ## sim(start)
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         gmcsDataPrep = list(
           doPlotting = TRUE,
-          yearOfFirstClimateImpact = self$args$simYears$start ## sim(start)
+          yearOfFirstClimateImpact = self$args$simYears$start ## start(sim)
         )
       )
 
@@ -460,13 +497,10 @@ landrfsConfig <- R6::R6Class(
       invisible(self)
     },
 
-    #' @description Update a `landrfsConfig` object from its context.
+    #' @description Update a `onnrvConfig` object from its context.
     #'              Must be called anytime the context is updated.
     update = function() {
       self$params <- list(
-        Biomass_core = list(
-          growthAndMortalityDrivers = ifelse(isTRUE(self$args[["useLandR.CS"]]), "LandR.CS", "LandR")
-        ),
         fireSense_SpreadFit = list(
           NP = length(self$params$fireSense_SpreadFit$cores)
         )
@@ -479,26 +513,19 @@ landrfsConfig <- R6::R6Class(
             useCloud = FALSE ## TODO: cloudCache spams Google Drive folder; doesn't respect drive path
           ),
           delayStart = if ("production" %in% self$context[["mode"]]) delay_rnd(5L:15L) else 0L, # 5-15 minutes
-          successionTimestep = 10
+          successionTimestep = 10,
+          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end), ## TODO: confirm; remove from args; used in params
+          summaryInterval = 50 ## TODO: remove from args; used in params
         )
 
         self$params <- list(
           .globals = list(
-            .plots = c("png") ## don't plot to screen; saving obj/raw is very slow
+            .plots = c("png") ## don't plot to screen; saving ggplot/raw is very slow
           )
         )
-
-        if ("hrv" %in% self$context[["mode"]]) {
-          self$params <- list(
-            canClimateData = list(
-              projectedFireYears = 1501:2000, ## TODO: not real calendar years!
-              projectedType = "hindcast"
-            )
-          )
-        }
       } else if ("postprocess" %in% self$context[["mode"]]) {
         self$modules <- list("Biomass_summary", "fireSense_summary",
-                             "bird_BRT")
+                             "birds_BRT", "NRV_summary")
 
         self$params <- list(
           .globals = list(
@@ -507,20 +534,10 @@ landrfsConfig <- R6::R6Class(
           Biomass_summary = list(
             ## TODO
           ),
-          bird_BRT = list(
+          birds_BRT = list(
             ## TODO
           ),
           fireSense_summary = list(
-            ## TODO
-          )
-        )
-      }
-
-      if (any(c("frv", "hrv") %in% self$context[["mode"]])) {
-        # self$modules <- c("NRV_summary") ## TODO
-
-        self$params <- list(
-          NRV_summary = list(
             ## TODO
           )
         )
@@ -532,21 +549,45 @@ landrfsConfig <- R6::R6Class(
         spades.moduleCodeChecks = if ("production" %in% self$context[["mode"]]) FALSE else TRUE
       )
 
-      ## study area + run info ----------------------
+      ## NRV type --------------------------------------------------------------
+      if (self$context[["nrvType"]] == "hrv") {
+        self$params <- list(
+          canClimateData = list(
+            projectedFireYears = 1501:2000, ## TODO: not real calendar years!
+            projectedType = "hindcast"
+          ),
+          NRV_summary = list(
+            ## TODO for HRV
+          )
+        )
+      } else {
+        self$params <- list(
+          NRV_summary = list(
+            ## TODO for FRV
+          )
+        )
+      }
+
+      ## TODO: if using frv, need non-NA climateGCM and SSP
+
+      ## study area + run info -------------------------------------------------
       self$params <- list(
         .globals = list(
           .studyAreaName = self$context[["studyAreaName"]]
         ),
         Biomass_borealDataPrep = list(
           pixelGroupBiomassClass = 1000 / (250 / self$context[["pixelSize"]])^2 ## 1000 / mapResFact^2; can be coarse because initial conditions are irrelevant
+        ),
+        Biomass_core = list(
+          growthAndMortalityDrivers = ifelse(isTRUE(self$args[["useLandR.CS"]]), "LandR.CS", "LandR")
         )
       )
 
-      ## paths --------------------------------------
+      ## paths -----------------------------------------------------------------
       self$paths <- list(
-        logPath = file.path(updateOutputPath(self, .landrfsRunName), "log"),
-        outputPath = updateOutputPath(self, .landrfsRunName),
-        tilePath = file.path(updateOutputPath(self, .landrfsRunName), "tiles")
+        logPath = file.path(updateOutputPath(self, .onnrvRunName), "log"),
+        outputPath = updateOutputPath(self, .onnrvRunName),
+        tilePath = file.path(updateOutputPath(self, .onnrvRunName), "tiles")
       )
 
       return(invisible(self))
