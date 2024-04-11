@@ -11,9 +11,16 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 ## allow setting run context info from outside this script (e.g., bash script) ----------------
 
 if (exists(".mode", .GlobalEnv)) {
-  stopifnot(all(.mode %in% c("development", "fit", "frv", "hrv", "postprocess", "production")))
+  stopifnot(all(.mode %in% c("development", "fit", "postprocess", "production")))
 } else {
-  .mode <- if (interactive()) c("development", "hrv") else c("production", "hrv")
+  .mode <- if (interactive()) "development" else "production"
+}
+
+if (exists(".nrvType", .GlobalEnv)) {
+  .nrvType <- tolower(.nrvType)
+  stopifnot(.nrvType %in% c("hrv", "frv"))
+} else {
+  .nrvType <- tolower("hrv")
 }
 
 if (exists(".climateGCM", .GlobalEnv)) {
@@ -73,10 +80,10 @@ options(
 ## TODO: implement exptTbl stuff to pass values to config
 
 box::use(box/prjcfg)
-config <- prjcfg$landrfsConfig$new(
+config <- prjcfg$onnrvConfig$new(
   projectName = "LandRfS", projectPath = prjDir,
   climateGCM = .climateGCM, climateSSP = .climateSSP,
-  mode = .mode, rep = .rep, res = .res,
+  mode = .mode, nrvType = .nrvType, rep = .rep, res = .res,
   studyAreaName = .studyAreaName
 )$update()$validate()
 

@@ -26,7 +26,7 @@ dynamicParams <- list(
   fireSense_IgnitionPredict = config$params[["fireSense_IgnitionPredict"]],
   fireSense_SpreadPredict = config$params[["fireSense_SpreadPredict"]],
   gmcsDataPrep = config$params[["gmcsDataPrep"]],
-  historicFires = config$params[["historicFires"]]
+  historicFires = config$params[["historicFires"]] ## TODO: future only
 )
 
 dynamicParams[[".globals"]][["sppEquivCol"]] <- simOutPreamble[["sppEquivCol"]]
