@@ -305,8 +305,12 @@ fSdataPrepParams[["fireSense_dataPrepFit"]][["sppEquivCol"]] <- simOutPreamble[[
 simOutPreamble[["rasterToMatch"]] <- terra::mask(simOutPreamble[["rasterToMatch"]], simOutPreamble[["studyArea"]])
 standAgeMap2001 <- postProcess(biomassMaps2001[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
 standAgeMap2011 <- postProcess(biomassMaps2011[["standAgeMap"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
-rstLCC <- postProcess(biomassMaps2011[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
-rstLCC[] <- as.integer(rstLCC[])
+
+rstLCC2001 <- postProcess(biomassMaps2001[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
+rstLCC2001[] <- as.integer(rstLCC2001[])
+
+rstLCC2011 <- postProcess(biomassMaps2011[["rstLCC"]], rasterToMatch = simOutPreamble[["rasterToMatch"]])
+rstLCC2011[] <- as.integer(rstLCC2011[])
 
 fSdataPrepObjects <- list(
   .runName = config$context[["runName"]],
@@ -319,7 +323,8 @@ fSdataPrepObjects <- list(
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
-  rstLCC = rstLCC,
+  rstLCC2001 = rstLCC2001,
+  rstLCC2011 = rstLCC2011,
   sppEquiv = simOutPreamble[["sppEquiv"]],
   standAgeMap2001 = standAgeMap2001,
   standAgeMap2011 = standAgeMap2011,
