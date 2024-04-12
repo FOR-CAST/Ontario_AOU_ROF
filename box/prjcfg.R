@@ -428,7 +428,7 @@ onnrvConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_dataPrepFit = list(
-          fireYears = 2001:2022,
+          fireYears = 2002:2022,
           igAggFactor = 10000 / self$context$pixelSize,
           ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
           spreadFuelClassCol = "FuelClass", ## TODO: use improved classification

@@ -389,4 +389,4 @@ if (isTRUE(upload_fSsimDataPrep)) {
   source("R/upload_fSDatPrepFit_vegCoeffs.R") ## TODO: add to the module
 }
 
-rm(rstLCC, standAgeMap2001, standAgeMap2011)
+rm(rstLCC2001, rstLCC2011, standAgeMap2001, standAgeMap2011)
