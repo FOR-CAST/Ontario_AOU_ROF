@@ -444,7 +444,7 @@ onnrvConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_EscapeFit = list(
-          ##
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_EscapePredict = list(
           .runInitialTime = self$args$simYears$start ## start(sim)
@@ -453,6 +453,7 @@ onnrvConfig <- R6::R6Class(
           # iterDEoptim = 300, ## default: 500
           rescalers = NULL,
           rescaleVars = TRUE,
+          .runInitialTime = self$args$simYears$start, ## start(sim)
           .studyAreaName = self$context$studyAreaName,
           .useCache = "run"
         ),
@@ -481,7 +482,8 @@ onnrvConfig <- R6::R6Class(
           verbose = TRUE,
           visualizeDEoptim = FALSE,
           .plot = FALSE, # TRUE,
-          .plotSize = list(height = 1600, width = 2000)
+          .plotSize = list(height = 1600, width = 2000),
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_SpreadPredict = list(
           .runInitialTime = self$args$simYears$start ## start(sim)

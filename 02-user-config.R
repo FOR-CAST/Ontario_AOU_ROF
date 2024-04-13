@@ -2,6 +2,10 @@
 
 .fitUsing <- if (grepl("for-cast[.]ca", .nodename)) 4 else 0
 
+if (grepl("picea[.]for-cast[.]ca", .nodename)) {
+  .fitUsing <- 2
+}
+
 config.user <- switch(
   .user,
 
