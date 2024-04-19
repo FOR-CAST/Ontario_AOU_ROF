@@ -1208,13 +1208,13 @@
     },
     "climateData": {
       "Package": "climateData",
-      "Version": "2.0.4",
+      "Version": "2.0.5",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
       "RemoteRef": "development",
-      "RemoteSha": "8e552a85c7efc7f5b5afb1f449e685fa54842b13",
+      "RemoteSha": "88d556c966df30a28d1070109e7fb093a684ea45",
       "RemoteHost": "api.github.com",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
@@ -1235,7 +1235,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "da63fbf4837014dc20821ca3ae1a8cdc"
+      "Hash": "36369101e8e5240b3884e22b8a5e00cf"
     },
     "clipr": {
       "Package": "clipr",
