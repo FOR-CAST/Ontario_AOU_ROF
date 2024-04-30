@@ -326,7 +326,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
-        spades.allowInitDuringSimInit = TRUE,
+        spades.allowInitDuringSimInit = FALSE,
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
