@@ -326,7 +326,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
-        spades.allowInitDuringSimInit = TRUE,
+        spades.allowInitDuringSimInit = FALSE,
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
@@ -417,6 +417,7 @@ onnrvConfig <- R6::R6Class(
           climateGCM = self$context$climateGCM,
           climateSSP = self$context$climateSSP,
           historicalFireYears = 1971:2022, ## TODO: using more years for sampling
+          outputDir = file.path(dirname(self$paths$outputPath), "climate"), ## outputs/studyArea/climate
           projectedType = "forecast",
           studyAreaName = self$context$studyAreaName,
           .useCache = FALSE ## c(".inputObjects", "init")
@@ -444,7 +445,7 @@ onnrvConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_EscapeFit = list(
-          ##
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_EscapePredict = list(
           .runInitialTime = self$args$simYears$start ## start(sim)
@@ -453,6 +454,7 @@ onnrvConfig <- R6::R6Class(
           # iterDEoptim = 300, ## default: 500
           rescalers = NULL,
           rescaleVars = TRUE,
+          .runInitialTime = self$args$simYears$start, ## start(sim)
           .studyAreaName = self$context$studyAreaName,
           .useCache = "run"
         ),
@@ -481,7 +483,8 @@ onnrvConfig <- R6::R6Class(
           verbose = TRUE,
           visualizeDEoptim = FALSE,
           .plot = FALSE, # TRUE,
-          .plotSize = list(height = 1600, width = 2000)
+          .plotSize = list(height = 1600, width = 2000),
+          .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_SpreadPredict = list(
           .runInitialTime = self$args$simYears$start ## start(sim)

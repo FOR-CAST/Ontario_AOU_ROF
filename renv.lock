@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -1210,14 +1210,14 @@
     },
     "climateData": {
       "Package": "climateData",
-      "Version": "2.0.6",
+      "Version": "2.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
       "RemoteRef": "development",
-      "RemoteSha": "1865b10242c4b6a5c93a5b02a99bfdd74e863a74",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "377dd48eb0cc2b6252c0534d58c5cb0e4e2eb5b1",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "DBI",
@@ -1237,7 +1237,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "516c7b0810cabca26d7773502da32947"
+      "Hash": "07b465f4849c8cf2f78a5f38ace4c2a8"
     },
     "clipr": {
       "Package": "clipr",

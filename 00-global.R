@@ -48,7 +48,7 @@ if (exists(".res", .GlobalEnv)) {
 }
 
 if (!exists(".studyAreaName", .GlobalEnv)) {
-  .studyAreaName <- "ON_AOU_5" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
+  .studyAreaName <- "ON_AOU_1" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
   #.studyAreaName <- "ON_ROF_5" ## FRTs in ROF: 1, 5 (small parts of 2)
   #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
   #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
@@ -150,6 +150,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
   source("07-allDataPrep.R")
 
   if ("fit" %in% config$context[["mode"]]) {
+    config$params[[".globals"]][["reps"]] <- 1 ## TODO: testing only
     for (i in config$params[[".globals"]][["reps"]]) {
       config$context[["rep"]] <- i
       config$update()$validate()
