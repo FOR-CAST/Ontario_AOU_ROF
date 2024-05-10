@@ -133,14 +133,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.0.9083",
+      "Version": "1.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
-      "RemoteRef": "a2a90057c07d7c26c2158c97f1cba79490160697",
-      "RemoteSha": "a2a90057c07d7c26c2158c97f1cba79490160697",
+      "RemoteRef": "development",
+      "RemoteSha": "2cc96617a940662c35d97bb2b6178d88c1e30f46",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -170,7 +170,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "f85f49eca55801e21e8497dbba61d5d3"
+      "Hash": "d99ee71c5d0b760aeec7932cc48190a2"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -513,14 +513,14 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.0.4.9007",
+      "Version": "2.0.5.9008",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
       "RemoteRef": "sequentialCaching",
-      "RemoteSha": "88ad63d85a26185ba03441faaf3bb4600dc57ff4",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "4fbfefe469f936d2efa1f4f192ffdee5d1e19d2e",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@modsForLargeArchives",
       "Requirements": [
         "R",
@@ -539,7 +539,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "8142de8bdcd0a5dc6043d0ae0bc71227"
+      "Hash": "6754156fe6538a237477fbd0b9aa5aaf"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
@@ -611,14 +611,14 @@
     },
     "SpaDES.tools": {
       "Package": "SpaDES.tools",
-      "Version": "2.0.4.9002",
+      "Version": "2.0.6.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.tools",
-      "RemoteRef": "84711a47adab87e34e3d2f05f5998d545605b7f5",
-      "RemoteSha": "84711a47adab87e34e3d2f05f5998d545605b7f5",
+      "RemoteRef": "development",
+      "RemoteSha": "ef6ec116378e296bdb5ed09e9d42d50cd47ad90a",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
@@ -634,7 +634,7 @@
         "stats",
         "terra"
       ],
-      "Hash": "c9a99290d541e8b6d972f9156efcc103"
+      "Hash": "ef27f78290e0145a929014612a2dca1d"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -3753,24 +3753,19 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "utils"
-      ],
-      "Hash": "32c3f93e8360f667ca5863272ec8ba6a"
+      "Version": "1.0.7",
+      "Source": "Repository"
     },
     "reproducible": {
       "Package": "reproducible",
-      "Version": "2.0.10.9018",
+      "Version": "2.0.12.9011",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "0f469588bb7ffd67455c62dd78202bec5a0cbfa6",
-      "RemoteSha": "0f469588bb7ffd67455c62dd78202bec5a0cbfa6",
+      "RemoteRef": "modsForLargeArchives",
+      "RemoteSha": "52f4d36aa912d93ea044a7b7662089a12eccbe66",
       "Requirements": [
         "R",
         "data.table",
@@ -3783,7 +3778,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "3002d437b085490c366243d602714118"
+      "Hash": "5fa940c479842deaf23dcb3f1b39897b"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -4864,16 +4859,17 @@
     },
     "workflowtools": {
       "Package": "workflowtools",
-      "Version": "0.0.2",
+      "Version": "0.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "FOR-CAST",
       "RemoteRepo": "workflowtools",
       "RemoteRef": "main",
-      "RemoteSha": "850581b88d83e61df5d04a602aba02fe7c211cb6",
+      "RemoteSha": "42b5d68ac144039d6b4ccbda44c5c1adfb57e736",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
+        "cli",
         "data.table",
         "details",
         "dplyr",
@@ -4882,13 +4878,15 @@
         "googledrive",
         "httr",
         "methods",
+        "remotes",
         "rprojroot",
         "sessioninfo",
         "sf",
+        "stats",
         "usethis",
         "utils"
       ],
-      "Hash": "bf2f0ac908b945ae4395a6a5a4286032"
+      "Hash": "692b1d18b8ac454bf37b02ca8ba3e1e5"
     },
     "xfun": {
       "Package": "xfun",
