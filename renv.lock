@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.0.9083",
+      "Version": "1.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
-      "RemoteRef": "lccFix",
-      "RemoteSha": "7c9af1d758978518939eaa1f0a1d5922f7f07a21",
-      "RemoteHost": "api.github.com",
+      "RemoteRef": "development",
+      "RemoteSha": "2cc96617a940662c35d97bb2b6178d88c1e30f46",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "f40e928906ddf3c93327e6b989367bb2"
+      "Hash": "d99ee71c5d0b760aeec7932cc48190a2"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -514,14 +514,14 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.0.4.9007",
+      "Version": "2.0.5.9008",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
       "RemoteRef": "sequentialCaching",
-      "RemoteSha": "5cb2ec0506fd6b91156ccf237ca671746d74c997",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "4fbfefe469f936d2efa1f4f192ffdee5d1e19d2e",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@modsForLargeArchives",
       "Requirements": [
         "R",
@@ -540,7 +540,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "22c01055e74a285498ea9f3b889b5681"
+      "Hash": "6754156fe6538a237477fbd0b9aa5aaf"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
@@ -618,8 +618,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.tools",
-      "RemoteRef": "rasterizeReduced",
-      "RemoteSha": "169480f204246a218e78825940a5ee0f8459b363",
+      "RemoteRef": "development",
+      "RemoteSha": "ef6ec116378e296bdb5ed09e9d42d50cd47ad90a",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
@@ -635,7 +635,7 @@
         "stats",
         "terra"
       ],
-      "Hash": "2a48d429de969bb97125d9f8e37287fe"
+      "Hash": "ef27f78290e0145a929014612a2dca1d"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -3856,14 +3856,14 @@
     },
     "reproducible": {
       "Package": "reproducible",
-      "Version": "2.0.10.9018",
+      "Version": "2.0.12.9011",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "0f469588bb7ffd67455c62dd78202bec5a0cbfa6",
-      "RemoteSha": "0f469588bb7ffd67455c62dd78202bec5a0cbfa6",
+      "RemoteRef": "modsForLargeArchives",
+      "RemoteSha": "52f4d36aa912d93ea044a7b7662089a12eccbe66",
       "Requirements": [
         "R",
         "data.table",
@@ -3876,7 +3876,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "3002d437b085490c366243d602714118"
+      "Hash": "5fa940c479842deaf23dcb3f1b39897b"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -5030,13 +5030,13 @@
     },
     "workflowtools": {
       "Package": "workflowtools",
-      "Version": "0.0.3.9000",
+      "Version": "0.0.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "FOR-CAST",
       "RemoteRepo": "workflowtools",
       "RemoteRef": "main",
-      "RemoteSha": "fbcb73767905892cb944dbda7413e408f78be058",
+      "RemoteSha": "42b5d68ac144039d6b4ccbda44c5c1adfb57e736",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
@@ -5053,10 +5053,11 @@
         "rprojroot",
         "sessioninfo",
         "sf",
+        "stats",
         "usethis",
         "utils"
       ],
-      "Hash": "e49470628cc8ccfc34bee2cd779cedaa"
+      "Hash": "692b1d18b8ac454bf37b02ca8ba3e1e5"
     },
     "xfun": {
       "Package": "xfun",

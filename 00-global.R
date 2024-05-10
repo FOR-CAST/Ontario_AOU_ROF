@@ -75,6 +75,8 @@ options(
   repos = c(CRAN = "https://cloud.r-project.org")
 )
 
+workflowtools::check_project_packages(prjDir)
+
 # configure project ---------------------------------------------------------------------------
 
 ## TODO: implement exptTbl stuff to pass values to config
