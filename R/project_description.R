@@ -12,5 +12,6 @@ workflowtools::description(
     Language = "en-CA",
     License = "GPL-3",
     Depends = "R (== 4.3)"
-  )
+  ),
+  snapshot = "renv.lock"
 )
