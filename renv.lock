@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.1",
+      "Version": "1.1.1.9001",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "development",
-      "RemoteSha": "2cc96617a940662c35d97bb2b6178d88c1e30f46",
+      "RemoteSha": "905fabad87f69a20f8046b2361dca98725b19d44",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "d99ee71c5d0b760aeec7932cc48190a2"
+      "Hash": "502e53505d780b33b9c417e4ad8fb1cb"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -514,19 +514,19 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.0.5.9008",
+      "Version": "2.0.5.9027",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
-      "RemoteRef": "sequentialCaching",
-      "RemoteSha": "4fbfefe469f936d2efa1f4f192ffdee5d1e19d2e",
-      "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@modsForLargeArchives",
+      "RemoteRef": "7d3fa600296603e8dfeb1e4997e607b7a72b5577",
+      "RemoteSha": "7d3fa600296603e8dfeb1e4997e607b7a72b5577",
+      "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
         "Require",
-        "crayon",
+        "cli",
         "data.table",
         "fs",
         "igraph",
@@ -537,10 +537,11 @@
         "reproducible",
         "stats",
         "terra",
+        "tools",
         "utils",
         "whisker"
       ],
-      "Hash": "6754156fe6538a237477fbd0b9aa5aaf"
+      "Hash": "12c9c845b024a63f887b8a4c754f0121"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
@@ -612,14 +613,14 @@
     },
     "SpaDES.tools": {
       "Package": "SpaDES.tools",
-      "Version": "2.0.6.9000",
+      "Version": "2.0.7.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.tools",
       "RemoteRef": "development",
-      "RemoteSha": "ef6ec116378e296bdb5ed09e9d42d50cd47ad90a",
+      "RemoteSha": "a8d263c924098fd472d17c0e44ccbbdadc64fef2",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
@@ -635,7 +636,7 @@
         "stats",
         "terra"
       ],
-      "Hash": "ef27f78290e0145a929014612a2dca1d"
+      "Hash": "4e6181a41334c688c89b94fcd8ac8407"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -1209,14 +1210,14 @@
     },
     "climateData": {
       "Package": "climateData",
-      "Version": "2.2.0",
+      "Version": "2.2.1",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "climateData",
       "RemoteRef": "development",
-      "RemoteSha": "377dd48eb0cc2b6252c0534d58c5cb0e4e2eb5b1",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "d4f076c11d5cc57f800bd6dac96006cacd96a2e6",
       "Remotes": "PredictiveEcology/reproducible@development",
       "Requirements": [
         "DBI",
@@ -1225,6 +1226,7 @@
         "data.table",
         "dplyr",
         "fs",
+        "future.apply",
         "methods",
         "parallel",
         "parallelly",
@@ -1236,7 +1238,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "07b465f4849c8cf2f78a5f38ace4c2a8"
+      "Hash": "be4e1197d00d03ddb206d4f7c44b471d"
     },
     "clipr": {
       "Package": "clipr",
@@ -1722,14 +1724,14 @@
     },
     "fireSenseUtils": {
       "Package": "fireSenseUtils",
-      "Version": "0.0.5.9067",
+      "Version": "0.0.5.9068",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "fireSenseUtils",
       "RemoteRef": "development",
-      "RemoteSha": "2661c791ac6ebde068b3b87bd2498fa343d56408",
+      "RemoteSha": "e5993f0fa2ee9e2df00d8eb231e16acfd1935eea",
       "Remotes": "PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development, PredictiveEcology/Require@development, PredictiveEcology/reproducible@development",
       "Requirements": [
         "DEoptim",
@@ -1757,7 +1759,7 @@
         "terra",
         "utils"
       ],
-      "Hash": "92f8f97bea29ec54c08f7db35ee8dc8f"
+      "Hash": "a6124a860a72c90738378aa28a0a139a"
     },
     "fontawesome": {
       "Package": "fontawesome",
@@ -2057,6 +2059,35 @@
         "zip"
       ],
       "Hash": "f70d3fe2d9e7654213a946963d1591eb"
+    },
+    "ggforce": {
+      "Package": "ggforce",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "Rcpp",
+        "RcppEigen",
+        "cli",
+        "ggplot2",
+        "grDevices",
+        "grid",
+        "gtable",
+        "lifecycle",
+        "polyclip",
+        "rlang",
+        "scales",
+        "stats",
+        "systemfonts",
+        "tidyselect",
+        "tweenr",
+        "utils",
+        "vctrs",
+        "withr"
+      ],
+      "Hash": "384b388bd9155468d2c851846ee69f9f"
     },
     "ggplot2": {
       "Package": "ggplot2",
@@ -3184,6 +3215,39 @@
       ],
       "Hash": "996ad9f3ed5d1ad4fba1c9d85085bf9e"
     },
+    "nrvtools": {
+      "Package": "nrvtools",
+      "Version": "0.0.13",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "FOR-CAST",
+      "RemoteRepo": "nrvtools",
+      "RemoteRef": "main",
+      "RemoteSha": "9a5d4224812a4c054bd949b35dd0f120f235685e",
+      "Remotes": "PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.tools@development",
+      "Requirements": [
+        "SpaDES.tools",
+        "assertthat",
+        "data.table",
+        "dplyr",
+        "future.apply",
+        "ggforce",
+        "ggplot2",
+        "landscapemetrics",
+        "methods",
+        "pemisc",
+        "purrr",
+        "qs",
+        "raster",
+        "sf",
+        "stats",
+        "terra",
+        "tools",
+        "utils"
+      ],
+      "Hash": "e416c6c078a0a6cce73d57562f6919b8"
+    },
     "numDeriv": {
       "Package": "numDeriv",
       "Version": "2016.8-1.1",
@@ -3766,14 +3830,14 @@
     },
     "reproducible": {
       "Package": "reproducible",
-      "Version": "2.0.12.9011",
+      "Version": "2.0.12.9019",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "modsForLargeArchives",
-      "RemoteSha": "52f4d36aa912d93ea044a7b7662089a12eccbe66",
+      "RemoteRef": "development",
+      "RemoteSha": "d1a467a09bf37bae5de30d94796e54813f7b51ee",
       "Requirements": [
         "R",
         "data.table",
@@ -3786,7 +3850,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "5fa940c479842deaf23dcb3f1b39897b"
+      "Hash": "d0b90f5fcd62a12eec6c6f8cc5e4f0de"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -4667,6 +4731,21 @@
         "stats"
       ],
       "Hash": "f50614d2145ba1012b62ff75f2129d5b"
+    },
+    "tweenr": {
+      "Package": "tweenr",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cpp11",
+        "farver",
+        "magrittr",
+        "rlang",
+        "vctrs"
+      ],
+      "Hash": "82fac2b73e6a1f3874fc000aaf96d8bc"
     },
     "tzdb": {
       "Package": "tzdb",
