@@ -3,57 +3,6 @@
 if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## GITHUB_PAT, RENV_PATHS_CACHE, TMPDIR, etc.
 if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
 
-.ncores <- min(parallelly::availableCores(constraints = "connections") / 2, 32L)
-
-.nodename <- SpaDES.config::machine()
-.user <- SpaDES.config::user()
-
-## allow setting run context info from outside this script (e.g., bash script) ----------------
-
-if (exists(".mode", .GlobalEnv)) {
-  stopifnot(all(.mode %in% c("development", "fit", "postprocess", "production")))
-} else {
-  .mode <- if (interactive()) "development" else "production"
-}
-
-if (exists(".nrvType", .GlobalEnv)) {
-  .nrvType <- tolower(.nrvType)
-  stopifnot(.nrvType %in% c("hrv", "frv"))
-} else {
-  .nrvType <- tolower("hrv")
-}
-
-if (exists(".climateGCM", .GlobalEnv)) {
-  stopifnot(.climateGCM %in% c("CanESM5", "CNRM-ESM2-1"))
-} else {
-  .climateGCM <- "CanESM5"
-}
-
-if (exists(".climateSSP", .GlobalEnv)) {
-  stopifnot(.climateSSP %in% c(245, 370, 585))
-} else {
-  .climateSSP <- 370
-}
-
-if (exists(".rep", .GlobalEnv)) {
-  .rep <- if ("postprocess" %in% .mode) NA_integer_ else as.integer(.rep)
-} else {
-  .rep <- if ("postprocess" %in% .mode) NA_integer_ else 1L
-}
-
-if (exists(".res", .GlobalEnv)) {
-  stopifnot(.res %in% c(125, 250))
-} else {
-  .res <- 250
-}
-
-if (!exists(".studyAreaName", .GlobalEnv)) {
-  .studyAreaName <- "ON_AOU_1" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
-  #.studyAreaName <- "ON_ROF_5" ## FRTs in ROF: 1, 5 (small parts of 2)
-  #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
-  #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
-}
-
 ## packages, paths and options --------------------------------------------------------------------------
 
 library(data.table)
@@ -83,7 +32,7 @@ workflowtools::check_project_packages(prjDir)
 
 box::use(box/prjcfg)
 config <- prjcfg$onnrvConfig$new(
-  projectName = "LandRfS", projectPath = prjDir,
+  projectPath = prjDir,
   climateGCM = .climateGCM, climateSSP = .climateSSP,
   mode = .mode, nrvType = .nrvType, rep = .rep, res = .res,
   studyAreaName = .studyAreaName
@@ -119,7 +68,8 @@ prjPaths <- SpaDES.config::paths4spades(config$paths)
 
 # project options -----------------------------------------------------------------------------
 
-data.table::setDTthreads(1L) ## TODO: why is SpaDES.core / reproducible not setting this correctly?
+## TODO: why is SpaDES.core / reproducible not setting this correctly?
+data.table::setDTthreads(config$params[[".globals"]][[".useParallel"]])
 
 opts <- SpaDES.config::setProjectOptions(config)
 
@@ -136,17 +86,16 @@ if (config$args[["delayStart"]] > 0) {
   Sys.sleep(config$args[["delayStart"]]*60)
 }
 
+if ("fit" %in% config$context[["mode"]]) {
+  config$args[["usePrerun"]] <- FALSE
+  config$args[["reupload"]] <- TRUE
+} else {
+  config$args[["usePrerun"]] <- TRUE
+  config$args[["reupload"]] <- FALSE
+}
+
 if (!"postprocess" %in% config$context[["mode"]]) {
-  if ("fit" %in% config$context[["mode"]]) {
-    config$args[["usePrerun"]] <- FALSE
-    config$args[["reupload"]] <- TRUE
-  } else {
-    config$args[["usePrerun"]] <- TRUE
-    config$args[["reupload"]] <- FALSE
-  }
-
   source("06-studyArea.R")
-
   source("07-allDataPrep.R")
 
   if ("fit" %in% config$context[["mode"]]) {
@@ -189,4 +138,3 @@ cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append =
 
 ## cleanup
 DBI::dbDisconnect(getOption("reproducible.conn"))
-

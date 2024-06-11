@@ -23,7 +23,8 @@ config.user <- switch(
       usePrerun = FALSE
     ),
     options = list(
-      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## can be slow, but sometimes needed
+      LandR.assertions = isTRUE("development" %in% .mode),
+      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## can be slow, but sometime needed
       renv.config.sandbox.enabled = FALSE, ## copying pkgs to sandbox is too slow during cluster setup
       reproducible.cacheSaveFormat = "rds", ## TODO: use qs once Cache is fixed (reproducible#359)
       reproducible.conn = SpaDES.config::dbConnCache("postgresql"),
@@ -31,6 +32,9 @@ config.user <- switch(
       spades.memoryUseInterval = FALSE ## TODO: temp workaround for broken memuse
     ),
     params = list(
+      .globals = list(
+        ##
+      ),
       fireSense_IgnitionFit = list(
         cores = switch(
           .nodename,

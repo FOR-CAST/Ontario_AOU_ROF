@@ -22,6 +22,8 @@ box::use(pemisc[availableMemory])
   return(.runName)
 }
 
+# context -------------------------------------------------------------------------------------
+
 #' Ontario NRV project context class
 #'
 #' This extends the `projContext` class by setting various defaults for Ontario NRV
@@ -53,8 +55,8 @@ onnrvContext <- R6::R6Class(
     #' @param res Numeric indicating the map resolution (pixel size) to use.
     #'            Must be one of 125 or 250 (default).
     #'
-    #' @param studyAreaName Character string identifying a study area.
-    #'
+    #' @param studyAreaName Character string identifying a study area (see `Ontario_preamble`
+    #'                      module for up-to-date descriptions of each study area label).
     initialize = function(projectPath, mode = "development",
                           climateGCM = NA_character_, climateSSP = NA_integer_,
                           nrvType = "hrv",
@@ -136,6 +138,16 @@ onnrvContext <- R6::R6Class(
       }
     },
 
+    #' @field climateSSP Numeric CMIP climate scenario SSP. E.g., `370` or `585`.
+    climateSSP = function(value) {
+      if (missing(value)) {
+        return(private[[".climateSSP"]])
+      } else {
+        private[[".climateSSP"]] <- as.integer(value)
+        self$runName <- .onnrvRunName(self)
+      }
+    },
+
     #' @field nrvType Character string specifying 'hrv' for historic
     #'                or 'frv' for future range of variability.
     nrvType = function(value) {
@@ -152,16 +164,6 @@ onnrvContext <- R6::R6Class(
         }
 
         private[[".nrvType"]] <- value
-        self$runName <- .onnrvRunName(self)
-      }
-    },
-
-    #' @field climateSSP Numeric CMIP climate scenario SSP. E.g., `370` or `585`.
-    climateSSP = function(value) {
-      if (missing(value)) {
-        return(private[[".climateSSP"]])
-      } else {
-        private[[".climateSSP"]] <- as.integer(value)
         self$runName <- .onnrvRunName(self)
       }
     },
@@ -210,6 +212,8 @@ onnrvContext <- R6::R6Class(
     .studyAreaHash = NA_character_
   )
 )
+
+# config --------------------------------------------------------------------------------------
 
 #' Ontario NRV project configuration class
 #'
@@ -280,8 +284,9 @@ onnrvConfig <- R6::R6Class(
         Biomass_speciesData = "Biomass_speciesData",
         Biomass_speciesFactorial = "Biomass_speciesFactorial",
         Biomass_speciesParameters = "Biomass_speciesParameters",
-        # Biomass_summary = "Biomass_summary", ## post-processing
-        # birds_BRT = "birds_BRT", ## post-processing
+        ## Biomass_summary = "Biomass_summary", ## post-processing
+        ## birds_BRT = "birds_BRT", ## post-processing
+        ## burnSummaries = "burnSummaries", ## post-processing
         canClimateData = "canClimateData",
         fireSense = "fireSense",
         fireSense_dataPrepFit = "fireSense_dataPrepFit",
@@ -292,15 +297,15 @@ onnrvConfig <- R6::R6Class(
         fireSense_IgnitionPredict = "fireSense_IgnitionPredict",
         fireSense_SpreadFit = "fireSense_SpreadFit",
         fireSense_SpreadPredict = "fireSense_SpreadPredict",
-        # fireSense_summary = "fireSense_summary", ## post-processing
+        ## fireSense_summary = "fireSense_summary", ## post-processing
         gmcsDataPrep = "gmcsDataPrep"#,
-        # NRV_summary = "NRV_summary ## post-processing
+        ## NRV_summary = "NRV_summary ## post-processing
       )
 
       # options ------------------------------------------------------------------------------------
       private[[".options"]] <- list(
         encoding = "UTF-8",
-        future.availableCores.fallback = parallelly::availableCores(constraints = "connections", omit = 1L),
+        future.availableCores.fallback = parallelly::availableCores(constraints = "connections", omit = 2L),
         future.globals.maxSize = 1000*1024^2, ## 1000 MiB (0.98 GiB)
         future.plan = "callr",
         LandR.assertions = TRUE,
@@ -310,7 +315,7 @@ onnrvConfig <- R6::R6Class(
         map.overwrite = TRUE,
         map.tilePath = FALSE, ## TODO: use self$paths$tilePath once parallel tile creation works
         map.useParallel = TRUE, ## TODO: streamline useParallel: used directly for post-processing
-        rasterMaxMemory = 5e+12,
+        rasterMaxMemory = 5e+9,
         rasterTmpDir = normPath(file.path(self$paths[["scratchPath"]], "raster")),
         reproducible.cacheSaveFormat = "rds", ## can be "qs" or "rds"
         reproducible.conn = dbConnCache("sqlite"), ## "sqlite" or "postgresql"
@@ -326,7 +331,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
-        spades.allowInitDuringSimInit = FALSE,
+        spades.allowInitDuringSimInit = TRUE,
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
@@ -351,16 +356,17 @@ onnrvConfig <- R6::R6Class(
           summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end), ## TODO: confirm
           vegLeadingProportion = 0.8,
           .plotInitialTime = self$args$simYears$start,
-          .plots = c("object", "png", "raw", "screen"),
+          .plots = "png", ## TODO: c("object", "png", "raw", "screen")
           .sslVerify = 0L, ## TODO: temporary to deal with NFI server SSL issues
           .studyAreaName = self$context$studyAreaName,
+          .useCache = FALSE, ## TODO: event caching is broken
           .useParallel = 2 ## doesn't benefit from more DT threads
         ),
         Biomass_borealDataPrep = list(
           biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
                                             (logAge + cover | ecoregionGroup))),
           dataYear = 2011,
-          ecoregionLayerField = "ECOREGION", # "ECODISTRIC"
+          ecoregionLayerField = "ECOREGION", ## "ECODISTRIC"
           exportModels = "all",
           fixModelBiomass = TRUE,
           forestedLCCClasses = 1:6, ## LCC2010 default
@@ -376,42 +382,41 @@ onnrvConfig <- R6::R6Class(
           subsetDataBiomassModel = 100,
           useCloudCacheForStats = FALSE, ## TODO: re-enable once errors in species levels resolved
           .plotInitialTime = self$args$simYears$start, ## start(sim)
-          .useCache = c(".inputObjects", "init")
+          .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_core = list(
           growthAndMortalityDrivers = ifelse(isTRUE(self$args[["useLandR.CS"]]), "LandR.CS", "LandR"),
           growthInitialTime = self$args$simYears$start, ## start(sim)
           initialBiomassSource = "cohortData",
+          mixedType = 2L,
           seedingAlgorithm = "wardDispersal",
           vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
           .maxMemory = if (format(pemisc::availableMemory(), units = "GiB") > 130) 5 else 2, ## GB
           .plotInitialTime = self$args$simYears$start, ## start(sim)
-          .useCache = c(".inputObjects", "init")
+          .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_regeneration = list(
           fireInitialTime = self$args$simYears$start + 1, ## start(sim) + 1
           .plotInitialTime = self$args$simYears$start, ## start(sim)
-          .useCache = c(".inputObjects", "init")
+          .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_speciesData = list(
           dataYear = 2011,
           types = "KNN",
           .plotInitialTime = self$args$simYears$start, ## start(sim)
-          .useCache = c(".inputObjects", "init")
+          .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_speciesFactorial = list(
           factorialSize = "small" ## TODO: use medium?
         ),
         Biomass_speciesParameters = list(
-          constrainGrowthCurve = c(0, 1),
-          constrainMaxANPP = c(3.0, 3.5),
-          constrainMortalityShape = c(10, 25),
-          GAMMiterations = 2,
-          GAMMknots = 3,
-          minimumPlotsPerGamm = 65,
           PSPdataTypes = "all", ## will use all within studyAreaANPP
           quantileAgeSubset = 98,
-          speciesFittingApproach = "focal"
+          speciesFittingApproach = "focal" ## 'pairwise' ?
+        ),
+        burnSummaries = list(
+          simOutPrefix = "simOutMainSim",
+          simTimes = unlist(self$args[["simYears"]])
         ),
         canClimateData = list(
           climateGCM = self$context$climateGCM,
@@ -419,7 +424,7 @@ onnrvConfig <- R6::R6Class(
           historicalFireYears = 1971:2022, ## TODO: using more years for sampling
           outputDir = file.path(dirname(self$paths$outputPath), "climate"), ## outputs/studyArea/climate
           projectedType = "forecast",
-          studyAreaName = self$context$studyAreaName,
+          .studyAreaName = self$context$studyAreaName,
           .useCache = FALSE ## c(".inputObjects", "init")
         ),
         fireSense = list(
@@ -437,7 +442,7 @@ onnrvConfig <- R6::R6Class(
           usePiecewiseRegression = FALSE, ## pw reg is the old approach
           whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit"),
           .studyAreaName = self$context$studyAreaName,
-          .useCache = FALSE # ".inputObjects"
+          .useCache = FALSE # ".inputObjects" ## TODO
         ),
         fireSense_dataPrepPredict = list(
           nonForestCanBeYoungAge = TRUE,
@@ -456,7 +461,7 @@ onnrvConfig <- R6::R6Class(
           rescaleVars = TRUE,
           .runInitialTime = self$args$simYears$start, ## start(sim)
           .studyAreaName = self$context$studyAreaName,
-          .useCache = "run"
+          .useCache = "run" ## TODO
         ),
         fireSense_IgnitionPredict = list(
           .runInitialTime = self$args$simYears$start ## start(sim)
@@ -517,8 +522,8 @@ onnrvConfig <- R6::R6Class(
           ),
           delayStart = if ("production" %in% self$context[["mode"]]) delay_rnd(5L:15L) else 0L, # 5-15 minutes
           successionTimestep = 10,
-          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end), ## TODO: confirm; remove from args; used in params
-          summaryInterval = 50 ## TODO: remove from args; used in params
+          summaryInterval = 50, ## TODO: remove from args; used in params
+          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end) ## TODO: confirm; remove from args; used in params
         )
 
         self$params <- list(
@@ -532,7 +537,8 @@ onnrvConfig <- R6::R6Class(
 
         self$params <- list(
           .globals = list(
-            reps = 1L:10L
+            reps = 1L:10L,
+            .plots = c("png")
           ),
           Biomass_summary = list(
             ## TODO
@@ -542,6 +548,9 @@ onnrvConfig <- R6::R6Class(
           ),
           fireSense_summary = list(
             ## TODO
+          ),
+          NRV_summary = list(
+            postprocessEvents = "on"
           )
         )
       }
@@ -550,6 +559,13 @@ onnrvConfig <- R6::R6Class(
       self$options <- list(
         LandR.assertions = if ("production" %in% self$context[["mode"]]) FALSE else TRUE,
         spades.moduleCodeChecks = if ("production" %in% self$context[["mode"]]) FALSE else TRUE
+      )
+
+      ## args ------------------------------------------------------------------
+      self$params <- list(
+        NRV_summary = list(
+          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end)
+        )
       )
 
       ## NRV type --------------------------------------------------------------
