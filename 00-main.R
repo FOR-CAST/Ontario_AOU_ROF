@@ -3,6 +3,8 @@
 if (file.exists("~/.Renviron")) readRenviron("~/.Renviron") ## GITHUB_PAT, RENV_PATHS_CACHE, TMPDIR, etc.
 if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
 
+source("01-global-vars.R")
+
 ## packages, paths and options --------------------------------------------------------------------------
 
 library(data.table)
