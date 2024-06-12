@@ -422,7 +422,7 @@ onnrvConfig <- R6::R6Class(
           climateGCM = self$context$climateGCM,
           climateSSP = self$context$climateSSP,
           historicalFireYears = 1971:2022, ## TODO: using more years for sampling
-          outputDir = file.path(dirname(self$paths$outputPath), "climate"), ## outputs/studyArea/climate
+          outputDir = file.path(dirname(self$paths[["outputPath"]]), "climate"), ## outputs/studyArea/climate
           projectedType = "forecast",
           .studyAreaName = self$context$studyAreaName,
           .useCache = FALSE ## c(".inputObjects", "init")
@@ -511,6 +511,9 @@ onnrvConfig <- R6::R6Class(
       self$params <- list(
         fireSense_SpreadFit = list(
           NP = length(self$params$fireSense_SpreadFit$cores)
+        ),
+        canClimateData = list(
+          outputDir = file.path(dirname(self$paths[["outputPath"]]), "climate")
         )
       )
 

@@ -55,6 +55,7 @@ config$args <- config.user$args
 config$options <- config.user$options
 config$params <- config.user$params
 config$paths <- config.user$paths
+config$update()$validate()
 
 # print run info ------------------------------------------------------------------------------
 SpaDES.config::printRunInfo(config$context)
@@ -95,6 +96,10 @@ if ("fit" %in% config$context[["mode"]]) {
   config$args[["usePrerun"]] <- TRUE
   config$args[["reupload"]] <- FALSE
 }
+
+## TODO:
+config$args[["usePrerun"]] <- FALSE
+config$args[["reupload"]] <- FALSE
 
 if (!"postprocess" %in% config$context[["mode"]]) {
   source("06-studyArea.R")
