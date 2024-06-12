@@ -318,11 +318,10 @@ fSdataPrepObjects <- list(
   cohortData2001 = biomassMaps2001[["cohortData"]],
   cohortData2011 = biomassMaps2011[["cohortData"]],
   # fireRaster = wildfire2020,
-  nonForestedLCCGroups = simOutPreamble[["nonForestLCCGroups"]],
   historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
+  nonForestedLCCGroups = simOutPreamble[["nonForestLCCGroups"]],
   pixelGroupMap2001 = biomassMaps2001[["pixelGroupMap"]],
   pixelGroupMap2011 = biomassMaps2011[["pixelGroupMap"]],
-  historicalClimateRasters = simOutPreamble[["historicalClimateRasters"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rstLCC2001 = rstLCC2001,
   rstLCC2011 = rstLCC2011,
@@ -357,9 +356,6 @@ if (isTRUE(config$args[["usePrerun"]])) {
 
   if (isUpdated(fSsimDataPrep) || isFALSE(config$args[["useCache"]])) {
     fSsimDataPrep@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    ## TODO: saveSimList() now failing after resampling rasters for hindcast:
-    ## error in evaluating the argument 'object' in selecting a method for function '.robustDigest':
-    ##   [subset] invalid name(s)
     tryCatch({
       saveSimList(
         fSsimDataPrep,
@@ -370,7 +366,7 @@ if (isTRUE(config$args[["usePrerun"]])) {
         files = FALSE
       )
     }, error = function(e) {
-      message(crayon::red(e)) ## TODO: .robustDigest failure per above
+      message(crayon::red(e))
     })
   }
 }
