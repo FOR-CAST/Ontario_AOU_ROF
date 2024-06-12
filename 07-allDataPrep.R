@@ -314,6 +314,7 @@ rstLCC2011[] <- as.integer(rstLCC2011[])
 
 fSdataPrepObjects <- list(
   .runName = config$context[["runName"]],
+  # climateVariablesForFire = list(ignition = "MDC", spread = "MDC"),
   cohortData2001 = biomassMaps2001[["cohortData"]],
   cohortData2011 = biomassMaps2011[["cohortData"]],
   # fireRaster = wildfire2020,
