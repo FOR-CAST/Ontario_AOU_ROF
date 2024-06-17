@@ -348,7 +348,7 @@ onnrvConfig <- R6::R6Class(
       private[[".params_full"]] <- list(
         .globals = list(
           fireTimestep = 1L, ## TODO: where is this used?
-          initialB = 10, ## NA
+          initialB = NA, ## 10
           reps = 1L:10L,
           sppEquivCol = "LandR",
           successionTimestep = 10,
@@ -363,17 +363,13 @@ onnrvConfig <- R6::R6Class(
           .useParallel = 2 ## doesn't benefit from more DT threads
         ),
         Biomass_borealDataPrep = list(
-          biomassModel = quote(lme4::lmer(B ~ logAge * speciesCode + cover * speciesCode +
-                                            (logAge + cover | ecoregionGroup))),
           dataYear = 2011,
           ecoregionLayerField = "ECOREGION", ## "ECODISTRIC"
-          exportModels = "all",
+          exportModels = "none", ## use "all" to export for debugging
           fixModelBiomass = TRUE,
           forestedLCCClasses = 1:6, ## LCC2010 default
           LCCClassesToReplaceNN = numeric(0), ## LCC2010 default
-          pixelGroupAgeClass = 2 * 10,  ## twice the successionTimestep; can be coarse because initial conditions are irrelevant
-          pixelGroupBiomassClass = 1000, ## 1000 / mapResFact^2; can be coarse because initial conditions are irrelevant
-          speciesTableAreas = c("BSW", "BP", "MC", "PM"), ## western boreal defaults
+          speciesTableAreas = c("BSW", "BP", "MC"),
           speciesUpdateFunction = list(
             quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),
             quote(LandR::updateSpeciesTable(sim$species, sim$speciesParams))
@@ -389,7 +385,6 @@ onnrvConfig <- R6::R6Class(
           growthInitialTime = self$args$simYears$start, ## start(sim)
           initialBiomassSource = "cohortData",
           mixedType = 2L,
-          seedingAlgorithm = "wardDispersal",
           vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
           .maxMemory = if (format(pemisc::availableMemory(), units = "GiB") > 130) 5 else 2, ## GB
           .plotInitialTime = self$args$simYears$start, ## start(sim)
@@ -435,17 +430,22 @@ onnrvConfig <- R6::R6Class(
         ),
         fireSense_dataPrepFit = list(
           fireYears = 2002:2022,
+          forestedLCC = 1:6, ## LCC2010 default
           igAggFactor = 10000 / self$context$pixelSize,
           ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
           spreadFuelClassCol = "FuelClass", ## TODO: use improved classification
           useCentroids = TRUE,
           usePiecewiseRegression = FALSE, ## pw reg is the old approach
+          useRasterizedFireForSpread = FALSE,
           whichModulesToPrepare = c("fireSense_IgnitionFit", "fireSense_EscapeFit", "fireSense_SpreadFit"),
           .studyAreaName = self$context$studyAreaName,
           .useCache = FALSE # ".inputObjects" ## TODO
         ),
         fireSense_dataPrepPredict = list(
+          forestedLCC = 1:6, ## LCC2010 default
+          ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
           nonForestCanBeYoungAge = TRUE,
+          spreadFuelClassCol = "FuelClass", ## TODO: use improved classification
           whichModulesToPrepare = c("fireSense_IgnitionPredict", "fireSense_EscapePredict", "fireSense_SpreadPredict"),
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
@@ -456,7 +456,9 @@ onnrvConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_IgnitionFit = list(
+          # cores = 1L, ## added by user config
           # iterDEoptim = 300, ## default: 500
+          # iterNlminb = 500, ## default: 500
           rescalers = NULL,
           rescaleVars = TRUE,
           .runInitialTime = self$args$simYears$start, ## start(sim)
@@ -468,6 +470,7 @@ onnrvConfig <- R6::R6Class(
         ),
         fireSense_SpreadFit = list(
           cloudFolderID_DE = self$args$cloud$cacheDir,
+          # cores = 1L, ## added by user config
           DEoptimTests = c("adTest", "snll_fs"),
           doObjFunAssertions = FALSE,
           iterDEoptim = 150L, ## default 500L
@@ -476,7 +479,7 @@ onnrvConfig <- R6::R6Class(
           libPathDEoptim = file.path(projectPath, "renv", "library",
                                      paste0("R-", getRversion()[, 1:2]), version$platform),
           mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
-          mutuallyExclusive = list("youngAge" = c("class", "nonForest")),
+          mutuallyExclusiveCols = list("youngAge" = c("class", "nonForest")),
           objFunCoresInternal = 1L,
           objfunFireReps = 100,
           rep = self$config$context$rep,
@@ -492,6 +495,7 @@ onnrvConfig <- R6::R6Class(
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         fireSense_SpreadPredict = list(
+          mutuallyExclusiveCols = list("youngAge" = c("class", "nonForest")),
           .runInitialTime = self$args$simYears$start ## start(sim)
         ),
         gmcsDataPrep = list(
@@ -535,8 +539,14 @@ onnrvConfig <- R6::R6Class(
           )
         )
       } else if ("postprocess" %in% self$context[["mode"]]) {
-        self$modules <- list("Biomass_summary", "fireSense_summary",
-                             "birds_BRT", "NRV_summary")
+        self$modules <- list(
+          ## TODO preamble + speciesData ??
+          "Biomass_summary",
+          "fireSense_summary",
+          "birds_BRT",
+          "burnSummaries",
+          "NRV_summary"
+        )
 
         self$params <- list(
           .globals = list(
