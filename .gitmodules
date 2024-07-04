@@ -76,3 +76,6 @@
 [submodule "modules/scfm"]
 	path = modules/scfm
 	url = https://github.com/PredictiveEcology/scfm
+[submodule "modules/timeSinceFire"]
+	path = modules/timeSinceFire
+	url = https://github.com/fRI-Research/timeSinceFire
