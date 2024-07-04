@@ -12,7 +12,6 @@ library(plyr)
 library(pryr)
 library(future.callr)
 library(googledrive)
-library(httr)
 
 library(SpaDES.config)
 library(SpaDES.core)
@@ -32,10 +31,11 @@ workflowtools::check_project_packages(prjDir)
 
 ## TODO: implement exptTbl stuff to pass values to config
 
-box::use(box/prjcfg)
-config <- prjcfg$onnrvConfig$new(
+box::use(box/onnrv)
+config <- onnrv$onnrvConfig$new(
   projectPath = prjDir,
   climateGCM = .climateGCM, climateSSP = .climateSSP,
+  fireCause = .fireCause, fireModel = .fireModel, frpType = .fireRegimePolysType,
   mode = .mode, nrvType = .nrvType, rep = .rep, res = .res,
   studyAreaName = .studyAreaName
 )$update()$validate()
@@ -62,12 +62,10 @@ SpaDES.config::printRunInfo(config$context)
 names(config$modules)
 
 # project paths -------------------------------------------------------------------------------
-config$paths
+
 stopifnot(identical(checkPath(config$paths[["projectPath"]]), prjDir))
 
 checkPath(config$paths[["logPath"]], create = TRUE) ## others will be created as needed below
-
-prjPaths <- SpaDES.config::paths4spades(config$paths)
 
 # project options -----------------------------------------------------------------------------
 
@@ -82,28 +80,32 @@ SpaDES.config::authGoogle(tryToken = "eastern-boreal", tryEmail = config$args[["
 
 # begin simulations ---------------------------------------------------------------------------
 
-do.call(SpaDES.core::setPaths, prjPaths)
+do.call(SpaDES.core::setPaths, SpaDES.config::paths4spades(config$paths))
 
 if (config$args[["delayStart"]] > 0) {
   message(crayon::green("\nStaggered job start: delaying by", config$args[["delayStart"]], "minutes."))
   Sys.sleep(config$args[["delayStart"]]*60)
 }
 
-if ("fit" %in% config$context[["mode"]]) {
+if (config$context[["mode"]] == "postprocess") {
+  config$args[["usePrerun"]] <- TRUE
+} else if (config$context[["rep"]] == 1) {
   config$args[["usePrerun"]] <- FALSE
-  config$args[["reupload"]] <- TRUE
 } else {
   config$args[["usePrerun"]] <- TRUE
-  config$args[["reupload"]] <- FALSE
 }
 
-## TODO:
-config$args[["usePrerun"]] <- FALSE
-config$args[["reupload"]] <- FALSE
+# if ("fit" %in% config$context[["mode"]]) {
+#   config$args[["usePrerun"]] <- FALSE
+#   config$args[["reupload"]] <- TRUE
+# } else {
+#   config$args[["usePrerun"]] <- TRUE
+#   config$args[["reupload"]] <- FALSE
+# }
 
 if (!"postprocess" %in% config$context[["mode"]]) {
   source("06-studyArea.R")
-  source("07-allDataPrep.R")
+  source(paste0("07-dataPrep-", config$context[["fireModel"]], ".R"))
 
   if ("fit" %in% config$context[["mode"]]) {
     config$params[[".globals"]][["reps"]] <- 1 ## TODO: testing only
@@ -122,7 +124,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
         unlink("Rplots.pdf")
       }
 
-      do.call(SpaDES.core::setPaths, prjPaths)
+      do.call(SpaDES.core::setPaths, SpaDES.config::paths4spades(config$paths))
 
       source("08-fireSense_fit.R")
 
@@ -131,14 +133,18 @@ if (!"postprocess" %in% config$context[["mode"]]) {
       }
     }
   } else {
-    source("08-fireSense_fit.R")
-    source("09-main-sim.R")
+    if (config$context[["fireModel"]] == "firesense") {
+      source("08-fireSense_fit.R")
+    }
+
+    source(paste0("09-main-", config$context[["fireModel"]], ".R"))
   }
 } else {
-  source("10-post-processing.R")
+  source("06-studyArea.R")
+  source("10-post-processing.R") ## TODO: run B_sppData here
 }
 
-relOutputPath <- SpaDES.config:::.getRelativePath(prjPaths[["outputPath"]], prjDir)
+relOutputPath <- SpaDES.config:::.getRelativePath(config$paths[["outputPath"]], prjDir)
 rrFile <- file.path(relOutputPath, "INFO.md")
 cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
 cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)

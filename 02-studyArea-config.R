@@ -41,6 +41,7 @@ config.studyArea <- list(
     ),
     ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = list(
+      fireRegimePolysType = config$context[["frpType"]],
       studyAreaName = config$context[["studyAreaName"]],
       useAgeMapkNN = !grepl("ROF", config$context[["runName"]]), ## don't use kNN for ROF
       .resolution = ifelse(grepl("ROF", config$context[["studyAreaName"]]), 125, 250),

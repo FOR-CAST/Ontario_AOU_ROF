@@ -31,6 +31,30 @@ if (exists(".climateSSP", .GlobalEnv)) {
   .climateSSP <- 370
 }
 
+if (exists(".fireCause", .GlobalEnv)) {
+  stopifnot(.fireCause %in% c("L", "H", "N"))
+} else {
+  # .fireCause <- c("L")
+  .fireCause <- c("L", "H")
+}
+
+if (exists(".fireModel", .GlobalEnv)) {
+  ## fireSense: Marchal et al. climate/vegetation sensitive stand replacing fire;
+  ## scfm: Cumming et al. stand replacing fires;
+  .fireModel <- tolower(.fireModel)
+  stopifnot(.fireModel %in% c("firesense", "scfm"))
+} else {
+  # .fireModel <- tolower("firesense")
+  .fireModel <- tolower("scfm")
+}
+
+if (exists(".fireRegimePolysType", .GlobalEnv)) {
+  stopifnot(.fireRegimePolysType %in%
+              c("ECODISTRICT", "ECOREGION", "FRT", "FRU"))
+} else {
+  .fireRegimePolysType <- ifelse(.fireModel == "scfm", "FRT", "ECOREGION") ## TODO: re-evaluate firesense
+}
+
 if (exists(".rep", .GlobalEnv)) {
   .rep <- if ("postprocess" %in% .mode) NA_integer_ else as.integer(.rep)
 } else {
@@ -44,8 +68,12 @@ if (exists(".res", .GlobalEnv)) {
 }
 
 if (!exists(".studyAreaName", .GlobalEnv)) {
-  .studyAreaName <- "ON_AOU_1" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
-  #.studyAreaName <- "ON_ROF_5" ## FRTs in ROF: 1, 5 (small parts of 2)
-  #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
-  #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
+  if (.fireModel == "scfm") {
+    .studyAreaName <- "ON_AOU" ## scfm can handle multiple fire regime polygons
+  } else {
+    .studyAreaName <- "ON_AOU_1" ## FRTs in AOU: 1, 5 (small parts of 2, 6, 7)
+    #.studyAreaName <- "ON_ROF_5" ## FRTs in ROF: 1, 5 (small parts of 2)
+    #.studyAreaName <- "ON_ROF_shield" ## ecozones in ROF: Boreal Shield, Hudson Plain
+    #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
+  }
 }

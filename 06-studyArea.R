@@ -5,34 +5,57 @@ gid_preamble <- gdriveSims[studyArea == .studyAreaName & simObject == "simOutPre
 # upload_preamble <- config$context[["rep"]] == 1 & (config$args[["reupload"]] | length(gid_preamble) == 0)
 upload_preamble <- FALSE ## TODO: restore uploads
 
-preambleObjects <- list(
-  .runName = config$context[["runName"]]
-)
+# paths ---------------------------------------------------------------------------------------
+
+## don't need replicated copies of preamble outputs
+repID <- basename(config$paths[["outputPath"]])
+config$paths[["outputPath"]] <- dirname(config$paths[["outputPath"]]) ## TODO: add to config
+checkPath(config$paths[["logPath"]], create = TRUE)
+
+# modules & parameters ------------------------------------------------------------------------
 
 if (grepl("^ON", config$context[["studyAreaName"]])) {
   preambleParams <- list(
     # config$params[[".globals"]],
-    canClimateData = config$params[["canClimateData"]],
     Ontario_preamble = config$params[["Ontario_preamble"]]
   )
 
-  preambleModules <- list("Ontario_preamble", "canClimateData") ## TODO: use config$modules
+  preambleModules <- list("Ontario_preamble") ## TODO: use config$modules
 } else if (grepl("^QC", config$context[["studyAreaName"]])) {
   preambleParams <- list(
     # config$params[[".globals"]],
-    canClimateData = config$params[["canClimateData"]],
     Quebec_fires_preamble = config$params[["Quebec_fires_preamble"]]
   )
 
-  preambleModules <- list("Quebec_fires_preamble", "canClimateData") ## TODO: use config$modules
+  preambleModules <- list("Quebec_fires_preamble") ## TODO: use config$modules
 } else {
   stop("Currently only ON and QC study areas supported.")
 }
 
-fsimOutPreamble <- simFile(paste0("simOutPreamble_", config$context[["studyAreaName"]],
-                                  "_", config$context[["climateGCM"]],
-                                  "_", config$context[["climateSSP"]]),
-                           prjPaths[["outputPath"]], ext = config$args[["fsimext"]])
+if (config$context[["fireModel"]] == "firesense") {
+  preambleParams <- modList(preambleParams, list(canClimateData = config$params[["canClimateData"]]))
+  preambleModules <- append(preambleModules, "canClimateData") |> unique()
+}
+
+# objects -------------------------------------------------------------------------------------
+
+preambleObjects <- list(
+  .runName = config$context[["runName"]] ## TODO: is this necessary??
+)
+
+# outputs -------------------------------------------------------------------------------------
+
+outputs1 <- data.frame()
+
+# run simulation ------------------------------------------------------------------------------
+
+fsimOutPreamble <- simFile(
+  name = paste0("simOutPreamble_", config$context[["studyAreaName"]],
+                "_", config$context[["climateGCM"]],
+                "_", config$context[["climateSSP"]]),
+  path = config$paths[["outputPath"]],
+  ext = config$args[["fsimext"]]
+)
 
 if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
   if (!file.exists(fsimOutPreamble)) {
@@ -50,21 +73,14 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
 
   if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    ## TODO: saveSimList() now failing after resampling rasters for hindcast:
-    ## error in evaluating the argument 'object' in selecting a method for function '.robustDigest':
-    ##   [subset] invalid name(s)
-    tryCatch({
-      saveSimList(
-        simOutPreamble,
-        fsimOutPreamble,
-        inputs = FALSE,
-        outputs = FALSE,
-        cache = FALSE,
-        files = FALSE
-      )
-    }, error = function(e) {
-      message(crayon::red(e)) ## TODO: .robustDigest failure per above
-    })
+    saveSimList(
+      simOutPreamble,
+      fsimOutPreamble,
+      inputs = FALSE,
+      outputs = FALSE,
+      cache = FALSE,
+      files = FALSE
+    )
     amc::.gc()
   }
 
@@ -74,18 +90,22 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
     fdf <- googledrive::drive_put(media = fsimOutPreamble, path = as_id(gdriveURL), name = basename(fsimOutPreamble))
     gid_preamble <- as.character(fdf$id)
     rm(fdf)
-    gdriveSims <- update_googleids(
-      data.table(studyArea = config$context[["studyAreaName"]], simObject = "simOutPreamble", runID = NA,
-                 gcm = config$context[["climateGCM"]], ssp = config$context[["climateSSP"]], gid = gid_preamble),
-      gdriveSims
-    )
+    gdriveSims <- data.table(
+      studyArea = config$context[["studyAreaName"]],
+      simObject = "simOutPreamble",
+      runID = NA,
+      gcm = config$context[["climateGCM"]],
+      ssp = config$context[["climateSSP"]],
+      gid = gid_preamble
+    ) |>
+      update_googleids(gdriveSims)
   }
 }
 
 firstRunMDCplots <- if (config$context[["rep"]] == 1 && config$args[["reupload"]]) TRUE else FALSE
 
 ## TODO move to canClimateData
-if (isTRUE(firstRunMDCplots)) {
+if (config$context[["fireModel"]] == "firesense" && isTRUE(firstRunMDCplots)) {
   ggMDC <- fireSenseUtils::compareMDC(
     historicalMDC = simOutPreamble[["historicalClimateRasters"]][["MDC"]],
     projectedMDC = simOutPreamble[["projectedClimateRasters"]][["MDC"]],
@@ -117,5 +137,6 @@ stopifnot(
   !is.null(attr(simOutPreamble[["standAgeMap2011"]], "imputedPixID"))
 )
 
-## cleanup
+## restore paths + cleanup
+config$paths[["outputPath"]] <- file.path(config$paths[["outputPath"]], repID)
 terra::tmpFiles(remove = TRUE)
