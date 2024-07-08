@@ -1,3 +1,10 @@
+# paths ---------------------------------------------------------------------------------------
+
+## don't need replicated copies of preamble outputs
+repID <- basename(config$paths[["outputPath"]])
+config$paths[["outputPath"]] <- dirname(config$paths[["outputPath"]]) ## TODO: add to config
+checkPath(config$paths[["logPath"]], create = TRUE)
+
 ## 07a-dataPrep_2001 -------------------------------------------------------------------------------
 
 source("05-google-ids.R")
@@ -48,17 +55,29 @@ dataPrepParams2001 <- list(
 )
 
 dataPrepObjects <- list(
-  .runName = config$context[["runName"]],
+  .runName = config$context[["runName"]], ## needed to trigger correct caching behaviour?
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
-  sppColorVect = simOutPreamble[["sppColorVect"]],
-  sppEquiv = simOutPreamble[["sppEquiv"]],
-  rstLCC = simOutPreamble[["LCC"]],
-  standAgeMap = simOutPreamble[["standAgeMap2001"]],
   studyArea = simOutPreamble[["studyArea"]],
   studyAreaLarge = simOutPreamble[["studyAreaLarge"]],
   studyAreaReporting = simOutPreamble[["studyAreaReporting"]]
 )
+
+if (config$context[["fireModel"]] == "fireSense") {
+  dataPrepObjects_fireModel <- list(
+    rstLCC2001 = simOutPreamble[["rstLCC2001"]],
+    rstLCC2011 = simOutPreamble[["rstLCC2011"]],
+    standAgeMap2001 = simOutPreamble[["standAgeMap2001"]],
+    standAgeMap2011 = simOutPreamble[["standAgeMap2011"]]
+  )
+} else if (config$context[["fireModel"]] == "scfm") {
+  dataPrepObjects_fireModel <- list(
+    rstLCC = simOutPreamble[["rstLCC"]],
+    standAgeMap = simOutPreamble[["standAgeMap2001"]]
+  )
+}
+
+dataPrepObjects <- append(dataPrepObjects, dataPrepObjects_fireModel)
 
 dataPrepOutputs2001 <- data.frame(
   objectName = c("cohortData",
@@ -93,6 +112,8 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_biomassMaps2001)) {
     params = dataPrepParams2001,
     modules = dataPrepModules,
     objects = dataPrepObjects,
+    outputs = dataPrepOutputs,
+    paths = SpaDES.config::paths4spades(config$paths),
     loadOrder = unlist(dataPrepModules),
     .plots = NA,
     useCloud = config$args[["cloud"]][["useCloud"]],
@@ -386,4 +407,7 @@ if (isTRUE(upload_fSsimDataPrep)) {
   source("R/upload_fSDatPrepFit_vegCoeffs.R") ## TODO: add to the module
 }
 
+## restore paths + cleanup
+config$paths[["outputPath"]] <- file.path(config$paths[["outputPath"]], repID)
+terra::tmpFiles(remove = TRUE)
 rm(rstLCC2001, rstLCC2011, standAgeMap2001, standAgeMap2011)

@@ -3,13 +3,22 @@ box::use(SpaDES.config[...])
 
 box::use(DBI[dbConnect,dbDisconnect])
 box::use(pemisc[availableMemory])
+box::use(scfmutils[fireRegimePolyTypes])
+
+# runName -------------------------------------------------------------------------------------
 
 #' @keywords internal
 .onnrvRunName <- function(context, withRep = TRUE) {
   .runName <- paste0(
     context$studyAreaName,
-    paste0("_", context$climateGCM),
-    paste0("_SSP", context$climateSSP),
+    paste0("_", context$fireModel, "_", paste0(context$fireCause, collapse = "")),
+    paste0("_", context$nrvType),
+    if (context$fireModel == "scfm") {
+      ""
+    } else {
+      paste0("_", context$climateGCM, "_SSP", context$climateSSP)
+    },
+    paste0("_", context$frpType),
     if (context$pixelSize == 250) "" else paste0("_res", context$pixelSize),
     if (isTRUE(withRep)) {
       if ("postprocess" %in% context[["mode"]]) "" else sprintf("_rep%02d", context$rep)
@@ -44,6 +53,17 @@ onnrvContext <- R6::R6Class(
     #'
     #' @param climateSSP Numeric CMIP climate scenario SSP. E.g., `370` or `585`.
     #'
+    #' @param fireCause Character string specifying which fires to use for fitting:
+    #'                  `'L'` (or `'N'`) for natural (lightning) caused fires only;
+    #'                  `c('L', 'H')` for both lightning and human-caused fires.
+    #'
+    #' @param fireModel Character string specifying the fire model to use.
+    #'                  One of 'scfm' or 'firesense'.
+    #'
+    #' @param frpType Character string denoting the polygons to use for scfm fire regime fitting.
+    #'                One of 'BECSUBZONE', 'BECZONE', 'ECODISTRICT', or other types in
+    #'                `scfmutils::fireRegimePolyTypes()`.
+    #'
     #' @param mode Character string. One of 'production', 'development', or 'postprocess',
     #'             May also include 'fit' (e.g., `c('development', 'fit')`).
     #'
@@ -59,7 +79,7 @@ onnrvContext <- R6::R6Class(
     #'                      module for up-to-date descriptions of each study area label).
     initialize = function(projectPath, mode = "development",
                           climateGCM = NA_character_, climateSSP = NA_integer_,
-                          nrvType = "hrv",
+                          fireCause = "L", fireModel = "scfm", frpType = "FRT", nrvType = "hrv",
                           rep = 1L, res = 250, studyAreaName = NA_character_) {
       stopifnot(
         res %in% c(125, 250)
@@ -74,6 +94,9 @@ onnrvContext <- R6::R6Class(
       self$mode <- mode
       self$climateGCM <- climateGCM
       self$climateSSP <- climateSSP
+      self$fireCause <- fireCause
+      self$fireModel <- fireModel
+      self$frpType <- frpType
       self$nrvType <- nrvType
       self$rep <- rep
       self$studyAreaName <- studyAreaName ## will set studyAreaHash
@@ -95,6 +118,9 @@ onnrvContext <- R6::R6Class(
         rep = self$rep,
         climateGCM = self$climateGCM,
         climateSSP = self$climateSSP,
+        fireCause = self$fireCause,
+        fireModel = self$fireModel,
+        frpType = self$frpType,
         nrvType = self$nrvType,
         pixelSize = self$pixelSize,
         runName = self$runName
@@ -144,6 +170,47 @@ onnrvContext <- R6::R6Class(
         return(private[[".climateSSP"]])
       } else {
         private[[".climateSSP"]] <- as.integer(value)
+        self$runName <- .onnrvRunName(self)
+      }
+    },
+
+    #' @field fireCause Character string specifying which fires to use for fitting:
+    #'                  `'L'` (or `'N'`) for natural (lightning) caused fires only;
+    #'                  `c('L', 'H')` for both lightning and human-caused fires.
+    fireCause = function(value) {
+      if (missing(value)) {
+        return(private[[".fireCause"]])
+      } else {
+        stopifnot(value %in% c("L", "H", "N"))
+
+        private[[".fireCause"]] <- value
+        self$runName <- .onnrvRunName(self)
+      }
+    },
+
+    #' @field fireModel Character string specifying the fire model to use.
+    #'                  One of 'scfm' or 'firesense'.
+    fireModel = function(value) {
+      if (missing(value)) {
+        return(private[[".fireModel"]])
+      } else {
+        value <- tolower(value)
+        stopifnot(value %in% c("scfm", "firesense"))
+
+        private[[".fireModel"]] <- value
+        self$runName <- .onnrvRunName(self)
+      }
+    },
+
+    #' @field frpType Character string denoting the polygons to use for scfm fire regime fitting.
+    #'                One of the types in `scfmutils::fireRegimePolyTypes()`.
+    frpType = function(value) {
+      if (missing(value)) {
+        return(private[[".frpType"]])
+      } else {
+        stopifnot(value %in% scfmutils::fireRegimePolyTypes())
+
+        private[[".frpType"]] <- value
         self$runName <- .onnrvRunName(self)
       }
     },
@@ -207,6 +274,9 @@ onnrvContext <- R6::R6Class(
   private = list(
     .climateGCM = NA_character_,
     .climateSSP = NA_integer_,
+    .fireCause = "L",
+    .fireModel = "scfm",
+    .frpType = "FRT",
     .nrvType = "hrv",
     .pixelSize = 125,
     .studyAreaHash = NA_character_
@@ -245,11 +315,18 @@ onnrvConfig <- R6::R6Class(
 
       ## do paths first as these may be used below
       # paths ---------------------------------------------------------------------------------------
+      modPaths <- if (self$context[["fireModel"]] == "scfm") {
+        c(projectPaths("module"),
+          file.path(projectPaths("modules"), "scfm", "modules"))
+      } else {
+        projectPaths("module")
+      }
+
       private[[".paths"]] <- list(
         cachePath = projectPaths("cache"),
         inputPath = projectPaths("input"),
         logPath = projectPaths("log"),
-        modulePath = projectPaths("module"),
+        modulePath = modPaths,
         outputPath = projectPaths("output"),
         projectPath = normPath(projectPath),
         scratchPath = file.path(dirname(tempdir()), "scratch", basename(projectPath)),
@@ -265,17 +342,24 @@ onnrvConfig <- R6::R6Class(
         ),
         delayStart = 0,
         fsimext = "rds", ## TODO: use qs once spades.core is fixed
-        simYears = list(start = 2011, end = 2100),
+        simYears = if (self$context[["fireModel"]] == "scfm") {
+          list(start = 0, end = 1200)
+        } else {
+          list(start = 2011, end = 2100)
+        },
         notifications = list(
           slackChannel = ""
         ),
         reupload = FALSE,
+        timeSeriesTimes = self$args[["simYears"]][["start"]] + 801:850, ## TODO: use in params
         useCache = FALSE, ## simulation caching
-        useLandR.CS = TRUE,
+        useLandR.CS = if (self$context[["fireModel"]] == "scfm") FALSE  else TRUE,
         usePrerun = TRUE
       )
 
       # modules ------------------------------------------------------------------------------------
+      private[[".fireModules"]] <- list() ## updated based on context$fireModel below
+
       private[[".modules"]] <- list(
         ## NOTE: user needs to provide their own preamble module per project, and add it to the config
         Biomass_borealDataPrep = "Biomass_borealDataPrep",
@@ -287,19 +371,8 @@ onnrvConfig <- R6::R6Class(
         ## Biomass_summary = "Biomass_summary", ## post-processing
         ## birds_BRT = "birds_BRT", ## post-processing
         ## burnSummaries = "burnSummaries", ## post-processing
-        canClimateData = "canClimateData",
-        fireSense = "fireSense",
-        fireSense_dataPrepFit = "fireSense_dataPrepFit",
-        fireSense_dataPrepPredict = "fireSense_dataPrepPredict",
-        fireSense_EscapeFit = "fireSense_EscapeFit",
-        fireSense_EscapePredict = "fireSense_EscapePredict",
-        fireSense_IgnitionFit = "fireSense_IgnitionFit",
-        fireSense_IgnitionPredict = "fireSense_IgnitionPredict",
-        fireSense_SpreadFit = "fireSense_SpreadFit",
-        fireSense_SpreadPredict = "fireSense_SpreadPredict",
-        ## fireSense_summary = "fireSense_summary", ## post-processing
-        gmcsDataPrep = "gmcsDataPrep"#,
         ## NRV_summary = "NRV_summary ## post-processing
+        timeSinceFire = "timeSinceFire"
       )
 
       # options ------------------------------------------------------------------------------------
@@ -315,6 +388,7 @@ onnrvConfig <- R6::R6Class(
         map.overwrite = TRUE,
         map.tilePath = FALSE, ## TODO: use self$paths$tilePath once parallel tile creation works
         map.useParallel = TRUE, ## TODO: streamline useParallel: used directly for post-processing
+        pemisc.useParallel = TRUE, ## TODO: streamline useParallel: used directly by scfm
         rasterMaxMemory = 5e+9,
         rasterTmpDir = normPath(file.path(self$paths[["scratchPath"]], "raster")),
         reproducible.cacheSaveFormat = "rds", ## can be "qs" or "rds"
@@ -331,7 +405,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
-        spades.allowInitDuringSimInit = TRUE,
+        spades.allowInitDuringSimInit = FALSE, ## TODO: is TRUE working correctly???
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
@@ -349,7 +423,7 @@ onnrvConfig <- R6::R6Class(
         .globals = list(
           fireTimestep = 1L, ## TODO: where is this used?
           initialB = NA, ## 10
-          reps = 1L:10L,
+          reps = 1L:50L,
           sppEquivCol = "LandR",
           successionTimestep = 10,
           summaryInterval = 50,
@@ -391,6 +465,7 @@ onnrvConfig <- R6::R6Class(
           .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_regeneration = list(
+          calibrate = TRUE, ## TODO: use TRUE for debugging regen
           fireInitialTime = self$args$simYears$start + 1, ## start(sim) + 1
           .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = FALSE # c(".inputObjects", "init") ## TODO
@@ -501,6 +576,61 @@ onnrvConfig <- R6::R6Class(
         gmcsDataPrep = list(
           doPlotting = TRUE,
           yearOfFirstClimateImpact = self$args$simYears$start ## start(sim)
+        ),
+        NRV_summary = list(
+          ageClasses = c("Young1", "Young2", "Immature1", "Immature2", "Mature1", "Mature2", "Old", "Old2"),
+          ageClassCutOffs = seq(0, 140, 20),
+          ageClassMaxAge = 400L, ## was `maxAge` previously
+          reps = 1L:10L, ## TODO: used elsewhere to setup runs (expt table)?
+          postprocessEvents = "bc",
+          sieveThresh = as.integer(10 / self$args[["pixelSize"]]), ## 10 ha in pixels
+          # simOutputPath = self$paths[["outputPath"]],
+          studyAreaNamesCol = "LU_NAME",
+          summaryInterval = 50,        ## also in .globals
+          summaryPeriod = c(800, 1200), ## also in .globals
+          timeSeriesTimes = 801:850, ## TODO: from args
+          upload = FALSE,
+          uploadTo = "", ## TODO: use google-ids.csv to define these per WBI?
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
+          .useCache = FALSE # c(".inputObjects") ## don't cache 'init' ## TODO
+        ),
+        scfmDiagnostics = list(
+          mode = "single"
+        ),
+        scfmDriver = list(
+          pMax = 0.27,
+          targetN = 5000, ## increase targetN for more robust estimates, longer run-time
+          scamOptimizer = "efs",
+          .useCache = FALSE, # ".inputObjects", ## don't cache 'init' ## TODO
+          .useCloud = FALSE,
+          .useParallelFireRegimePolys = TRUE
+        ),
+        scfmEscape = list(
+          startTime = self$args$simYears$start + 1,
+          .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
+        ),
+        scfmIgnition = list(
+          startTime = self$args$simYears$start + 1,
+          .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
+        ),
+        scfmLandcoverInit = list(
+          sliverThreshold = 1e8, ## polygons <100 km2 are merged with closest non-sliver neighbour
+          .plotInitialTime = self$args$simYears$start + 1,
+          .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
+        ),
+        scfmRegime = list(
+          fireCause = self$context[["fireCause"]],
+          fireEpoch = c(1971, 2010), ## default 1971-2000; using longer epoch for areas too small w/ not enough fire data
+          .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
+        ),
+        scfmSpread = list(
+          startTime = self$args$simYears$start + 1,
+          .plotInitialTime = self$args$simYears$start + 1,
+          .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
+        ),
+        timeSinceFire = list(
+          startTime = self$args$simYears$start + 1,
+          .useCache = ".inputObjects" ## faster without caching for "init"
         )
       )
 
@@ -512,16 +642,52 @@ onnrvConfig <- R6::R6Class(
     #' @description Update a `onnrvConfig` object from its context.
     #'              Must be called anytime the context is updated.
     update = function() {
-      self$params <- list(
-        fireSense_SpreadFit = list(
-          NP = length(self$params$fireSense_SpreadFit$cores)
+      ## fireModel -------------------------------------------------------------
+      private[[".fireModules"]] <- switch(
+        self$context[["fireModel"]],
+        firesense = list(
+          canClimateData = "canClimateData",
+          fireSense = "fireSense",
+          fireSense_dataPrepFit = "fireSense_dataPrepFit",
+          fireSense_dataPrepPredict = "fireSense_dataPrepPredict",
+          fireSense_EscapeFit = "fireSense_EscapeFit",
+          fireSense_EscapePredict = "fireSense_EscapePredict",
+          fireSense_IgnitionFit = "fireSense_IgnitionFit",
+          fireSense_IgnitionPredict = "fireSense_IgnitionPredict",
+          fireSense_SpreadFit = "fireSense_SpreadFit",
+          fireSense_SpreadPredict = "fireSense_SpreadPredict",
+          ## fireSense_summary = "fireSense_summary", ## post-processing
+          gmcsDataPrep = "gmcsDataPrep"
         ),
-        canClimateData = list(
-          outputDir = file.path(dirname(self$paths[["outputPath"]]), "climate")
+        scfm = list(
+          scfmDiagnostics = "scfmDiagnostics",
+          scfmDriver = "scfmDriver",
+          scfmEscape = "scfmEscape",
+          scfmIgnition = "scfmIgnition",
+          scfmLandcoverInit = "scfmLandcoverInit",
+          scfmRegime = "scfmRegime",
+          scfmSpread = "scfmSpread"
         )
       )
 
-      ## mode ---------------------------------------
+      self$modules <- modList(self$modules, private[[".fireModules"]])
+
+      if (self$context[["fireModel"]] == "firesense") {
+        self$params <- list(
+          fireSense_SpreadFit = list(
+            NP = length(self$params[["fireSense_SpreadFit"]][["cores"]])
+          )
+        )
+      }
+
+      ## frpType ---------------------------------------------------------------
+      self$params <- list(
+        Ontario_preamble = list(
+          fireRegimePolysType = self$context[["frpType"]]
+        )
+      )
+
+      ## mode ------------------------------------------------------------------
       if (any(c("development", "production") %in% self$context[["mode"]])) {
         self$args <- list(
           cloud = list(
@@ -532,6 +698,8 @@ onnrvConfig <- R6::R6Class(
           summaryInterval = 50, ## TODO: remove from args; used in params
           summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end) ## TODO: confirm; remove from args; used in params
         )
+
+        self$modules <- modList(self$modules, private[[".fireModules"]])
 
         self$params <- list(
           .globals = list(
@@ -548,9 +716,22 @@ onnrvConfig <- R6::R6Class(
           "NRV_summary"
         )
 
+        if (self$context[["fireModel"]] == "scfm") {
+          self$modules <- modList(self$modules, list(scfmDiagnostics = "scfmDiagnostics"))
+          self$params <- list(
+            scfmDiagnostics = list(
+              mode = "multi",
+              simOutPrefix = "simOutMainSim",
+              simTimes = unlist(self$args[["simYears"]])
+            )
+          )
+        } else if (self$context[["fireModel"]] == "firesense") {
+          self$modules <- modList(self$modules, list(fireSense_summary = "fireSense_summary"))
+        }
+
         self$params <- list(
           .globals = list(
-            reps = 1L:10L,
+            reps = 1L:50L,
             .plots = c("png")
           ),
           Biomass_summary = list(
@@ -577,7 +758,8 @@ onnrvConfig <- R6::R6Class(
       ## args ------------------------------------------------------------------
       self$params <- list(
         NRV_summary = list(
-          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end)
+          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end),
+          timeSeriesTimes = self$args$simYears$start + 801:850
         )
       )
 
@@ -627,6 +809,8 @@ onnrvConfig <- R6::R6Class(
   ),
 
   private = list(
+    .fireModules = list(),
+
     finalize = function() {
       if (!is.null(self$options[["reproducible.conn"]])) {
         if (requireNamespace("DBI", quietly = TRUE)) {

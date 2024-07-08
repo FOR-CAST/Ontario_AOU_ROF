@@ -16,8 +16,8 @@ gid_results <- lapply(studyAreaNames, function(sAN) {
 names(gid_results) <- studyAreaNames
 
 ## postprocessing paths
-posthocPaths <- prjPaths
-posthocPaths[["outputPath"]] <- dirname(config$paths[["outputPath"]])
+posthocPaths <- config$paths
+posthocPaths[["outputPath"]] <- dirname(config$paths[["outputPath"]]) ## TODO: already in config ??
 
 do.call(setPaths, posthocPaths)
 
