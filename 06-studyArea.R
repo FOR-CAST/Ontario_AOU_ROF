@@ -48,11 +48,15 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
     objects = preambleObjects
   )
 
+  ## TODO: find and fix these warnings:
+  ## 4: In assessDataTypeOuter(from, ...elt(hasMethod)) :
+  ##   method is bilinear, but the data are integer; please confirm this is correct
+  ## 5: In assessDataTypeOuter(from, ...elt(hasMethod)) :
+  ##   method is bilinear, but the data are integer; please confirm this is correct
+
+
   if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
-    ## TODO: saveSimList() now failing after resampling rasters for hindcast:
-    ## error in evaluating the argument 'object' in selecting a method for function '.robustDigest':
-    ##   [subset] invalid name(s)
     tryCatch({
       saveSimList(
         simOutPreamble,
@@ -63,7 +67,7 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
         files = FALSE
       )
     }, error = function(e) {
-      message(crayon::red(e)) ## TODO: .robustDigest failure per above
+      message(crayon::red(e))
     })
     amc::.gc()
   }
@@ -84,7 +88,7 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
 
 firstRunMDCplots <- if (config$context[["rep"]] == 1 && config$args[["reupload"]]) TRUE else FALSE
 
-## TODO move to canClimateData
+## TODO: move to canClimateData
 if (isTRUE(firstRunMDCplots)) {
   ggMDC <- fireSenseUtils::compareMDC(
     historicalMDC = simOutPreamble[["historicalClimateRasters"]][["MDC"]],
