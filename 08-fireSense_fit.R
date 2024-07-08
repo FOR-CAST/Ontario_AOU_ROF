@@ -29,7 +29,6 @@ fSFitObjects <- list(
   fireSense_annualSpreadFitCovariates = fSsimDataPrep[["fireSense_annualSpreadFitCovariates"]],
   fireSense_nonAnnualSpreadFitCovariates = fSsimDataPrep[["fireSense_nonAnnualSpreadFitCovariates"]],
   fireSense_spreadFormula = fSsimDataPrep[["fireSense_spreadFormula"]],
-  flammableRTM = fSsimDataPrep[["flammableRTM2011"]],
   rasterToMatch = fSsimDataPrep[["rasterToMatch"]],
   spreadFirePoints = fSsimDataPrep[["spreadFirePoints"]],
   studyArea = fSsimDataPrep[["studyArea"]]

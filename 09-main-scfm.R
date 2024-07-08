@@ -26,14 +26,14 @@ objects_sim <- list(
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
   # fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output
-  flammableMap = simOutPreamble[["flammableMap"]],
-  flammableMapLarge = simOutPreamble[["flammableMapLarge"]],
+  flammableMap = simOutPreamble[["flammableRTM"]],
+  flammableMapLarge = simOutPreamble[["flammableRTML"]],
   minRelativeB = simOutDataPrep[["minRelativeB"]],
   pixelGroupMap = simOutDataPrep[["pixelGroupMap"]],
   rawBiomassMap = simOutDataPrep[["rawBiomassMap"]],
   rasterToMatch = simOutDataPrep[["rasterToMatch"]],
   rasterToMatchLarge = simOutDataPrep[["rasterToMatchLarge"]],
-  rstFlammable = simOutPreamble[["rstFlammable"]],
+  rstFlammable = simOutPreamble[["flammableRTM"]],
   rstTimeSinceFire = simOutPreamble[["rstTimeSinceFire"]],
   species = simOutDataPrep[["species"]],
   speciesEcoregion = simOutDataPrep[["speciesEcoregion"]],
@@ -45,8 +45,9 @@ objects_sim <- list(
   studyAreaLarge = simOutDataPrep[["studyAreaLarge"]],
   studyAreaReporting = simOutDataPrep[["studyAreaReporting"]],
   sufficientLight = simOutDataPrep[["sufficientLight"]]#,
-  # summaryPeriod = config$params[[".globals"]][["summaryPeriod"]] ## LandWeb_output
+  # summaryPeriod = config$args[["summaryPeriod"]] ## LandWeb_output
 )
+stopifnot(all(!sapply(objects_sim, is.null)))
 
 objects_fireModel <- list(
   fireRegimePolys = simOutPreamble[["fireRegimePolys"]], ## scfmDriver, scfmRegime

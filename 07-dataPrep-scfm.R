@@ -47,7 +47,7 @@ objects2 <- list(
 )
 
 objects2_fireModel <- list(
-  rstLCC = simOutPreamble[["rstLCC2011"]],
+  rstLCC = simOutPreamble[["rstLCC2001"]],
   standAgeMap = simOutPreamble[["standAgeMap2011"]]
 )
 
