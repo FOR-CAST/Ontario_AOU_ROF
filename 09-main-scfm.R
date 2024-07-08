@@ -65,7 +65,7 @@ times2save <- c(
   unlist(config$args[["simYears"]]),
   config$args[["analysesOutputsTimes"]],
   config$args[["timeSeriesTimes"]],
-  config$args[["transitionPlotTimes"]],
+  config$args[["transitionPlotTimes"]]
 ) |> unique() |> sort()
 
 objs2save_during <- c(
@@ -78,6 +78,7 @@ objs2save_during <- c(
   "standAgeMap",       ## SpatRaster (.tif); LandWeb_output, NRV_summary
   "vegTypeMap"         ## SpatRaster (.tif); LandWeb_output, HSI_PineMarten, NRV_summary, visualize_LandR_output
 )
+nRsts <- (length(objs2save_during) - 1)
 
 outputs_during <- data.frame(
   expand.grid(objectName = objs2save_during, saveTime = times2save),
