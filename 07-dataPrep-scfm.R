@@ -36,7 +36,7 @@ objects2 <- list(
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   speciesLayers = simOutPreamble[["speciesLayers"]],
   speciesParams = list(
-    longevity = list(Thuj_pli = 800) ## default 700; LandR::speciesTableUpdate sets 1500 (too high!)
+    ## TODO: override spp params if needed
   ),
   speciesTable = simOutPreamble[["speciesTable"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
