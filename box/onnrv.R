@@ -351,10 +351,21 @@ onnrvConfig <- R6::R6Class(
           slackChannel = ""
         ),
         reupload = FALSE,
-        timeSeriesTimes = self$args[["simYears"]][["start"]] + 801:850, ## TODO: use in params
         useCache = FALSE, ## simulation caching
         useLandR.CS = if (self$context[["fireModel"]] == "scfm") FALSE  else TRUE,
         usePrerun = TRUE
+      )
+      self$args <- list(
+        ## these need 'simYears' to already be defined
+        summaryInterval = 50,
+        summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end),
+        timeSeriesTimes = self$args[["simYears"]][["start"]] + 801:850,
+        transitionPlotTimes = seq(self$args[["simYears"]][["start"]], self$args[["simYears"]][["end"]], 100)
+      )
+      self$args <- list(
+        ## these need 'summaryPeriod' and 'summaryInterval' to already be defined
+        analysesOutputsTimes = seq(self$args[["summaryPeriod"]][1], self$args[["summaryPeriod"]][2],
+                                   self$args[["summaryInterval"]])
       )
 
       # modules ------------------------------------------------------------------------------------

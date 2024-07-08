@@ -2,9 +2,6 @@
 .historicFireYears <- 2011:2022 ## TODO: change this for HRV
 
 config.studyArea <- list(
-  args = list(
-    simYears = list(start = 2011, end = 2100) ## TODO: change this for HRV
-  ),
   modules = list(
     ## include ON and QC preambles, which are dropped below based on study area to be run
     Ontario_preamble = "Ontario_preamble",

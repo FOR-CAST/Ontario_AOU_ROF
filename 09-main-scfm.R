@@ -25,7 +25,7 @@ objects_sim <- list(
   cohortData = simOutDataPrep[["cohortData"]],
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
-  fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output
+  # fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output
   flammableMap = simOutPreamble[["flammableMap"]],
   flammableMapLarge = simOutPreamble[["flammableMapLarge"]],
   minRelativeB = simOutDataPrep[["minRelativeB"]],
@@ -44,8 +44,8 @@ objects_sim <- list(
   studyArea = simOutDataPrep[["studyArea"]],
   studyAreaLarge = simOutDataPrep[["studyAreaLarge"]],
   studyAreaReporting = simOutDataPrep[["studyAreaReporting"]],
-  sufficientLight = simOutDataPrep[["sufficientLight"]],
-  summaryPeriod = config$params[[".globals"]][["summaryPeriod"]] ## LandWeb_output
+  sufficientLight = simOutDataPrep[["sufficientLight"]]#,
+  # summaryPeriod = config$params[[".globals"]][["summaryPeriod"]] ## LandWeb_output
 )
 
 objects_fireModel <- list(
@@ -62,12 +62,11 @@ objects_sim <- append(objects_sim, objects_fireModel)
 
 ## objects to save during simulation
 times2save <- c(
-  0,
-  seq(0, 1200, 100), ## TODO: add this to config - want to produce transition plots for the entire sim
+  unlist(config$args[["simYears"]]),
+  config$args[["analysesOutputsTimes"]],
   config$args[["timeSeriesTimes"]],
-  LandWebUtils::analysesOutputsTimes(period = config$params[[".globals"]][["summaryPeriod"]],
-                                     interval = config$params[[".globals"]][["summaryInterval"]])
-) |> unique()
+  config$args[["transitionPlotTimes"]],
+) |> unique() |> sort()
 
 objs2save_during <- c(
   "cohortData",        ## data.table (.qs); NRV_summary, visualize_LandR_output
