@@ -25,7 +25,7 @@ objects_sim <- list(
   cohortData = simOutDataPrep[["cohortData"]],
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
-  # fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output
+  fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output, timeSinceFire
   flammableMap = simOutPreamble[["flammableRTM"]],
   flammableMapLarge = simOutPreamble[["flammableRTML"]],
   minRelativeB = simOutDataPrep[["minRelativeB"]],
