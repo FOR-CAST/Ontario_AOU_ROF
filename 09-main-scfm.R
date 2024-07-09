@@ -47,7 +47,6 @@ objects_sim <- list(
   sufficientLight = simOutDataPrep[["sufficientLight"]]#,
   # summaryPeriod = config$args[["summaryPeriod"]] ## LandWeb_output
 )
-stopifnot(all(!sapply(objects_sim, is.null)))
 
 objects_fireModel <- list(
   fireRegimePolys = simOutPreamble[["fireRegimePolys"]], ## scfmDriver, scfmRegime
@@ -58,6 +57,7 @@ objects_fireModel <- list(
 )
 
 objects_sim <- append(objects_sim, objects_fireModel)
+stopifnot(all(!sapply(objects_sim, is.null)))
 
 # simulation outputs --------------------------------------------------------------------------
 
