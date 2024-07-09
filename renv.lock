@@ -419,7 +419,7 @@
       "Package": "RandomFields",
       "Version": "3.3.14",
       "Source": "Repository",
-      "Repository": "https://predictiveecology.r-universe.dev",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "RandomFieldsUtils",
@@ -436,7 +436,7 @@
       "Package": "RandomFieldsUtils",
       "Version": "1.2.5",
       "Source": "Repository",
-      "Repository": "https://predictiveecology.r-universe.dev",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods",
@@ -4192,14 +4192,14 @@
     },
     "scfmutils": {
       "Package": "scfmutils",
-      "Version": "2.0.1",
+      "Version": "2.0.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "scfmutils",
       "RemoteRef": "development",
-      "RemoteSha": "11d937c501f68f7e91687b1f9a497515f24c86cb",
+      "RemoteSha": "d898b3271e8111850fd7cc9b7880c8cdd9e85f30",
       "Remotes": "PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "R",
@@ -4224,7 +4224,7 @@
         "tools",
         "viridis"
       ],
-      "Hash": "e58ea4e1d56c09744ca6d16e1ab4855a"
+      "Hash": "afb6b0987e7905a163f4d9ac94786509"
     },
     "selectr": {
       "Package": "selectr",
