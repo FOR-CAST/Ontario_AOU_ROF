@@ -224,18 +224,14 @@ if (isUpdated(mySimOut) || isFALSE(config$args[["useCache"]])) {
 
   # create vegetation transition plots ----------------------------------------------------------
 
-  NDTBEC <- simOutPreamble[["ml"]][["ecoregionLayer (NDTxBEC)"]] |>
-    sf::st_crop(simOutPreamble[["studyAreaReporting"]])
-  rstNDTBEC <- terra::rasterize(NDTBEC, simOutPreamble[["rasterToMatch"]], field = "NDTBEC") |>
-    terra::crop(simOutPreamble[["studyAreaReporting"]]) |>
-    terra::mask(simOutPreamble[["studyAreaReporting"]])
+  rstEcoregion <- sf::st_crop(mySimOut[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
 
   years <- seq(0, 1200, 100) ## TODO: use years from config
   fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
 
   transitions_df <- vegTransitions(
     vtm = fvtm,
-    ecoregion = rstNDTBEC,
+    ecoregion = rstEcoregion,
     field = "NDTBEC",
     studyArea = simOutPreamble[["studyAreaReporting"]],
     times = years,

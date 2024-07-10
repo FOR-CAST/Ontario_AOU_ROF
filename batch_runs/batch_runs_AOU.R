@@ -1,21 +1,33 @@
-# sAN <- "ON_AOU_6.1" ## terrible ignition fits; sims can't run
-#sAN <- "ON_AOU_6.2" ## 370 running; 585 done
-#sAN <- "ON_AOU_6.5" ## 370 done; 585 done
-sAN <- "ON_AOU_6.6" ## 370 done; 585 done
+fireModel <- "scfm" ## "fireSense"
+nrvType <- "HRV" ## "FRV"
 
 fit <- FALSE
 
-gcm <- "CanESM5"
-# gcm <- "CNRM-ESM2-1"
+if (tolower(fireModel) == "firesense") {
+  # sAN <- "ON_AOU_6.1"
+  # sAN <- "ON_AOU_6.2"
+  # sAN <- "ON_AOU_6.5"
+  sAN <- "ON_AOU_6.6"
+} else {
+  sAN <- "ON_AOU"
+}
 
-# ssp <- 245
-# ssp <- 370
-ssp <- 585
+if (nrvType == "FRV") {
+  gcm <- "CanESM5"
+  # gcm <- "CNRM-ESM2-1"
 
-Nstart <- 1L
-Nreps <- 10L
+  # ssp <- 245
+  # ssp <- 370
+  ssp <- 585
+} else {
+  gcm <- NULL
+  ssp <- NULL
+}
 
-delay <- 0L * 3600L
+Nstart <- 31L
+Nreps <- 50L
+
+delay <- 5L * 3600L
 
 reps2run <- if (isTRUE(fit)) {
   Nstart ## fitting loops already in script
@@ -24,15 +36,28 @@ reps2run <- if (isTRUE(fit)) {
 }
 
 lapply(reps2run, function(rep) {
-  cmd <- paste(
-    sprintf("screen -d -m -S %s_%02d Rscript -e '.rep <- %d; .studyAreaName <- \"%s\"; .climateGCM <- \"%s\"; .climateSSP <- \"%d\";",
-            sAN, rep, rep, sAN, gcm, ssp),
-    if (isTRUE(fit)) sprintf(".mode <- c(\"production\", \"fit\");") else ".mode <- \"production\";",
-    sprintf("Sys.sleep(%d);", delay),
-    "source(\"00-global.R\")'"
-  )
+  cmd <- sprintf("screen -d -m -S %s_%02d Rscript -e", sAN, rep)
+  cmd <- paste(cmd, "'")
+
+  cmd <- paste(cmd, sprintf(".rep <- %d;", rep))
+  cmd <- paste(cmd, sprintf(".studyAreaName <- \"%s\";", sAN))
+  cmd <- paste(cmd, sprintf(".fireModel <- \"%s\";", fireModel))
+
+  if (nrvType == "FRV") {
+    cmd <- paste(cmd, sprintf(".climateGCM <- \"%s\"; .climateSSP <- \"%d\";", gcm, ssp))
+  }
+
+  if (isTRUE(fit)) {
+    cmd <- paste(cmd, sprintf(".mode <- c(\"production\", \"fit\");"))
+  } else {
+    cmd <- paste(cmd, ".mode <- \"production\";")
+  }
+
+  cmd <- paste(cmd, sprintf("Sys.sleep(%d);", delay))
+  cmd <- paste(cmd, sprintf("source(\"00-main.R\")"))
+  cmd <- paste(cmd, "'")
   system(cmd, intern = TRUE)
   Sys.sleep(5)
 })
 
-rm(delay, fit, gcm, Nstart, Nreps, reps2run, sAN, ssp)
+rm(delay, fireModel, fit, gcm, Nstart, Nreps, nrvType, reps2run, sAN, ssp)
