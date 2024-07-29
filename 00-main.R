@@ -74,6 +74,8 @@ data.table::setDTthreads(config$params[[".globals"]][[".useParallel"]])
 
 opts <- SpaDES.config::setProjectOptions(config)
 
+sf::sf_proj_network(TRUE)
+
 quickPlot::dev.useRSGD(useRSGD = quickPlot::isRstudioServer())
 
 SpaDES.config::authGoogle(tryToken = "eastern-boreal", tryEmail = config$args[["cloud"]][["googleUser"]])

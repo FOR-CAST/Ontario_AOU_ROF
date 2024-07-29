@@ -405,7 +405,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.cacheSaveFormat = "rds", ## can be "qs" or "rds"
         reproducible.conn = dbConnCache("sqlite"), ## "sqlite" or "postgresql"
         reproducible.destinationPath = normPath(self$paths[["inputPath"]]),
-        reproducible.gdalwarp = TRUE,
+        reproducible.gdalwarp = TRUE, ## required b/c prepInputs doing it wrong???
         reproducible.inputPaths = NULL,
         reproducible.nThreads = 2,
         reproducible.overwrite = TRUE,

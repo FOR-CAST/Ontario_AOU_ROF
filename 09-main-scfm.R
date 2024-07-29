@@ -224,9 +224,9 @@ if (isUpdated(mySimOut) || isFALSE(config$args[["useCache"]])) {
 
   # create vegetation transition plots ----------------------------------------------------------
 
-  rstEcoregion <- sf::st_crop(mySimOut[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
+  rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
 
-  years <- seq(0, 1200, 100) ## TODO: use years from config
+  years <- config$args[["transitionPlotTimes"]]
   fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
 
   transitions_df <- vegTransitions(

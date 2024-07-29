@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9005",
+      "Version": "1.1.5.9006",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
-      "RemoteRef": "development",
-      "RemoteSha": "d366001a3e06eff2e9e6677ae659c9242bffc048",
+      "RemoteRef": "1eaa2d2c7583d149e2b51e31d4ca0f0ce52ea4eb",
+      "RemoteSha": "1eaa2d2c7583d149e2b51e31d4ca0f0ce52ea4eb",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "cea3b68ea1be0faaecd45935cf5236a0"
+      "Hash": "b4ea6daa3a5684a6ec190f7dc8a6da93"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -279,6 +279,21 @@
       ],
       "Hash": "b76e204be3f12c7adc635618092029ad"
     },
+    "R.cache": {
+      "Package": "R.cache",
+      "Version": "0.16.0",
+      "Source": "Repository",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Requirements": [
+        "R",
+        "R.methodsS3",
+        "R.oo",
+        "R.utils",
+        "digest",
+        "utils"
+      ],
+      "Hash": "fe539ca3f8efb7410c3ae2cf5fe6c0f8"
+    },
     "R.methodsS3": {
       "Package": "R.methodsS3",
       "Version": "1.8.2",
@@ -302,6 +317,25 @@
         "utils"
       ],
       "Hash": "4fed809e53ddb5407b3da3d0f572e591"
+    },
+    "R.rsp": {
+      "Package": "R.rsp",
+      "Version": "0.46.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R.cache",
+        "R.methodsS3",
+        "R.oo",
+        "R.utils",
+        "digest",
+        "methods",
+        "stats",
+        "tools",
+        "utils"
+      ],
+      "Hash": "fb4da3a8c5a9246a50a7b7b0eb81e8ef"
     },
     "R.utils": {
       "Package": "R.utils",
@@ -649,7 +683,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.tools",
-      "RemoteRef": "development",
+      "RemoteRef": "a8d263c924098fd472d17c0e44ccbbdadc64fef2",
       "RemoteSha": "a8d263c924098fd472d17c0e44ccbbdadc64fef2",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
@@ -666,7 +700,7 @@
         "stats",
         "terra"
       ],
-      "Hash": "4e6181a41334c688c89b94fcd8ac8407"
+      "Hash": "7f49577252b891f87071ac6717ce8b07"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -732,6 +766,19 @@
         "utils"
       ],
       "Hash": "14d82c02c5dc0330a0f3f3d717d92a19"
+    },
+    "V8": {
+      "Package": "V8",
+      "Version": "4.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Rcpp",
+        "curl",
+        "jsonlite",
+        "utils"
+      ],
+      "Hash": "ca98390ad1cef2a5a609597b49d3d042"
     },
     "XML": {
       "Package": "XML",
@@ -852,6 +899,24 @@
         "vctrs"
       ],
       "Hash": "85c24dd7844977e4a680ba28f576125c"
+    },
+    "asciicast": {
+      "Package": "asciicast",
+      "Version": "2.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "V8",
+        "cli",
+        "curl",
+        "jsonlite",
+        "magick",
+        "processx",
+        "tibble",
+        "utils",
+        "withr"
+      ],
+      "Hash": "d3231ad4843d771ecce79dfa805e50a2"
     },
     "askpass": {
       "Package": "askpass",
@@ -2539,6 +2604,18 @@
       ],
       "Hash": "03d741c92fda96d98c3a3f22494e3b4a"
     },
+    "hunspell": {
+      "Package": "hunspell",
+      "Version": "3.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "digest"
+      ],
+      "Hash": "e957e989ea17f937964f0d46b0f0bca0"
+    },
     "igraph": {
       "Package": "igraph",
       "Version": "2.0.3",
@@ -3083,6 +3160,16 @@
         "tcltk"
       ],
       "Hash": "c075218a4fc802bab009a7f5e01bb686"
+    },
+    "mockery": {
+      "Package": "mockery",
+      "Version": "0.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "testthat"
+      ],
+      "Hash": "674d86780fecdee68504452578cb010c"
     },
     "modelr": {
       "Package": "modelr",
@@ -3737,7 +3824,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "quickPlot",
-      "RemoteRef": "development",
+      "RemoteRef": "9bfd2801989e1de9da13a99649759edeed83189a",
       "RemoteSha": "9bfd2801989e1de9da13a99649759edeed83189a",
       "Requirements": [
         "R",
@@ -3750,7 +3837,7 @@
         "terra",
         "utils"
       ],
-      "Hash": "dbfe7545d7409553b170b99b45a80d2d"
+      "Hash": "a66b06f8d75bf08f9fbf74c0329ac137"
     },
     "rappdirs": {
       "Package": "rappdirs",
@@ -3860,14 +3947,14 @@
     },
     "reproducible": {
       "Package": "reproducible",
-      "Version": "2.1.1.9002",
+      "Version": "2.1.1.9004",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
-      "RemoteRef": "development",
-      "RemoteSha": "3ac3c96bbe2bc2f8bee7b2bc251f20bf41647f04",
+      "RemoteRef": "b0f65fa8b504b8238f472093b4ed5cff573fb3d2",
+      "RemoteSha": "b0f65fa8b504b8238f472093b4ed5cff573fb3d2",
       "Remotes": "rspatial/geodata",
       "Requirements": [
         "R",
@@ -3881,7 +3968,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "74f76339364f53e9185520b1d1f3742d"
+      "Hash": "c0d55298f3280b591b7151770130ff31"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -4541,6 +4628,19 @@
       ],
       "Hash": "787fa89f5c48dfe579c670db3ceaa0cc"
     },
+    "spelling": {
+      "Package": "spelling",
+      "Version": "2.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "commonmark",
+        "hunspell",
+        "knitr",
+        "xml2"
+      ],
+      "Hash": "632e9e83d3dc774d361b9415b15642bb"
+    },
     "stringfish": {
       "Package": "stringfish",
       "Version": "0.16.0",
@@ -4638,7 +4738,7 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.7-71",
+      "Version": "1.7-78",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -4646,7 +4746,7 @@
         "Rcpp",
         "methods"
       ],
-      "Hash": "e8611881ab70a4fb7a1f629b31e6fcff"
+      "Hash": "8f020def0792119cb98bd8f696dab22d"
     },
     "testthat": {
       "Package": "testthat",

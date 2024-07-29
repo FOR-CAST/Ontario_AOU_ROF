@@ -16,7 +16,7 @@ year <- 2001
 
 dataPrepModules <- list(
   "Biomass_speciesData",
-  "Biomass_speciesFactorial",
+  # "Biomass_speciesFactorial",
   "Biomass_borealDataPrep",
   "Biomass_speciesParameters"
 ) ## TODO: use config$modules
@@ -33,9 +33,9 @@ config$params <- list(
     .plotInitialTime = year,
     .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
   ),
-  Biomass_speciesFactorial = list(
-    .plotInitialTime = year
-  ),
+  # Biomass_speciesFactorial = list(
+  #   .plotInitialTime = year
+  # ),
   Biomass_borealDataPrep = list(
     dataYear = year,
     .plotInitialTime = year,
@@ -56,6 +56,7 @@ dataPrepParams2001 <- list(
 
 dataPrepObjects <- list(
   .runName = config$context[["runName"]], ## needed to trigger correct caching behaviour?
+  imputedPixID = simOutPreamble[["imputedPixID2001"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   studyArea = simOutPreamble[["studyArea"]],
@@ -185,9 +186,9 @@ config$params <- list(
     .plotInitialTime = year,
     .studyAreaName = paste0(config$context[["studyAreaName"]], "_", year)
   ),
-  Biomass_speciesFactorial = list(
-    .plotInitialTime = year
-  ),
+  # Biomass_speciesFactorial = list(
+  #   .plotInitialTime = year
+  # ),
   Biomass_borealDataPrep = list(
     dataYear = year,
     .plotInitialTime = year,
@@ -219,6 +220,7 @@ dataPrepParams2011[["Biomass_borealDataPrep"]][[".studyAreaName"]] <- paste0(con
 dataPrepParams2011[["Biomass_speciesParameters"]][[".plotInitialTime"]] <- year
 ## end pram updates
 
+dataPrepObjects[["imputedPixID"]] <- simOutPreamble[["imputedPixID2011"]]
 dataPrepObjects[["standAgeMap"]] <- simOutPreamble[["standAgeMap2011"]]
 
 dataPrepOutputs2011 <- data.frame(

@@ -31,7 +31,7 @@ parameters2 <- list(
 ## ensure all 'objects(simOutPreamble)' accounted for here, with correct names/mappings
 objects2 <- list(
   cloudFolderID = config$args[["cloud"]][["cacheDir"]],
-  # imputedPixID = simOutPreamble[["imputedPixID"]], ## TODO
+  imputedPixID = simOutPreamble[["imputedPixID2001"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   speciesLayers = simOutPreamble[["speciesLayers"]],
@@ -67,7 +67,7 @@ outputs2 <- data.frame(
   file = c(
     "ecoregionMap_year0000.tif",
     "speciesEcoregion_year0000.csv",
-    "speciesTraits_adjusted.csv"
+    "speciesTraits_adjusted_year0000.csv"
   ),
   stringsAsFactors = FALSE
 )
