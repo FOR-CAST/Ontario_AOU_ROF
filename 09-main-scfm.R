@@ -12,8 +12,19 @@ prev_modules <- c(
 
 modules_sim <- config$modules[-which(names(config$modules) %in% prev_modules)]
 
+## TODO: specifying load order manually is still necessary :(
 loadorder_sim <- c(
-  ## TODO: specify load order manually; is this still necessary???
+  "scfmLandcoverInit",
+  "scfmRegime",
+  "scfmDriver",
+  "Biomass_core",
+  "scfmIgnition",
+  "scfmEscape",
+  "scfmSpread",
+  "Biomass_regeneration",
+  "LandWeb_output",
+  "timeSinceFire",
+  "scfmDiagnostics"
 )
 
 parameters_sim <- config$params
@@ -157,7 +168,7 @@ tryCatch({
     times = times_sim,
     params = parameters_sim,
     modules = modules_sim,
-    # loadOrder = loadorder_sim, ## TODO: confirm this is no longer necessary
+    loadOrder = loadorder_sim,
     outputs = outputs_sim,
     objects = objects_sim,
     paths = paths_sim,
