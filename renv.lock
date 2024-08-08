@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9007",
+      "Version": "1.1.5.9011",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "tmp",
-      "RemoteSha": "7856ce38a9264673c1135fcaf4a2877b29f74a92",
+      "RemoteSha": "e30ba4259781b96b01996b092eb5bbbdc1123e74",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "f9706ef62d1174ebdc670ddade392c6b"
+      "Hash": "82f78d15d14b49225fa4302fab96f8e0"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -578,14 +578,14 @@
     },
     "SpaDES.core": {
       "Package": "SpaDES.core",
-      "Version": "2.1.5.9000",
+      "Version": "2.1.5.9001",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
       "RemoteRef": "development",
-      "RemoteSha": "f97a604bc22900bf1c07beb40b32b7057bb3614b",
+      "RemoteSha": "0004226245397c5e663bddd1dfd9eb08233a268b",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
@@ -605,7 +605,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "d35c8d4b3a05564c8cd506d601686646"
+      "Hash": "8074fbe8e9e763a421a53a85f02b61c4"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
@@ -3954,7 +3954,7 @@
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
       "RemoteRef": "development",
-      "RemoteSha": "d7039c25bf065a49c4cb7f2c4cb01a35eaac2307",
+      "RemoteSha": "e586dbbf5f9187577dbcf265477bb9ec2cb9da47",
       "Remotes": "rspatial/geodata",
       "Requirements": [
         "R",
@@ -3968,7 +3968,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "3b8ad56bdbe6f9080e51073d7df950c6"
+      "Hash": "fc7e3fe193f82eed53812e8c5f091936"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -4279,14 +4279,14 @@
     },
     "scfmutils": {
       "Package": "scfmutils",
-      "Version": "2.0.2",
+      "Version": "0.0.13.9003",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "scfmutils",
-      "RemoteRef": "development",
-      "RemoteSha": "d898b3271e8111850fd7cc9b7880c8cdd9e85f30",
+      "RemoteRef": "pre-essification",
+      "RemoteSha": "7d7b3c57d4f2170bf9de07536b24dc1d2c16151b",
       "Remotes": "PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "R",
@@ -4294,7 +4294,6 @@
         "SpaDES.tools",
         "data.table",
         "dplyr",
-        "fpCompare",
         "ggplot2",
         "grDevices",
         "graphics",
@@ -4311,7 +4310,7 @@
         "tools",
         "viridis"
       ],
-      "Hash": "afb6b0987e7905a163f4d9ac94786509"
+      "Hash": "324f80d4f29418cac7407f5cfcd364fa"
     },
     "selectr": {
       "Package": "selectr",
