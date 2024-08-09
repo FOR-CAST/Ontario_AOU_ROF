@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9013",
+      "Version": "1.1.5.9014",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "tmp",
-      "RemoteSha": "46f54a9e829174aaba99d69b01805bf8a32fd745",
+      "RemoteSha": "c51b21422df26af431480fee69e6258e213b0f52",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "5561361e3f708617c454a3128d920e4d"
+      "Hash": "677e3fa8f1b50f47b96c0f15d9c1e469"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
