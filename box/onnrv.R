@@ -343,7 +343,7 @@ onnrvConfig <- R6::R6Class(
         delayStart = 0,
         fsimext = "rds", ## TODO: use qs once spades.core is fixed
         simYears = if (self$context[["fireModel"]] == "scfm") {
-          list(start = 0, end = 1200)
+          list(start = 0, end = 1201) ## use one extra year to get fire summaries
         } else {
           list(start = 2011, end = 2100)
         },
@@ -416,6 +416,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
+        scfmutils.driver.plot.scam = FALSE,
         spades.allowInitDuringSimInit = FALSE, ## TODO: is TRUE working correctly???
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
@@ -614,7 +615,7 @@ onnrvConfig <- R6::R6Class(
           scamOptimizer = "efs",
           .useCache = FALSE, # ".inputObjects", ## don't cache 'init' ## TODO
           .useCloud = FALSE,
-          .useParallelFireRegimePolys = TRUE
+          .useParallelFireRegimePolys = FALSE ## TODO: fix cluster hang/crash
         ),
         scfmEscape = list(
           startTime = self$args$simYears$start + 1,
