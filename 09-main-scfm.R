@@ -41,7 +41,6 @@ objects_sim <- list(
   flammableMapLarge = simOutPreamble[["flammableRTML"]],
   minRelativeB = simOutDataPrep[["minRelativeB"]],
   pixelGroupMap = simOutDataPrep[["pixelGroupMap"]],
-  rawBiomassMap = simOutDataPrep[["rawBiomassMap"]],
   rasterToMatch = simOutDataPrep[["rasterToMatch"]],
   rasterToMatchLarge = simOutDataPrep[["rasterToMatchLarge"]],
   rstFlammable = simOutPreamble[["flammableRTM"]],

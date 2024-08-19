@@ -34,7 +34,6 @@ objects2 <- list(
   imputedPixID = simOutPreamble[["imputedPixID2001"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
-  speciesLayers = simOutPreamble[["speciesLayers"]],
   speciesParams = list(
     ## TODO: override spp params if needed
   ),
@@ -47,7 +46,7 @@ objects2 <- list(
 )
 
 objects2_fireModel <- list(
-  rstLCC = simOutPreamble[["rstLCC2001"]],
+  rstLCC = simOutPreamble[["rstLCC2011"]],
   standAgeMap = simOutPreamble[["standAgeMap2011"]]
 )
 

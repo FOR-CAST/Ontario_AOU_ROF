@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9016",
+      "Version": "1.1.5.9017",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "tmp",
-      "RemoteSha": "5da7cc0a65e3af40a571dd5d3de6bab079107eaa",
+      "RemoteSha": "b0bd697aa0e139cc2cda584365331201f816d733",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -171,7 +171,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "75b39cb9cee8888efeeafa97a99941d9"
+      "Hash": "7a46e9d7d354939b08083f63d1c10aa9"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -4279,14 +4279,14 @@
     },
     "scfmutils": {
       "Package": "scfmutils",
-      "Version": "0.0.13.9003",
+      "Version": "2.0.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "scfmutils",
-      "RemoteRef": "pre-essification",
-      "RemoteSha": "7d7b3c57d4f2170bf9de07536b24dc1d2c16151b",
+      "RemoteRef": "development",
+      "RemoteSha": "a2751c7f341f6d76b6491932687ef02203b9b43e",
       "Remotes": "PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "R",
@@ -4294,6 +4294,7 @@
         "SpaDES.tools",
         "data.table",
         "dplyr",
+        "fpCompare",
         "ggplot2",
         "grDevices",
         "graphics",
@@ -4310,7 +4311,7 @@
         "tools",
         "viridis"
       ],
-      "Hash": "324f80d4f29418cac7407f5cfcd364fa"
+      "Hash": "8a404d350d655a7e59eb05fb821f8502"
     },
     "selectr": {
       "Package": "selectr",
