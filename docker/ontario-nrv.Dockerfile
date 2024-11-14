@@ -1,4 +1,4 @@
-FROM achubaty/spades-project:4.3.2
+FROM achubaty/spades-project:4.3.3
 
 LABEL org.opencontainers.image.authors="achubaty@for-cast.ca"
 
