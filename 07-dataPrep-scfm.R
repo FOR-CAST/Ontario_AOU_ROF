@@ -34,9 +34,7 @@ objects2 <- list(
   imputedPixID = simOutPreamble[["imputedPixID2001"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
-  speciesParams = list(
-    ## TODO: override spp params if needed
-  ),
+  speciesParams = simOutPreamble[["speciesParams"]],
   speciesTable = simOutPreamble[["speciesTable"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
   sppEquiv = simOutPreamble[["sppEquiv"]],

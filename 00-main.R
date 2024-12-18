@@ -128,17 +128,15 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
       do.call(SpaDES.core::setPaths, SpaDES.config::paths4spades(config$paths))
 
-      source("08-fireSense_fit.R")
+      if (config$context[["fireModel"]] == "firesense") {
+        source("08-fireSense_fit.R")
+      }
 
       if (file.exists("Rplots.pdf")) {
         file.rename("Rplots.pdf", file.path(figPath, sprintf("spreadFit_plots_%s.pdf", config$context[["runName"]])))
       }
     }
   } else {
-    if (config$context[["fireModel"]] == "firesense") {
-      source("08-fireSense_fit.R")
-    }
-
     source(paste0("09-main-", config$context[["fireModel"]], ".R"))
   }
 } else {

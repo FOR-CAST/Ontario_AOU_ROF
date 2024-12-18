@@ -31,8 +31,37 @@ parameters_sim <- config$params
 
 # simulation objects --------------------------------------------------------------------------
 
+if (FALSE) {
+  ## verify everything needed for main sim gets into objects_sim / objects_fireModel
+  obj4sim <- list()
+
+  tmp1 <- lapply(objects(simOutPreamble), function(x) simOutPreamble[[x]])
+  names(tmp1) <- objects(simOutPreamble)
+
+  tmp2 <- lapply(objects(simOutDataPrep), function(x) simOutDataPrep[[x]])
+  names(tmp2) <- objects(simOutDataPrep)
+
+  obj4sim <- modifyList(tmp1, tmp2)
+
+  objs2drop <- c(
+    "canProvs",
+    "cloudFolderID", "cohortDataFactorial", "columnsForPixelGroups",
+    "LCC", ## will use rstLCC from dataPrep
+    "ml", "pixelFateDT",
+    "PSPgis_sppParams", "PSPmeasure_sppParams", "PSPplot_sppParams",
+    "speciesGrowthCurves", "speciesTableFactorial", "speciesParams"
+  )
+
+  for (i in objs2drop) {
+    obj4sim[[i]] <- NULL
+  }
+
+  names(obj4sim) |> sort()
+
+  rm(objs2drop, obj4sim, tmp1, tmp2)
+}
+
 objects_sim <- list(
-  biomassMap = simOutDataPrep[["biomassMap"]],
   cohortData = simOutDataPrep[["cohortData"]],
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
@@ -205,67 +234,65 @@ tryCatch({
   }
 })
 
-if (isUpdated(mySimOut) || isFALSE(config$args[["useCache"]])) {
-  mySimOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
+mySimOut@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
 
-  message("Saving simulation to: ", fsim)
-  tryCatch({
-    saveSimList(mySimOut, fsim, inputs = FALSE, outputs = FALSE, cache = FALSE, files = FALSE)
-  }, error = function(e) warning(e))
+message("Saving simulation to: ", fsim)
+tryCatch({
+  saveSimList(mySimOut, fsim, inputs = FALSE, outputs = FALSE, cache = FALSE, files = FALSE)
+}, error = function(e) warning(e))
 
-  ## TODO: upload
+## TODO: upload
 
-  # save simulation info ------------------------------------------------------------------------
-  relOutputPath <- SpaDES.config:::.getRelativePath(paths_sim[["outputPath"]], prjDir)
-  rrFile <- file.path(relOutputPath, "INFO.md")
-  cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
-  cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
+# save simulation info ------------------------------------------------------------------------
+relOutputPath <- SpaDES.config:::.getRelativePath(paths_sim[["outputPath"]], prjDir)
+rrFile <- file.path(relOutputPath, "INFO.md")
+cat(SpaDES.config::printRunInfo(config$context), file = rrFile, sep = "")
+cat(workflowtools::reproducibilityReceipt(), file = rrFile, sep = "\n", append = TRUE)
 
-  # save simulation stats -----------------------------------------------------------------------
-  elapsed <- elapsedTime(mySimOut)
-  data.table::fwrite(elapsed, file.path(paths_sim[["outputPath"]], "elapsedTime.csv"))
-  qs::qsave(elapsed, file.path(paths_sim[["outputPath"]], "elapsedTime.qs"))
+# save simulation stats -----------------------------------------------------------------------
+elapsed <- elapsedTime(mySimOut)
+data.table::fwrite(elapsed, file.path(paths_sim[["outputPath"]], "elapsedTime.csv"))
+qs::qsave(elapsed, file.path(paths_sim[["outputPath"]], "elapsedTime.qs"))
 
-  if (!isFALSE(getOption("spades.memoryUseInterval"))) {
-    memory <- memoryUse(mySimOut, max = TRUE)
-    data.table::fwrite(memory, file.path(paths_sim[["outputPath"]], "memoryUsed.csv"))
-    qs::qsave(memory, file.path(paths_sim[["outputPath"]], "memoryUsed.qs"))
-  }
+if (!isFALSE(getOption("spades.memoryUseInterval"))) {
+  memory <- memoryUse(mySimOut, max = TRUE)
+  data.table::fwrite(memory, file.path(paths_sim[["outputPath"]], "memoryUsed.csv"))
+  qs::qsave(memory, file.path(paths_sim[["outputPath"]], "memoryUsed.qs"))
+}
 
-  # create vegetation transition plots ----------------------------------------------------------
+# create vegetation transition plots ----------------------------------------------------------
 
-  rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
+rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
 
-  years <- config$args[["transitionPlotTimes"]]
-  fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
+years <- config$args[["transitionPlotTimes"]]
+fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
 
-  transitions_df <- vegTransitions(
-    vtm = fvtm,
-    ecoregion = rstEcoregion,
-    field = "NDTBEC",
-    studyArea = simOutPreamble[["studyAreaReporting"]],
-    times = years,
-    na.rm = TRUE
-  )
+transitions_df <- vegTransitions(
+  vtm = fvtm,
+  ecoregion = rstEcoregion,
+  field = "NDTBEC",
+  studyArea = simOutPreamble[["studyAreaReporting"]],
+  times = years,
+  na.rm = TRUE
+)
 
-  transition_ggs <- plotVegTransitions(transitions_df)
+transition_ggs <- plotVegTransitions(transitions_df)
 
-  lapply(names(transition_ggs), function(i) {
-    ggsave(file.path(paths_sim[["outputPath"]], "figures", paste0("transition_vegTypeMap_", i, ".png")),
-           transition_ggs[[i]], width = 12, height = 6)
-  })
+lapply(names(transition_ggs), function(i) {
+  ggsave(file.path(paths_sim[["outputPath"]], "figures", paste0("transition_vegTypeMap_", i, ".png")),
+         transition_ggs[[i]], width = 12, height = 6)
+})
 
-  # archive files + upload ----------------------------------------------------------------------
-  if (isTRUE(config$args[["reupload"]])) {
-    resultsDir <- config$paths[["outputPath"]]
+# archive files + upload ----------------------------------------------------------------------
+if (isTRUE(config$args[["reupload"]])) {
+  resultsDir <- config$paths[["outputPath"]]
 
-    tarball <- paste0(resultsDir, ".tar.gz")
+  tarball <- paste0(resultsDir, ".tar.gz")
 
-    # withr::with_dir(resultsDir, archive::archive_write_dir(archive = tarball, dir = resultsDir)) ## TODO: verify
-    utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
+  # withr::with_dir(resultsDir, archive::archive_write_dir(archive = tarball, dir = resultsDir)) ## TODO: verify
+  utils::tar(tarball, resultsDir, compression = "gzip") ## TODO: use archive pkg
 
-    ## upload at the end to prevent timeouts from delaying subsequent sims
-  }
+  ## upload at the end to prevent timeouts from delaying subsequent sims
 }
 
 ## cleanup
