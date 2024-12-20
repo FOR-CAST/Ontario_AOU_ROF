@@ -27,6 +27,12 @@ loadorder_sim <- c(
   "scfmDiagnostics"
 )
 
+## add scfmRegime targetBurnRate param based on FRP attrs from Erni et al.
+## NOTE: Burn.rate is percent per year; we want proportion per year
+targetBurnRate <- simOutPreamble[["fireRegimePolysLarge"]][["Burn.rate"]] / 100
+names(targetBurnRate) <- simOutPreamble[["fireRegimePolysLarge"]][["PolyID"]]
+config$params[["scfmRegime"]][["targetBurnRate"]] <- targetBurnRate
+
 parameters_sim <- config$params
 
 # simulation objects --------------------------------------------------------------------------

@@ -24,10 +24,10 @@ if (nrvType == "FRV") {
   ssp <- NULL
 }
 
-Nstart <- 31L
-Nreps <- 50L
+Nstart <- 21L
+Nreps <- 21L
 
-delay <- 5L * 3600L
+delay <- as.integer(0.25 * 3600)
 
 reps2run <- if (isTRUE(fit)) {
   Nstart ## fitting loops already in script
