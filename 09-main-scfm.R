@@ -95,7 +95,8 @@ objects_sim <- list(
 
 objects_fireModel <- list(
   fireRegimePolys = simOutPreamble[["fireRegimePolys"]], ## scfmDriver, scfmRegime
-  fireRegimePolysLarge = simOutPreamble[["fireRegimePolysLarge"]], ## scfmLandCoverInit, scfmRegime
+  fireRegimePolysCalibration = simOutPreamble[["fireRegimePolysLarge"]], ## scfmLandCoverInit, scfmRegime
+  rasterToMatchCalibration = simOutDataPrep[["rasterToMatchLarge"]], ## scfmLandCoverInit
   rstLCC = simOutDataPrep[["rstLCC"]],
   standAgeMap = simOutDataPrep[["standAgeMap"]],
   vegMap = simOutDataPrep[["rstLCC"]] ## scfmLandCoverInit
@@ -268,7 +269,9 @@ if (!isFALSE(getOption("spades.memoryUseInterval"))) {
 
 # create vegetation transition plots ----------------------------------------------------------
 
-rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionMap"]], simOutPreamble[["studyAreaReporting"]])
+rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionLayer"]], simOutPreamble[["studyAreaReporting"]]) |>
+  terra::rasterize(simOutPreamble[["rasterToMatch"]], field = "ECODISTRIC") |>
+  terra::crop(simOutPreamble[["studyAreaReporting"]], mask = TRUE)
 
 years <- config$args[["transitionPlotTimes"]]
 fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
