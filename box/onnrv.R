@@ -412,7 +412,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.quick = FALSE,
         # reproducible.shapefileRead = "terra::vect",
         reproducible.showSimilar = FALSE,
-        reproducible.useCache = TRUE,
+        reproducible.useCache = FALSE, ## TODO: restore caching if it ever gets fixed
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
