@@ -407,6 +407,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.destinationPath = normPath(self$paths[["inputPath"]]),
         reproducible.gdalwarp = TRUE, ## required b/c prepInputs doing it wrong???
         reproducible.inputPaths = NULL,
+        reproducible.memoisePersist = FALSE,
         reproducible.nThreads = 2,
         reproducible.overwrite = TRUE,
         reproducible.quick = FALSE,
@@ -414,6 +415,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.showSimilar = FALSE,
         reproducible.useCache = FALSE, ## TODO: restore caching if it ever gets fixed
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
+        reproducible.useMemoise = FALSE,
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
         scfmutils.driver.plot.scam = FALSE,
@@ -433,7 +435,7 @@ onnrvConfig <- R6::R6Class(
       # parameters ---------------------------------------------------------------------------------
       private[[".params_full"]] <- list(
         .globals = list(
-          fireTimestep = 1L, ## TODO: where is this used?
+          fireTimestep = 1L, ## TODO: where is this used? scfm?
           initialB = NA, ## 10
           reps = 1L:50L,
           sppEquivCol = "LandR",

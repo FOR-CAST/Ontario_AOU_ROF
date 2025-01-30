@@ -134,14 +134,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9026",
+      "Version": "1.1.5.9031",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "development",
-      "RemoteSha": "683e802df5acca7530d1342a1590f699d04ba43d",
+      "RemoteSha": "84d3e2fae4f06f3f1e44ea26539a4627e600939c",
+      "RemoteHost": "api.github.com",
       "Remotes": "CeresBarros/biomod2@dev_currentCeres, RNCan/BioSimClient_R, PredictiveEcology/map@development, PredictiveEcology/pemisc@development, PredictiveEcology/quickPlot@development, PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "MuMIn",
@@ -155,6 +155,7 @@
         "ggpubr",
         "ggspatial",
         "grDevices",
+        "httr2",
         "lme4",
         "methods",
         "parallel",
@@ -171,7 +172,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "fab5b7c7bb1356d4174bc8ad77693cca"
+      "Hash": "0949c33dda3b7d1289f4fe0844b37ef6"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -260,24 +261,26 @@
     },
     "PSPclean": {
       "Package": "PSPclean",
-      "Version": "0.1.4.9005",
+      "Version": "0.1.5.9002",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "ianmseddy",
       "RemoteRepo": "PSPclean",
       "RemoteRef": "development",
-      "RemoteSha": "e54002c89a3c6b23a601b1b6f5d83b9fecbab800",
+      "RemoteSha": "fce6fdbbb3fab7147a215d065fb63c8ad7d5443a",
+      "RemoteHost": "api.github.com",
       "Remotes": "PredictiveEcology/LandR@development",
       "Requirements": [
+        "LandR",
         "R",
+        "bit64",
         "data.table",
         "raster",
         "reproducible",
         "sf",
         "sp"
       ],
-      "Hash": "b76e204be3f12c7adc635618092029ad"
+      "Hash": "4ed19e37473db229ce4afce774da4ac1"
     },
     "R.cache": {
       "Package": "R.cache",
@@ -581,11 +584,11 @@
       "Version": "2.1.5.9002",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.core",
       "RemoteRef": "development",
-      "RemoteSha": "f7f60bb8a6d59e4c2edeecc618b6ed44d55485f6",
+      "RemoteSha": "e3b34a5b9947d313258cce9d88802cb35f80880a",
+      "RemoteHost": "api.github.com",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
         "R",
@@ -605,7 +608,7 @@
         "utils",
         "whisker"
       ],
-      "Hash": "f5b20cca4aba37c99dc9c51281b7a301"
+      "Hash": "83789a2c57dba319c6165e40cf207315"
     },
     "SpaDES.docs": {
       "Package": "SpaDES.docs",
@@ -683,7 +686,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "SpaDES.tools",
-      "RemoteRef": "development",
+      "RemoteRef": "77e0b4fc04c53526ef3225eda03e6e6143e8621f",
       "RemoteSha": "77e0b4fc04c53526ef3225eda03e6e6143e8621f",
       "Remotes": "ropensci/NLMR, PredictiveEcology/reproducible@development",
       "Requirements": [
@@ -700,7 +703,7 @@
         "stats",
         "terra"
       ],
-      "Hash": "7dd3069a4ac2ad48068e35e1b42981ef"
+      "Hash": "e92a6ebc0f01bde37ab4df4b7d98a2d3"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -1819,14 +1822,14 @@
     },
     "fireSenseUtils": {
       "Package": "fireSenseUtils",
-      "Version": "0.0.5.9068",
+      "Version": "0.0.5.9084",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "fireSenseUtils",
       "RemoteRef": "development",
-      "RemoteSha": "e5993f0fa2ee9e2df00d8eb231e16acfd1935eea",
+      "RemoteSha": "f26eaa72c37b16cda575bf24e568a77cc0b18418",
+      "RemoteHost": "api.github.com",
       "Remotes": "PredictiveEcology/LandR@development, PredictiveEcology/pemisc@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development, PredictiveEcology/Require@development, PredictiveEcology/reproducible@development",
       "Requirements": [
         "DEoptim",
@@ -1834,10 +1837,12 @@
         "LandR",
         "R",
         "RhpcBLASctl",
+        "SpaDES.core",
         "SpaDES.tools",
         "crayon",
         "data.table",
         "fastDummies",
+        "ggplot2",
         "kSamples",
         "mclust",
         "methods",
@@ -1852,9 +1857,10 @@
         "sp",
         "stats",
         "terra",
+        "tidyr",
         "utils"
       ],
-      "Hash": "a6124a860a72c90738378aa28a0a139a"
+      "Hash": "d95ea4779367b428882b473f97bc72c1"
     },
     "fontawesome": {
       "Package": "fontawesome",
@@ -3824,7 +3830,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "quickPlot",
-      "RemoteRef": "development",
+      "RemoteRef": "b6eec391ffe8eb1ecc5377f1dc6982acaa3eb4ac",
       "RemoteSha": "b6eec391ffe8eb1ecc5377f1dc6982acaa3eb4ac",
       "Requirements": [
         "R",
@@ -3837,7 +3843,7 @@
         "terra",
         "utils"
       ],
-      "Hash": "78bb88d47b96898ccba79c638ee3fed2"
+      "Hash": "283581e73a2391eda4b0b479e5a3336b"
     },
     "rappdirs": {
       "Package": "rappdirs",
@@ -3950,11 +3956,11 @@
       "Version": "2.1.2",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
       "RemoteRef": "development",
-      "RemoteSha": "f0ccc2d543184fdbe61f55a1e55953b25d56d2c3",
+      "RemoteSha": "803332a2f2807f0aa245c38112fee77e7f0f0577",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "cli",
@@ -3968,7 +3974,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "00d6dd73dbbfee8b336108fa4ca77e3b"
+      "Hash": "422a471d0d2925d989859d71863f647a"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -4279,14 +4285,14 @@
     },
     "scfmutils": {
       "Package": "scfmutils",
-      "Version": "2.0.5",
+      "Version": "2.0.8",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "scfmutils",
       "RemoteRef": "development",
-      "RemoteSha": "62b50da195e7da43c2c8f23ceea0eaee3c4f8a5f",
+      "RemoteSha": "ba1d5df9984bc7aa5a9adbc0f68c9cda4bbc84cf",
+      "RemoteHost": "api.github.com",
       "Remotes": "PredictiveEcology/reproducible@development, PredictiveEcology/SpaDES.core@development, PredictiveEcology/SpaDES.tools@development",
       "Requirements": [
         "R",
@@ -4311,7 +4317,7 @@
         "tools",
         "viridis"
       ],
-      "Hash": "7cbc0c0402f43d08450c57938e3da49f"
+      "Hash": "8ff1849d4ed0ea7b873fdb240d5ae173"
     },
     "selectr": {
       "Package": "selectr",
