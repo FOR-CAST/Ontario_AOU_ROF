@@ -5,13 +5,14 @@ if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renvi
 
 source("01-global-vars.R")
 
-## packages, paths and options --------------------------------------------------------------------------
+## packages, paths and options ----------------------------------------------------------------
 
 library(data.table)
 library(plyr)
 library(pryr)
 library(future.callr)
 library(googledrive)
+library(httr)
 
 library(SpaDES.config)
 library(SpaDES.core)
@@ -32,6 +33,7 @@ workflowtools::check_project_packages(prjDir)
 ## TODO: implement exptTbl stuff to pass values to config
 
 box::use(box/onnrv)
+
 config <- onnrv$onnrvConfig$new(
   projectPath = prjDir,
   climateGCM = .climateGCM, climateSSP = .climateSSP,

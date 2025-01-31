@@ -68,6 +68,7 @@ if (FALSE) {
 }
 
 objects_sim <- list(
+  biomassMap = simOutDataPrep[["biomassMap"]],
   cohortData = simOutDataPrep[["cohortData"]],
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
@@ -76,7 +77,10 @@ objects_sim <- list(
   pixelGroupMap = simOutDataPrep[["pixelGroupMap"]],
   rasterToMatch = simOutDataPrep[["rasterToMatch"]],
   rasterToMatchLarge = simOutDataPrep[["rasterToMatchLarge"]],
+  rasterToMatchReporting = simOutPreamble[["rasterToMatchReporting"]],
+  rawBiomassMap = simOutDataPrep[["rawBiomassMap"]],
   rstFlammable = simOutPreamble[["flammableRTM"]],
+  rstLCC = simOutDataPrep[["rstLCC"]],
   rstTimeSinceFire = simOutPreamble[["rstTimeSinceFire"]],
   species = simOutDataPrep[["species"]],
   speciesEcoregion = simOutDataPrep[["speciesEcoregion"]],
@@ -84,6 +88,8 @@ objects_sim <- list(
   speciesTable = simOutDataPrep[["speciesTable"]],
   sppColorVect = simOutDataPrep[["sppColorVect"]],
   sppEquiv = simOutDataPrep[["sppEquiv"]],
+  sppNameVector = simOutDataPrep[["sppNameVector"]],
+  standAgeMap = simOutDataPrep[["standAgeMap"]],
   studyArea = simOutDataPrep[["studyArea"]],
   studyAreaLarge = simOutDataPrep[["studyAreaLarge"]],
   studyAreaReporting = simOutDataPrep[["studyAreaReporting"]],
@@ -110,7 +116,8 @@ stopifnot(all(!sapply(objects_sim, is.null)))
 
 ## objects to save during simulation
 times2save <- c(
-  unlist(config$args[["simYears"]]),
+  config$args[["simYears"]][[1]],
+  config$args[["simYears"]][[2]] - 1,
   config$args[["analysesOutputsTimes"]],
   config$args[["timeSeriesTimes"]],
   config$args[["transitionPlotTimes"]]
@@ -186,8 +193,8 @@ if (file.exists(fseed)) {
   seed <- sample(1e4, 1)
   saveRDS(seed, fseed)
 }
-print(paste("random seed:", seed))
-cat(paste("Setting seed in 10-main-sim.R:", seed), file = fseed2, sep = "\n")
+message(paste("random seed:", seed))
+cat(paste("Setting seed in 09-main-scfm.R:", seed), file = fseed2, sep = "\n")
 set.seed(seed)
 writeRNGInfo(fseed2, append = TRUE)
 
@@ -270,7 +277,8 @@ if (!isFALSE(getOption("spades.memoryUseInterval"))) {
 
 # create vegetation transition plots ----------------------------------------------------------
 
-rstEcoregion <- sf::st_crop(simOutDataPrep[["ecoregionLayer"]], simOutPreamble[["studyAreaReporting"]]) |>
+rstEcoregion <- simOutDataPrep[["ecoregionLayer"]] |>
+  sf::st_crop(simOutPreamble[["studyAreaReporting"]]) |>
   terra::rasterize(simOutPreamble[["rasterToMatch"]], field = "ECODISTRIC") |>
   terra::crop(simOutPreamble[["studyAreaReporting"]], mask = TRUE)
 

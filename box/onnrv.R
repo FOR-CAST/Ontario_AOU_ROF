@@ -347,9 +347,6 @@ onnrvConfig <- R6::R6Class(
         } else {
           list(start = 2011, end = 2100)
         },
-        notifications = list(
-          slackChannel = ""
-        ),
         reupload = FALSE,
         useCache = FALSE, ## simulation caching
         useLandR.CS = if (self$context[["fireModel"]] == "scfm") FALSE  else TRUE,
@@ -382,6 +379,7 @@ onnrvConfig <- R6::R6Class(
         ## Biomass_summary = "Biomass_summary", ## post-processing
         ## birds_BRT = "birds_BRT", ## post-processing
         ## burnSummaries = "burnSummaries", ## post-processing
+        ## LandWeb_summary = "LandWeb_summary", ## post-processing
         ## NRV_summary = "NRV_summary ## post-processing
         timeSinceFire = "timeSinceFire"
       )
@@ -436,12 +434,12 @@ onnrvConfig <- R6::R6Class(
       private[[".params_full"]] <- list(
         .globals = list(
           fireTimestep = 1L, ## TODO: where is this used? scfm?
-          initialB = NA, ## 10
+          initialB = NA, ## LandR default: 10; use NA for LANDIS-II default
           reps = 1L:50L,
           sppEquivCol = "LandR",
           successionTimestep = 10,
-          summaryInterval = 50,
-          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end), ## TODO: confirm
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]],
           vegLeadingProportion = 0.8,
           .plotInitialTime = self$args$simYears$start,
           .plots = "png", ## TODO: c("object", "png", "raw", "screen")
@@ -476,6 +474,8 @@ onnrvConfig <- R6::R6Class(
           vegLeadingProportion = 0, ## apparently `sppColorVect` has no mixed colour
           .maxMemory = if (format(pemisc::availableMemory(), units = "GiB") > 130) 5 else 2, ## GB
           .plotInitialTime = self$args$simYears$start, ## start(sim)
+          .plotInterval = 50,
+          .plotMaps = TRUE,
           .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_regeneration = list(
@@ -491,7 +491,7 @@ onnrvConfig <- R6::R6Class(
           .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
         Biomass_speciesFactorial = list(
-          factorialSize = "small" ## TODO: use medium?
+          factorialSize = "large" ## was "small"
         ),
         Biomass_speciesParameters = list(
           PSPdataTypes = "all", ## will use all within studyAreaANPP
@@ -591,17 +591,38 @@ onnrvConfig <- R6::R6Class(
           doPlotting = TRUE,
           yearOfFirstClimateImpact = self$args$simYears$start ## start(sim)
         ),
+        LandWeb_output = list(
+          summaryInterval = 50, ## also set in .globals
+          .plotInitialTime = 0 ## start(sim)
+        ),
+        LandWeb_summary = list(
+          ageClasses = c("Young1", "Young2", "Immature1", "Immature2", "Mature1", "Mature2", "Old", "Old2"),
+          ageClassCutOffs = seq(0, 140, 20),
+          ageClassMaxAge = 400L, ## was `maxAge` previously
+          reps = 1L:10L, ## TODO: used elsewhere to setup runs (expt table)?
+          simOutputPath = self$paths[["outputPath"]],
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]],
+          timeSeriesTimes = 801:850, ## TODO: from args
+          upload = FALSE,
+          uploadTo = "", ## TODO: use google-ids.csv to define these per WBI?
+          version = private[[".version"]],
+          .makeTiles = FALSE, ## no tiles until parallel tile creation resolved (ropensci/tiler#18)
+          .plotInitialTime = self$args$simYears$start, ## start(sim)
+          .useCache = FALSE, # c(".inputObjects", "animation", "postprocess"), ## don't cache 'init' ## TODO
+          .useParallel = self$options[["map.maxNumCores"]]
+        ),
         NRV_summary = list(
           ageClasses = c("Young1", "Young2", "Immature1", "Immature2", "Mature1", "Mature2", "Old", "Old2"),
           ageClassCutOffs = seq(0, 140, 20),
           ageClassMaxAge = 400L, ## was `maxAge` previously
           reps = 1L:10L, ## TODO: used elsewhere to setup runs (expt table)?
           postprocessEvents = "bc",
-          sieveThresh = as.integer(10 / self$args[["pixelSize"]]), ## 10 ha in pixels
+          sieveThresh = as.integer(1000 / self$context[["pixelSize"]]), ## 10 ha in pixels
           # simOutputPath = self$paths[["outputPath"]],
           studyAreaNamesCol = "LU_NAME",
-          summaryInterval = 50,        ## also in .globals
-          summaryPeriod = c(800, 1200), ## also in .globals
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]],
           timeSeriesTimes = 801:850, ## TODO: from args
           upload = FALSE,
           uploadTo = "", ## TODO: use google-ids.csv to define these per WBI?
@@ -708,9 +729,7 @@ onnrvConfig <- R6::R6Class(
             useCloud = FALSE ## TODO: cloudCache spams Google Drive folder; doesn't respect drive path
           ),
           delayStart = if ("production" %in% self$context[["mode"]]) delay_rnd(5L:15L) else 0L, # 5-15 minutes
-          successionTimestep = 10,
-          summaryInterval = 50, ## TODO: remove from args; used in params
-          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end) ## TODO: confirm; remove from args; used in params
+          successionTimestep = 10
         )
 
         self$modules <- modList(self$modules, private[[".fireModules"]])
@@ -722,12 +741,15 @@ onnrvConfig <- R6::R6Class(
         )
       } else if ("postprocess" %in% self$context[["mode"]]) {
         self$modules <- list(
-          ## TODO preamble + speciesData ??
+          "Ontario_AOU_preamble",
+          "Biomass_speciesData",
           "Biomass_summary",
           "fireSense_summary",
           "birds_BRT",
           "burnSummaries",
-          "NRV_summary"
+          # "LandWeb_summary", ## TODO
+          "NRV_summary"#,
+          # "visualize_LandR_output" ## TODO
         )
 
         if (self$context[["fireModel"]] == "scfm") {
@@ -758,7 +780,8 @@ onnrvConfig <- R6::R6Class(
             ## TODO
           ),
           NRV_summary = list(
-            postprocessEvents = "on"
+            postprocessEvents = "on",
+            sieveThresh = as.integer(1000 / self$context[["pixelSize"]]) ## 10 ha in pixels
           )
         )
       }
@@ -771,9 +794,21 @@ onnrvConfig <- R6::R6Class(
 
       ## args ------------------------------------------------------------------
       self$params <- list(
+        .globals = list(
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]]
+        ),
+        HSI_PineMarten = list(
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]]
+        ),
+        LandWeb_summary = list(
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]]
+        ),
         NRV_summary = list(
-          summaryPeriod = c(self$args$simYears$start + 800, self$args$simYears$end),
-          timeSeriesTimes = self$args$simYears$start + 801:850
+          summaryInterval = self$args[["summaryInterval"]],
+          summaryPeriod = self$args[["summaryPeriod"]]
         )
       )
 
