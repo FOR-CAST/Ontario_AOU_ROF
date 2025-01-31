@@ -72,8 +72,6 @@ objects_sim <- list(
   ecoregion = simOutDataPrep[["ecoregion"]],
   ecoregionMap = simOutDataPrep[["ecoregionMap"]],
   fireReturnInterval = simOutPreamble[["fireReturnInterval"]], ## LandWeb_output, timeSinceFire
-  flammableMap = simOutPreamble[["flammableRTM"]],
-  flammableMapLarge = simOutPreamble[["flammableRTML"]],
   minRelativeB = simOutDataPrep[["minRelativeB"]],
   pixelGroupMap = simOutDataPrep[["pixelGroupMap"]],
   rasterToMatch = simOutDataPrep[["rasterToMatch"]],
@@ -96,9 +94,12 @@ objects_sim <- list(
 objects_fireModel <- list(
   fireRegimePolys = simOutPreamble[["fireRegimePolys"]], ## scfmDriver, scfmRegime
   fireRegimePolysCalibration = simOutPreamble[["fireRegimePolysLarge"]], ## scfmLandCoverInit, scfmRegime
+  flammableMap = simOutPreamble[["flammableRTM"]],
+  flammableMapCalibration = simOutPreamble[["flammableRTML"]],
   rasterToMatchCalibration = simOutDataPrep[["rasterToMatchLarge"]], ## scfmLandCoverInit
   rstLCC = simOutDataPrep[["rstLCC"]],
   standAgeMap = simOutDataPrep[["standAgeMap"]],
+  studyAreaCalibration = simOutDataPrep[["studyAreaLarge"]],
   vegMap = simOutDataPrep[["rstLCC"]] ## scfmLandCoverInit
 )
 
