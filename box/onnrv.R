@@ -379,6 +379,7 @@ onnrvConfig <- R6::R6Class(
         ## Biomass_summary = "Biomass_summary", ## post-processing
         ## birds_BRT = "birds_BRT", ## post-processing
         ## burnSummaries = "burnSummaries", ## post-processing
+        # LandWeb_output = "LandWeb_output", ## TODO
         ## LandWeb_summary = "LandWeb_summary", ## post-processing
         ## NRV_summary = "NRV_summary ## post-processing
         timeSinceFire = "timeSinceFire"
@@ -414,6 +415,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.useCache = FALSE, ## TODO: restore caching if it ever gets fixed
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useMemoise = FALSE,
+        reproducible.useDBI = TRUE,
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
         scfmutils.driver.plot.scam = FALSE,
@@ -562,11 +564,13 @@ onnrvConfig <- R6::R6Class(
           # cores = 1L, ## added by user config
           DEoptimTests = c("adTest", "snll_fs"),
           doObjFunAssertions = FALSE,
-          iterDEoptim = 150L, ## default 500L
-          iterStep = 150L, ## default 25L
-          iterThresh = 396L, ## default 96L
-          libPathDEoptim = file.path(projectPath, "renv", "library",
-                                     paste0("R-", getRversion()[, 1:2]), version$platform),
+          iterDEoptim = 500L, ## default 500L
+          iterStep = 25L, ## default 25L
+          iterThresh = 96L, ## default 96L
+          libPathDEoptim = file.path(
+            projectPath, "renv", "library", renv:::renv_bootstrap_platform_os(),
+            paste0("R-", getRversion()[, 1:2]), version$platform
+          ),
           mode = c("fit", "visualize"), ## combo of "debug", "fit", "visualize"
           mutuallyExclusiveCols = list("youngAge" = c("class", "nonForest")),
           objFunCoresInternal = 1L,
