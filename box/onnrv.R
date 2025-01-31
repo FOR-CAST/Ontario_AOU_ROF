@@ -664,7 +664,7 @@ onnrvConfig <- R6::R6Class(
         ),
         scfmSpread = list(
           startTime = self$args$simYears$start + 1,
-          .plotInitialTime = self$args$simYears$start + 1,
+          .plotInterval = 100, ## TODO: default is 10
           .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
         ),
         timeSinceFire = list(
