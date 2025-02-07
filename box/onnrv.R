@@ -455,7 +455,7 @@ onnrvConfig <- R6::R6Class(
           ecoregionLayerField = "ECOREGION", ## "ECODISTRIC"
           exportModels = "none", ## use "all" to export for debugging
           fixModelBiomass = TRUE,
-          forestedLCCClasses = 1:6, ## LCC2010 default
+          forestedLCCClasses = c(81, 210, 220, 230, 240), ## NTEMS
           LCCClassesToReplaceNN = numeric(0), ## LCC2010 default
           speciesTableAreas = c("BSW", "BP", "MC"),
           speciesUpdateFunction = list(
@@ -521,7 +521,7 @@ onnrvConfig <- R6::R6Class(
         ),
         fireSense_dataPrepFit = list(
           fireYears = 2002:2022,
-          forestedLCC = 1:6, ## LCC2010 default
+          forestedLCC = c(81, 210, 220, 230, 240), ## NTEMS
           igAggFactor = 10000 / self$context$pixelSize,
           ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
           spreadFuelClassCol = "FuelClass", ## TODO: use improved classification
@@ -533,7 +533,7 @@ onnrvConfig <- R6::R6Class(
           .useCache = FALSE # ".inputObjects" ## TODO
         ),
         fireSense_dataPrepPredict = list(
-          forestedLCC = 1:6, ## LCC2010 default
+          forestedLCC = c(81, 210, 220, 230, 240), ## NTEMS
           ignitionFuelClassCol = "FuelClass", ## TODO: use improved classification
           nonForestCanBeYoungAge = TRUE,
           spreadFuelClassCol = "FuelClass", ## TODO: use improved classification
@@ -638,7 +638,7 @@ onnrvConfig <- R6::R6Class(
         ),
         scfmDriver = list(
           pMax = 0.27,
-          targetN = 5000, ## increase targetN for more robust estimates, longer run-time
+          targetN = 5000, ## use min 2000; increase for more robust estimates, but longer run-time
           scamOptimizer = "efs",
           .useCache = FALSE, # ".inputObjects", ## don't cache 'init' ## TODO
           .useCloud = FALSE,

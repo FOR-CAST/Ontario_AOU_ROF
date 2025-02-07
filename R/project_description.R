@@ -1,3 +1,5 @@
+options(renv.lockfile.version = 1)
+
 workflowtools::description(
   fields = list(
     Type = "project",
