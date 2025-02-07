@@ -29,9 +29,25 @@ parameters2 <- list(
 # objects -------------------------------------------------------------------------------------
 
 ## ensure all 'objects(simOutPreamble)' accounted for here, with correct names/mappings
+if (FALSE) {
+  ## verify everything needed for main sim gets into objects_sim / objects_fireModel
+  obj4sim <- lapply(objects(simOutPreamble), function(x) simOutPreamble[[x]])
+  names(obj4sim) <- objects(simOutPreamble)
+
+  objs2drop <- c()
+
+  for (i in objs2drop) {
+    obj4sim[[i]] <- NULL
+  }
+
+  names(obj4sim) |> sort()
+
+  rm(objs2drop, obj4sim)
+}
+
 objects2 <- list(
   cloudFolderID = config$args[["cloud"]][["cacheDir"]],
-  imputedPixID = simOutPreamble[["imputedPixID2001"]],
+  imputedPixID = simOutPreamble[["imputedPixID2011"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
   speciesParams = simOutPreamble[["speciesParams"]],
