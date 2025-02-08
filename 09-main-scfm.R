@@ -285,6 +285,16 @@ rstEcoregion <- simOutDataPrep[["ecoregionLayer"]] |>
 cats <- unique(as.character(rstEcoregion[])) |> sort()
 levels(rstEcoregion) <- data.frame(value = as.integer(cats), ECODISTRIC = cats)
 
+gg_ecoregion <- ggplot() +
+  tidyterra::geom_spatraster(data = rstEcoregion) +
+  theme_bw() +
+  annotation_north_arrow(location = "bl", which_north = "true",
+                         pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("ecodistricts")
+ggsave(gg_ecoregion, filename = file.path(paths_sim[["outputPath"]], "figures", "ecodistricts.png"))
+
 years <- config$args[["transitionPlotTimes"]]
 fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
 
