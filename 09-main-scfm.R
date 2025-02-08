@@ -282,6 +282,8 @@ rstEcoregion <- simOutDataPrep[["ecoregionLayer"]] |>
   sf::st_crop(simOutPreamble[["studyAreaReporting"]]) |>
   terra::rasterize(simOutPreamble[["rasterToMatch"]], field = "ECODISTRIC") |>
   terra::crop(simOutPreamble[["studyAreaReporting"]], mask = TRUE)
+cats <- unique(as.character(rstEcoregion[])) |> sort()
+levels(rstEcoregion) <- data.frame(value = as.integer(cats), ECODISTRIC = cats)
 
 years <- config$args[["transitionPlotTimes"]]
 fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", years))
@@ -289,7 +291,7 @@ fvtm <- file.path(paths_sim[["outputPath"]], sprintf("vegTypeMap_year%04d.tif", 
 transitions_df <- vegTransitions(
   vtm = fvtm,
   ecoregion = rstEcoregion,
-  field = "NDTBEC",
+  field = "ECODISTRIC",
   studyArea = simOutPreamble[["studyAreaReporting"]],
   times = years,
   na.rm = TRUE
