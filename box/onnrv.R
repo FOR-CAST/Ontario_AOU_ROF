@@ -453,7 +453,7 @@ onnrvConfig <- R6::R6Class(
         ),
         Biomass_borealDataPrep = list(
           dataYear = 2011,
-          ecoregionLayerField = "ECOREGION", ## "ECODISTRIC"
+          ecoregionLayerField = "ECODISTRIC", ## "ECOREGION"
           exportModels = "none", ## use "all" to export for debugging
           fixModelBiomass = TRUE,
           forestedLCCClasses = c(81, 210, 220, 230, 240), ## NTEMS default
