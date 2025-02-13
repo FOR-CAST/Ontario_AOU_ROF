@@ -11,7 +11,7 @@ if (!"postprocess" %in% config$context[["mode"]]) {
 
 modules2 <- c(
   "Biomass_speciesData",
-  # "Biomass_speciesFactorial",
+  "Biomass_speciesFactorial",
   "Biomass_borealDataPrep",
   "Biomass_speciesParameters"
 ) ## TODO: use config$modules
@@ -22,7 +22,7 @@ parameters2 <- list(
   .globals = config$params[[".globals"]],
   Biomass_borealDataPrep = config$params[["Biomass_borealDataPrep"]],
   Biomass_speciesData = config$params[["Biomass_speciesData"]],
-  # Biomass_speciesFactorial = config$params[["Biomass_speciesFactorial"]],
+  Biomass_speciesFactorial = config$params[["Biomass_speciesFactorial"]],
   Biomass_speciesParameters = config$params[["Biomass_speciesParameters"]]
 )
 
@@ -50,6 +50,7 @@ objects2 <- list(
   imputedPixID = simOutPreamble[["imputedPixID2011"]],
   rasterToMatch = simOutPreamble[["rasterToMatch"]],
   rasterToMatchLarge = simOutPreamble[["rasterToMatchLarge"]],
+  rstLCC = simOutPreamble[["rstLCC2011"]],
   speciesParams = simOutPreamble[["speciesParams"]],
   speciesTable = simOutPreamble[["speciesTable"]],
   sppColorVect = simOutPreamble[["sppColorVect"]],
@@ -60,7 +61,6 @@ objects2 <- list(
 )
 
 objects2_fireModel <- list(
-  rstLCC = simOutPreamble[["rstLCC2011"]],
   standAgeMap = simOutPreamble[["standAgeMap2011"]]
 )
 
