@@ -57,6 +57,9 @@ lapply(reps2run, function(rep) {
   cmd <- paste(cmd, sprintf("source(\"00-main.R\")"))
   cmd <- paste(cmd, "'")
   system(cmd, intern = TRUE)
+
+  message(glue::glue("started rep {rep} ({Sys.time()}"))
+
   Sys.sleep(5)
 })
 
