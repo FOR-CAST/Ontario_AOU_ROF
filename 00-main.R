@@ -91,14 +91,25 @@ if (config$args[["delayStart"]] > 0) {
   Sys.sleep(config$args[["delayStart"]]*60)
 }
 
-if (config$context[["mode"]] == "postprocess") {
+switch(
+  config$context[["mode"]],
+  development = {
+    config$args[["usePrerun"]] <- FALSE
+  },
+  postprocess = {
+    config$args[["usePrerun"]] <- TRUE
+  },
+  production = {
+    if (config$context[["rep"]] == 1) {
+      config$args[["usePrerun"]] <- FALSE
+    } else {
+      config$args[["usePrerun"]] <- TRUE
+    }
+  },
   config$args[["usePrerun"]] <- TRUE
-} else if (config$context[["rep"]] == 1) {
-  config$args[["usePrerun"]] <- FALSE
-} else {
-  config$args[["usePrerun"]] <- TRUE
-}
+)
 
+## TODO: pull this into the block above
 # if ("fit" %in% config$context[["mode"]]) {
 #   config$args[["usePrerun"]] <- FALSE
 #   config$args[["reupload"]] <- TRUE
