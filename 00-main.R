@@ -60,8 +60,20 @@ config$paths <- config.user$paths
 config$update()$validate()
 
 # print run info ------------------------------------------------------------------------------
-SpaDES.config::printRunInfo(config$context)
-names(config$modules)
+
+runInfo <- SpaDES.config::printRunInfo(config$context)
+
+if (interactive()) {
+  message(paste(c("# Module info:", names(config$modules)), collapse = "\n  "))
+} else {
+  notifications::notify_google(
+    paste0("Starting simulation `", config$context[["runName"]],
+           "` on host `", config$context[["machine"]], "`.\n",
+           "```\n",
+           runInfo,
+           "```")
+  )
+}
 
 # project paths -------------------------------------------------------------------------------
 
