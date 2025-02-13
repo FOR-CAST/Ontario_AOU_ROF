@@ -36,7 +36,7 @@ reps2run <- if (isTRUE(fit)) {
 }
 
 lapply(reps2run, function(rep) {
-  cmd <- sprintf("screen -d -m -S %s_%02d Rscript -e", sAN, rep)
+  cmd <- sprintf("screen -d -m -S %s_%02d xvfb-run -a Rscript -e", sAN, rep)
   cmd <- paste(cmd, "'")
 
   cmd <- paste(cmd, sprintf(".rep <- %d;", rep))
