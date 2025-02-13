@@ -88,6 +88,7 @@ if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
 
       stop(e$message)
     }
+  })
 
   if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
