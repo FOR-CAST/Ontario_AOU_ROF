@@ -408,18 +408,19 @@ onnrvConfig <- R6::R6Class(
         reproducible.inputPaths = NULL,
         reproducible.memoisePersist = FALSE,
         reproducible.nThreads = 2,
+        reproducible.objSize = FALSE, ## TODO: restore TRUE when 'error: bad binding access' fixed
         reproducible.overwrite = TRUE,
         reproducible.quick = FALSE,
         # reproducible.shapefileRead = "terra::vect",
         reproducible.showSimilar = FALSE,
         reproducible.useCache = FALSE, ## TODO: restore caching if it ever gets fixed
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
-        reproducible.useMemoise = FALSE,
         reproducible.useDBI = TRUE,
+        reproducible.useMemoise = FALSE,
         reproducible.useTerra = TRUE,
         Require.install = FALSE, ## don't use Require; assume all pkgs installed
         scfmutils.driver.plot.scam = FALSE,
-        spades.allowInitDuringSimInit = FALSE, ## TODO: is TRUE working correctly???
+        spades.allowInitDuringSimInit = FALSE, ## TODO: use TRUE when fixed / working correctly
         spades.allowSequentialCaching = FALSE,
         spades.futurePlan = "callr",
         # spades.memoryUseInterval = 10, ## track memory use every 10 seconds
@@ -456,7 +457,7 @@ onnrvConfig <- R6::R6Class(
           exportModels = "none", ## use "all" to export for debugging
           fixModelBiomass = TRUE,
           forestedLCCClasses = c(81, 210, 220, 230, 240), ## NTEMS
-          LCCClassesToReplaceNN = numeric(0), ## LCC2010 default
+          LCCClassesToReplaceNN = c(240), ## NTEMS default
           speciesTableAreas = c("BSW", "BP", "MC"),
           speciesUpdateFunction = list(
             quote(LandR::speciesTableUpdate(sim$species, sim$speciesTable, sim$sppEquiv, P(sim)$sppEquivCol)),

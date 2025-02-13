@@ -16,7 +16,7 @@ config.studyArea <- list(
       .runInitialTime = max(.historicFireYears) + 1 ## fireSense simulates fires for years w/o data; TODO: add to config
     ),
     Biomass_borealDataPrep = list(
-      forestedLCCClasses = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) c(9:10, 12, 14, 15:18) else 1:6,
+      forestedLCCClasses = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) c(9:10, 12, 14, 15:18) else c(81, 210, 220, 230, 240),
       overrideAgeInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
       overrideBiomassInFires = if (grepl("^ON_ROF", config$context[["studyAreaName"]])) FALSE else TRUE,
       speciesTableAreas = c("WestON"),
