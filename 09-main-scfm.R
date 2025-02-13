@@ -10,10 +10,9 @@ prev_modules <- c(
   "Biomass_speciesParameters" ## 07-dataPrep-scfm.R
 )
 
-modules_sim <- config$modules[-which(names(config$modules) %in% prev_modules)]
-
 ## TODO: specifying load order manually is still necessary :(
-loadorder_sim <- c(
+# modules_sim <- config$modules[-which(names(config$modules) %in% prev_modules)]
+modules_sim <- list(
   "scfmLandcoverInit",
   "scfmRegime",
   "scfmDriver",
@@ -26,6 +25,8 @@ loadorder_sim <- c(
   "timeSinceFire",
   "scfmDiagnostics"
 )
+
+loadorder_sim <- unlist(modules_sim)
 
 ## add scfmRegime targetBurnRate param based on FRP attrs from Erni et al.
 ## NOTE: Burn.rate is percent per year; we want proportion per year
@@ -51,9 +52,8 @@ if (FALSE) {
   obj4sim <- modifyList(tmp1, tmp2)
 
   objs2drop <- c(
-    "canProvs",
-    "cloudFolderID", "cohortDataFactorial", "columnsForPixelGroups",
-    "LCC", ## will use rstLCC from dataPrep
+    "canProvs", "cloudFolderID", "cohortDataFactorial", "columnsForPixelGroups",
+    "LCC", ## will use rstLCC from dataPrep ## TODO
     "ml", "pixelFateDT",
     "PSPgis_sppParams", "PSPmeasure_sppParams", "PSPplot_sppParams",
     "speciesGrowthCurves", "speciesTableFactorial", "speciesParams"

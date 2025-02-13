@@ -80,7 +80,7 @@ outputs2 <- data.frame(
   file = c(
     "ecoregionMap_year0000.tif",
     "speciesEcoregion_year0000.csv",
-    "speciesTraits_adjusted_year0000.csv"
+    "speciesTraits_adjusted.csv"
   ),
   stringsAsFactors = FALSE
 )

@@ -7,10 +7,12 @@ upload_preamble <- FALSE ## TODO: restore uploads
 
 # paths ---------------------------------------------------------------------------------------
 
-## don't need replicated copies of preamble outputs
-repID <- basename(config$paths[["outputPath"]])
-config$paths[["outputPath"]] <- dirname(config$paths[["outputPath"]]) ## TODO: add to config
-checkPath(config$paths[["logPath"]], create = TRUE)
+if (!"postprocess" %in% config$context[["mode"]]) {
+  ## don't need replicated copies of preamble outputs
+  repID <- basename(config$paths[["outputPath"]])
+  config$paths[["outputPath"]] <- dirname(config$paths[["outputPath"]]) ## TODO: add to config
+  checkPath(config$paths[["logPath"]], create = TRUE)
+}
 
 # modules & parameters ------------------------------------------------------------------------
 
@@ -39,9 +41,7 @@ if (config$context[["fireModel"]] == "firesense") {
 
 # objects -------------------------------------------------------------------------------------
 
-preambleObjects <- list(
-  .runName = config$context[["runName"]] ## TODO: is this necessary??
-)
+preambleObjects <- list()
 
 # outputs -------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ outputs1 <- data.frame()
 
 # run simulation ------------------------------------------------------------------------------
 
-fsimOutPreamble <- simFile(
+preambleFile <- simFile(
   name = paste0("simOutPreamble_", config$context[["studyAreaName"]],
                 "_", config$context[["climateGCM"]],
                 "_", config$context[["climateSSP"]]),
@@ -58,31 +58,42 @@ fsimOutPreamble <- simFile(
 )
 
 if (isTRUE(config$args[["usePrerun"]]) && isFALSE(upload_preamble)) {
-  if (!file.exists(fsimOutPreamble)) {
-    googledrive::drive_download(file = as_id(gid_preamble), path = fsimOutPreamble)
+  if (!file.exists(preambleFile)) {
+    googledrive::drive_download(file = as_id(gid_preamble), path = preambleFile)
   }
-  simOutPreamble <- loadSimList(fsimOutPreamble)
+  simOutPreamble <- loadSimList(preambleFile)
 } else {
-  simOutPreamble <- simInitAndSpades(
-    times = list(start = 0, end = 1),
-    params = preambleParams,
-    modules = preambleModules,
-    loadOrder = unlist(preambleModules),
-    objects = preambleObjects
-  )
+  tryCatch({
+    simOutPreamble <- simInitAndSpades(
+      times = list(start = 0, end = 1),
+      params = preambleParams,
+      modules = preambleModules,
+      loadOrder = unlist(preambleModules),
+      objects = preambleObjects
+    )
 
-  ## TODO: find and fix these warnings:
-  ## 4: In assessDataTypeOuter(from, ...elt(hasMethod)) :
-  ##   method is bilinear, but the data are integer; please confirm this is correct
-  ## 5: In assessDataTypeOuter(from, ...elt(hasMethod)) :
-  ##   method is bilinear, but the data are integer; please confirm this is correct
+    ## TODO: find and fix these warnings:
+    ## 4: In assessDataTypeOuter(from, ...elt(hasMethod)) :
+    ##   method is bilinear, but the data are integer; please confirm this is correct
+    ## 5: In assessDataTypeOuter(from, ...elt(hasMethod)) :
+    ##   method is bilinear, but the data are integer; please confirm this is correct
 
+  }, error = function(e) {
+    if (requireNamespace("notifications") & file.exists("~/.rgooglespaces")) {
+      notifications::notify_google(
+        paste0("ERROR in 06-studyArea: `", config$context[["runName"]],
+               "` on host `", config$context[["machine"]], "`.\n",
+               "```\n", e$message, "\n```")
+      )
+
+      stop(e$message)
+    }
 
   if (isUpdated(simOutPreamble) || isFALSE(config$args[["useCache"]])) {
     simOutPreamble@.xData[["._sessionInfo"]] <- workflowtools::projectSessionInfo(prjDir)
     saveSimList(
       simOutPreamble,
-      fsimOutPreamble,
+      preambleFile,
       inputs = FALSE,
       outputs = FALSE,
       cache = FALSE,

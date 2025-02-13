@@ -456,7 +456,7 @@ onnrvConfig <- R6::R6Class(
           ecoregionLayerField = "ECOREGION", ## "ECODISTRIC"
           exportModels = "none", ## use "all" to export for debugging
           fixModelBiomass = TRUE,
-          forestedLCCClasses = c(81, 210, 220, 230, 240), ## NTEMS
+          forestedLCCClasses = c(81, 210, 220, 230, 240), ## NTEMS default
           LCCClassesToReplaceNN = c(240), ## NTEMS default
           speciesTableAreas = c("BSW", "BP", "MC"),
           speciesUpdateFunction = list(
@@ -489,7 +489,7 @@ onnrvConfig <- R6::R6Class(
         ),
         Biomass_speciesData = list(
           dataYear = 2011,
-          types = "KNN",
+          types = "KNN", ## TODO: use NTEMS?
           .plotInitialTime = self$args$simYears$start, ## start(sim)
           .useCache = FALSE # c(".inputObjects", "init") ## TODO
         ),
@@ -753,8 +753,7 @@ onnrvConfig <- R6::R6Class(
           "birds_BRT",
           "burnSummaries",
           # "LandWeb_summary", ## TODO
-          "NRV_summary"#,
-          # "visualize_LandR_output" ## TODO
+          "NRV_summary"
         )
 
         if (self$context[["fireModel"]] == "scfm") {

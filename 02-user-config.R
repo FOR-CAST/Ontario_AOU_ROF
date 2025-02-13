@@ -16,15 +16,13 @@ config.user <- switch(
         googleUser = "achubaty@for-cast.ca",
         useCloud = FALSE
       ),
-      notifications = list(
-        slackChannel = "@alex.chubaty"
-      ),
       reupload = FALSE, ## TODO: don't reupload for now, while updating + testing
       usePrerun = FALSE
     ),
     options = list(
       LandR.assertions = isTRUE("development" %in% .mode),
-      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## can be slow, but sometimes needed
+      # parallelly.makeNodePSOCK.setup_strategy = "sequential", ## can be slow, but sometime needed
+      pemisc.useParallel = pemisc::optimalClusterNum(1000, .ncores), ## used by scfmDriver
       renv.config.sandbox.enabled = FALSE, ## copying pkgs to sandbox is too slow during cluster setup
       reproducible.cacheSaveFormat = "rds", ## TODO: use qs once Cache is fixed (reproducible#359)
       reproducible.conn = SpaDES.config::dbConnCache("postgresql"),
@@ -70,38 +68,24 @@ config.user <- switch(
             rep("localhost", 100)
           }
         )
+      ),
+      LandWeb_summary = list(
+        .clInit = function() {
+          ## NOTE: everything here has to be able to run from clean R session
+          if (file.exists("Ontario_AOU_ROF.Renviron")) readRenviron("Ontario_AOU_ROF.Renviron") ## database credentials
+
+          try(options(reproducible.conn = NULL)) ## ensure it's not set
+          options(reproducible.conn = SpaDES.config::dbConnCache("postgresql"))
+
+          return(invisible(NULL))
+        },
+        upload = FALSE ## TODO: use TRUE once `uploadTo` specified per study area
       )
     ),
     paths = list(
       scratchPath = switch(.nodename,
                            `larix.for-cast.ca` = file.path("/tmp/scratch", basename(prjDir)),
                            file.path("/mnt/scratch", .user, basename(prjDir)))
-    )
-  ),
-
-  ## Ian ------------------------------------------------------------------------------------------
-  ieddy = list(
-    args = list(
-      cloud = list(
-        googleUser = "ianmseddy@gmail.com",
-        useCloud = FALSE
-      ),
-      spades.memoryUse = FALSE,
-      notifications = list(
-        slackChannel = ""
-      ),
-      usePrerun = TRUE,
-      upload_preamble = FALSE
-    ),
-    options = list(
-      reproducible.cacheSaveFormat = "qs",
-      spades.memoryUseInterval = FALSE
-    ),
-    params = list(
-      .plotInitialTime = NA
-    ),
-    paths = list(
-      scratchPath = file.path("/mnt/scratch", .user, basename(prjDir))
     )
   ),
 
@@ -112,9 +96,6 @@ config.user <- switch(
         googleUser = "", ## TODO
         useCloud = FALSE
       ),
-      notifications = list(
-        slackChannel = "" ## TODO
-      )
     ),
     paths = list(
       cachePath = "cache_sqlite"
