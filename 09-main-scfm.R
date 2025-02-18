@@ -33,7 +33,7 @@ loadorder_sim <- unlist(modules_sim)
 targetBurnRate <- simOutPreamble[["fireRegimePolysLarge"]][["Burn.rate"]] / 100
 names(targetBurnRate) <- simOutPreamble[["fireRegimePolysLarge"]][["PolyID"]]
 
-config$params[["scfmRegime"]][["targetBurnRate"]] <- targetBurnRate * .burnRateMultiplier
+config$params[["scfmRegime"]][["targetBurnRate"]] <- targetBurnRate
 
 parameters_sim <- config$params
 

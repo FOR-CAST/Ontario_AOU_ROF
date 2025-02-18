@@ -77,15 +77,3 @@ if (!exists(".studyAreaName", .GlobalEnv)) {
     #.studyAreaName <- "QC_boreal_5" ## FRTs in QC_boreal: 1, 5 (also 4)
   }
 }
-
-## TODO: manually adjust/calibrate while fixing scfm; eventually remove.
-if (exists(".burnRateMultiplier", .GlobalEnv)) {
-  if (.fireModel != "scfm") {
-    txt <- ".burnRateMultiplier ignored for model runs not using scfm"
-    message(txt)
-    warning(txt)
-    rm(txt)
-  }
-} else {
-  .burnRateMultiplier <- as.numeric(.rep) ## TODO: use 1.0 as default after testing
-}
