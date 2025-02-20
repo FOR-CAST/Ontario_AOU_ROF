@@ -413,7 +413,7 @@ onnrvConfig <- R6::R6Class(
         reproducible.quick = FALSE,
         # reproducible.shapefileRead = "terra::vect",
         reproducible.showSimilar = FALSE,
-        reproducible.useCache = FALSE, ## TODO: restore caching if it ever gets fixed
+        reproducible.useCache = TRUE, ## TODO: restore caching if it ever gets fixed
         reproducible.useCloud = FALSE, ## TODO: cloudCache spams Google Drive; doesn't respect drive path
         reproducible.useDBI = TRUE,
         reproducible.useMemoise = FALSE,
@@ -440,6 +440,7 @@ onnrvConfig <- R6::R6Class(
           initialB = NA, ## LandR default: 10; use NA for LANDIS-II default
           reps = 1L:50L,
           sppEquivCol = "LandR",
+          sppEquivPlotCol = "LandR",
           successionTimestep = 10,
           summaryInterval = self$args[["summaryInterval"]],
           summaryPeriod = self$args[["summaryPeriod"]],
@@ -643,7 +644,7 @@ onnrvConfig <- R6::R6Class(
           scamOptimizer = "efs",
           .useCache = FALSE, # ".inputObjects", ## don't cache 'init' ## TODO
           .useCloud = FALSE,
-          .useParallelFireRegimePolys = FALSE ## TODO: fix cluster hang/crash
+          .useParallelFireRegimePolys = TRUE ## TODO: confirm this works again
         ),
         scfmEscape = list(
           startTime = self$args$simYears$start + 1,

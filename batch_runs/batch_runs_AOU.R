@@ -1,4 +1,5 @@
 fireModel <- "scfm" ## "fireSense"
+frpType <- "FRT" ## "FRU"
 nrvType <- "HRV" ## "FRV"
 
 fit <- FALSE
@@ -24,8 +25,8 @@ if (nrvType == "FRV") {
   ssp <- NULL
 }
 
-Nstart <- 21L
-Nreps <- 21L
+Nstart <- 1L
+Nreps <- 1L
 
 delay <- as.integer(0.25 * 3600)
 
@@ -36,12 +37,13 @@ reps2run <- if (isTRUE(fit)) {
 }
 
 lapply(reps2run, function(rep) {
-  cmd <- sprintf("screen -d -m -S %s_%02d xvfb-run -a Rscript -e", sAN, rep)
+  cmd <- sprintf("screen -d -m -S %s_%02d_%s xvfb-run -a Rscript -e", sAN, rep, frpType)
   cmd <- paste(cmd, "'")
 
   cmd <- paste(cmd, sprintf(".rep <- %d;", rep))
   cmd <- paste(cmd, sprintf(".studyAreaName <- \"%s\";", sAN))
   cmd <- paste(cmd, sprintf(".fireModel <- \"%s\";", fireModel))
+  cmd <- paste(cmd, sprintf(".fireRegimePolysType <- \"%s\";", frpType))
 
   if (nrvType == "FRV") {
     cmd <- paste(cmd, sprintf(".climateGCM <- \"%s\"; .climateSSP <- \"%d\";", gcm, ssp))
