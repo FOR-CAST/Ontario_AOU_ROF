@@ -623,10 +623,9 @@ onnrvConfig <- R6::R6Class(
           ageClassCutOffs = seq(0, 140, 20),
           ageClassMaxAge = 400L, ## was `maxAge` previously
           reps = 1L:10L, ## TODO: used elsewhere to setup runs (expt table)?
-          postprocessEvents = "bc",
+          postprocessEvents = "on",
           sieveThresh = as.integer(1000 / self$context[["pixelSize"]]), ## 10 ha in pixels
           # simOutputPath = self$paths[["outputPath"]],
-          studyAreaNamesCol = "LU_NAME",
           summaryInterval = self$args[["summaryInterval"]],
           summaryPeriod = self$args[["summaryPeriod"]],
           timeSeriesTimes = 801:850, ## TODO: from args
@@ -701,7 +700,7 @@ onnrvConfig <- R6::R6Class(
           gmcsDataPrep = "gmcsDataPrep"
         ),
         scfm = list(
-          scfmDiagnostics = "scfmDiagnostics",
+          scfmDiagnostics = "scfmDiagnostics", ## also in post-processing
           scfmDriver = "scfmDriver",
           scfmEscape = "scfmEscape",
           scfmIgnition = "scfmIgnition",
@@ -747,12 +746,11 @@ onnrvConfig <- R6::R6Class(
         )
       } else if ("postprocess" %in% self$context[["mode"]]) {
         self$modules <- list(
-          "Ontario_AOU_preamble",
+          "Ontario_preamble",
           "Biomass_speciesData",
-          "Biomass_summary",
-          "fireSense_summary",
+          # "Biomass_summary",
           "birds_BRT",
-          "burnSummaries",
+          # "burnSummaries", ## TODO
           # "LandWeb_summary", ## TODO
           "NRV_summary"
         )
@@ -772,7 +770,7 @@ onnrvConfig <- R6::R6Class(
 
         self$params <- list(
           .globals = list(
-            reps = 1L:50L,
+            reps = 1L:10L,
             .plots = c("png")
           ),
           Biomass_summary = list(
@@ -787,6 +785,9 @@ onnrvConfig <- R6::R6Class(
           NRV_summary = list(
             postprocessEvents = "on",
             sieveThresh = as.integer(1000 / self$context[["pixelSize"]]) ## 10 ha in pixels
+          ),
+          scfmDiagnostics = list(
+            ## TODO
           )
         )
       }
