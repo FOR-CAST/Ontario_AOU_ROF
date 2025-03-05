@@ -144,14 +144,14 @@
     },
     "LandR": {
       "Package": "LandR",
-      "Version": "1.1.5.9031",
+      "Version": "1.1.5.9034",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "LandR",
       "RemoteRef": "development",
-      "RemoteSha": "88540f2d9da9cf97011a86853dca8b5de90d1860",
+      "RemoteSha": "3fe2170dde13801099b5b07e18dc96d79a25d50f",
       "Requirements": [
         "MuMIn",
         "R",
@@ -181,7 +181,7 @@
         "utils",
         "viridis"
       ],
-      "Hash": "b557c050f76c398a0f2be0239a3e2b2f"
+      "Hash": "c44f3e9f0d0fef68a71c73c017686be1"
     },
     "LandR.CS": {
       "Package": "LandR.CS",
@@ -204,6 +204,40 @@
         "stats"
       ],
       "Hash": "7bd09aa160404b5d184762f8dc46d59a"
+    },
+    "LandWebUtils": {
+      "Package": "LandWebUtils",
+      "Version": "1.0.3",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "PredictiveEcology",
+      "RemoteRepo": "LandWebUtils",
+      "RemoteRef": "development",
+      "RemoteSha": "433755aab942c70111bdf2fa4581d4cd06157f4d",
+      "Requirements": [
+        "LandR",
+        "R",
+        "SpaDES.tools",
+        "data.table",
+        "dplyr",
+        "fs",
+        "future.apply",
+        "ggplot2",
+        "grDevices",
+        "graphics",
+        "magrittr",
+        "map",
+        "methods",
+        "pemisc",
+        "purrr",
+        "raster",
+        "rasterVis",
+        "reproducible",
+        "tools",
+        "utils"
+      ],
+      "Hash": "d6bd039a1a975b6f8ceec989604ccf80"
     },
     "MASS": {
       "Package": "MASS",
@@ -2944,7 +2978,7 @@
       "Package": "latticeExtra",
       "Version": "0.6-30",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "MASS",
         "R",
@@ -3096,14 +3130,14 @@
     },
     "map": {
       "Package": "map",
-      "Version": "1.1.0.9000",
+      "Version": "1.1.0.9003",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "map",
       "RemoteRef": "development",
-      "RemoteSha": "dd6270f6164b794dc5cf8db7394e1f89662993eb",
+      "RemoteSha": "a4d099df5b20325075495e57e4adf44fea31ac9e",
       "Requirements": [
         "R",
         "backports",
@@ -3119,9 +3153,10 @@
         "stats",
         "terra",
         "tiler",
-        "utils"
+        "utils",
+        "withr"
       ],
-      "Hash": "65b72436a88b88a2d3ee2888fafc43b7"
+      "Hash": "8b5b2790ee47aafd55cc8ea856108504"
     },
     "markdown": {
       "Package": "markdown",
@@ -4054,11 +4089,11 @@
       "Version": "2.1.2",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "PredictiveEcology",
       "RemoteRepo": "reproducible",
       "RemoteRef": "development",
-      "RemoteSha": "803332a2f2807f0aa245c38112fee77e7f0f0577",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "03c30b4e5d6df9495f3e3c460e7f6e7a6ab8079b",
       "Requirements": [
         "R",
         "cli",
@@ -4070,9 +4105,10 @@
         "lobstr",
         "methods",
         "stats",
-        "utils"
+        "utils",
+        "withr"
       ],
-      "Hash": "422a471d0d2925d989859d71863f647a"
+      "Hash": "a1e5436202744bad01c09cd6629a33b1"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -5352,7 +5388,7 @@
       "Package": "zoo",
       "Version": "1.8-12",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "grDevices",
