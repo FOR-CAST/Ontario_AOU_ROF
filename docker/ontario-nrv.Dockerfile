@@ -11,10 +11,14 @@ ARG USERNAME=rstudio
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-ENV DEFAULT_USER=$USERNAME
+ENV RENV_PATHS_CACHE=/home/${USERNAME}/.cache/R/renv
+ENV RENV_PATHS_PREFIX_AUTO=TRUE
+ENV RENV_WATCHDOG_ENABLED=FALSE
+
+RUN mkdir -p ${RENV_PATHS_CACHE}
 
 ## clone project repo and set up additional project directories
-WORKDIR /home/$DEFAULT_USER/GitHub
+WORKDIR /home/${USERNAME}/GitHub
 
 ARG GH_ORG=FOR-CAST
 ARG GH_REPO=Ontario_AOU_ROF
@@ -22,16 +26,20 @@ ARG GH_TAG=main
 RUN --mount=type=ssh git clone --single-branch -b $GH_TAG --recurse-submodules \
    -j8 https://github.com/$GH_ORG/$GH_REPO
 
-WORKDIR /home/$DEFAULT_USER/GitHub/$GH_REPO
+WORKDIR /home/${USERNAME}/GitHub/$GH_REPO
 
 RUN mkdir cache inputs outputs
 
-# RUN Rscript -e 'options(Ncpus = min(32, parallel::detectCores() / 2)); renv::restore()'
+## pre-install R packages
+COPY renv/settings.json renv/settings.json
+RUN Rscript -e 'options(Ncpus = max(1, min(8, parallel::detectCores()))); renv::restore()'
 
 ## set default project (https://stackoverflow.com/a/53547334/1380598)
-RUN mkdir -p /home/$DEFAULT_USER/.rstudio/projects_settings
-RUN echo /home/$DEFAULT_USER/GitHub/$GH_REPO/$GH_REPO.Rproj > /home/$DEFAULT_USER/.rstudio/projects_settings/switch-to-project
+RUN mkdir -p /home/${USERNAME}/.rstudio/projects_settings \
+    && echo /home/${USERNAME}/GitHub/$GH_REPO/$GH_REPO.Rproj > \
+            /home/${USERNAME}/.rstudio/projects_settings/switch-to-project
 
-RUN groupmod --gid $USER_GID $DEFAULT_USER \
-    && usermod --uid $USER_UID --gid $USER_GID $DEFAULT_USER \
-    && chown -R $USER_UID:$USER_GID /home/$DEFAULT_USER
+## set user permissions
+RUN groupmod --gid $USER_GID ${USERNAME} \
+    && usermod --uid $USER_UID --gid $USER_GID ${USERNAME} \
+    && chown -R $USER_UID:$USER_GID /home/${USERNAME}
