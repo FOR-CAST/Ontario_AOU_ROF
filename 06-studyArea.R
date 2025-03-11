@@ -157,5 +157,7 @@ stopifnot(
 )
 
 ## restore paths + cleanup
-config$paths[["outputPath"]] <- file.path(config$paths[["outputPath"]], repID)
+if (!"postprocess" %in% config$context[["mode"]]) {
+  config$paths[["outputPath"]] <- file.path(config$paths[["outputPath"]], repID)
+}
 terra::tmpFiles(remove = TRUE)
