@@ -22,8 +22,7 @@ prjDir <- SpaDES.config::findProjectPath()
 stopifnot(identical(prjDir, getwd()))
 
 options(
-  Ncpus = .ncores,
-  repos = c(CRAN = "https://cloud.r-project.org")
+  Ncpus = .ncores
 )
 
 workflowtools::check_project_packages(prjDir)
