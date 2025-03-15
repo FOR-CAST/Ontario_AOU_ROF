@@ -288,7 +288,7 @@
       "Package": "MuMIn",
       "Version": "1.48.4",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "Matrix",
         "R",
@@ -327,7 +327,7 @@
       "Package": "R.cache",
       "Version": "0.16.0",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "R.methodsS3",
@@ -434,7 +434,7 @@
       "Package": "RCurl",
       "Version": "1.98-1.16",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "bitops",
@@ -552,7 +552,7 @@
       "Package": "RcppEigen",
       "Version": "0.3.4.0.2",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "Rcpp",
@@ -758,7 +758,7 @@
       "Package": "SparseM",
       "Version": "1.84-2",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "graphics",
@@ -932,7 +932,7 @@
     },
     "arrow": {
       "Package": "arrow",
-      "Version": "18.1.0.1",
+      "Version": "19.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -950,7 +950,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "0d1937a1096257bd7e4dddbf3e837d9f"
+      "Hash": "68a298d1a2bfdb19d429dbb005285c62"
     },
     "asciicast": {
       "Package": "asciicast",
@@ -2352,7 +2352,7 @@
       "Package": "ggsci",
       "Version": "3.2.0",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "ggplot2",
@@ -3239,7 +3239,7 @@
       "Package": "microbenchmark",
       "Version": "1.5.0",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "graphics",
@@ -3261,7 +3261,7 @@
       "Package": "minqa",
       "Version": "1.2.8",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "Rcpp"
       ],
@@ -3389,7 +3389,7 @@
       "Package": "nloptr",
       "Version": "2.1.1",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Hash": "27550641889a3abf3aec4d91186311ec"
     },
     "nnet": {
@@ -3564,7 +3564,7 @@
       "Package": "pbkrtest",
       "Version": "0.5.3",
       "Source": "Repository",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "RSPM",
       "Requirements": [
         "MASS",
         "Matrix",
@@ -5047,21 +5047,6 @@
         "xfun"
       ],
       "Hash": "3ec7e3ddcacc2d34a9046941222bf94d"
-    },
-    "tmpdir": {
-      "Package": "tmpdir",
-      "Version": "0.1.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "achubaty",
-      "RemoteRepo": "tmpdir",
-      "RemoteRef": "5d0cbefc4f5b26ee6a746fbeb3a7226a5d947d9c",
-      "RemoteSha": "5d0cbefc4f5b26ee6a746fbeb3a7226a5d947d9c",
-      "Requirements": [
-        "tools"
-      ],
-      "Hash": "be0c924f74e5ec50787510e85f37db76"
     },
     "trust": {
       "Package": "trust",

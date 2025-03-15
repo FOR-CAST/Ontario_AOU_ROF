@@ -16,7 +16,7 @@ Imports:
     animation (== 2.7),
     archive (== 1.1.11),
     arm (== 1.14-4),
-    arrow (== 18.1.0.1),
+    arrow (== 19.0.1),
     asciicast (== 2.3.1),
     askpass (== 1.2.1),
     assertthat (== 0.2.1),
@@ -346,7 +346,6 @@ Imports:
     timechange (== 0.3.0),
     tinytex (== 0.54),
     TMB (== 1.9.16),
-    tmpdir (== 0.1.0),
     trust (== 0.1-8),
     tweenr (== 2.0.3),
     tzdb (== 0.4.0),
@@ -375,7 +374,6 @@ Imports:
     zoo (== 1.8-12)
 Remotes: 
     achubaty/amc@2d785f0e3151e8f580478538e326b2cd570b0675,
-    achubaty/tmpdir@5d0cbefc4f5b26ee6a746fbeb3a7226a5d947d9c,
     FOR-CAST/notifications@57d5989cae5f324d388e3173a79e3eeb84d504c7,
     FOR-CAST/nrvtools@25d0f4f49e6d5f11cea65119153480a77bab9266,
     FOR-CAST/workflowtools@5005b7788ed2f4042415158bda005b5a06e7cf32,
