@@ -18,6 +18,27 @@ modules2 <- c(
 
 # parameters ----------------------------------------------------------------------------------
 
+myMinRelativeB <- function(pixelCohortData) {
+  pixelData <- unique(pixelCohortData, by = "pixelIndex")
+  pixelData[, ecoregionGroup := factor(as.character(ecoregionGroup))] # resorts them in order
+  minRelativeB <- data.frame(
+    ecoregionGroup = as.factor(levels(pixelData$ecoregionGroup)),
+    data.frame(
+      X1 = 0.15, ## 0.15
+      X2 = 0.25, ## 0.25
+      X3 = 0.35, ## 0.50
+      X4 = 0.45, ## 0.75
+      X5 = 0.55  ## 0.85
+    )
+  )
+
+  return(minRelativeB)
+}
+
+config$params[["Biomass_speciesData"]] <- list(
+  minRelativeBFunction = quote(myMinRelativeB(pixelCohortData))
+)
+
 parameters2 <- list(
   .globals = config$params[[".globals"]],
   Biomass_borealDataPrep = config$params[["Biomass_borealDataPrep"]],

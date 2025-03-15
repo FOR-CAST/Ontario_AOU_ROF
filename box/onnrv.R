@@ -660,7 +660,7 @@ onnrvConfig <- R6::R6Class(
         ),
         scfmRegime = list(
           fireCause = self$context[["fireCause"]],
-          fireEpoch = c(1971, 2010), ## default 1971-2000; using longer epoch for areas too small w/ not enough fire data
+          fireEpoch = c(1971, 2020), ## default was 1971-2000; using longer epoch for areas too small w/ not enough fire data
           .useCache = FALSE # ".inputObjects", ## don't cache 'init' ## TODO
         ),
         scfmSpread = list(
