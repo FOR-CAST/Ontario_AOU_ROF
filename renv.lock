@@ -288,7 +288,7 @@
       "Package": "MuMIn",
       "Version": "1.48.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "Matrix",
         "R",
@@ -327,7 +327,7 @@
       "Package": "R.cache",
       "Version": "0.16.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "R.methodsS3",
@@ -434,7 +434,7 @@
       "Package": "RCurl",
       "Version": "1.98-1.16",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "bitops",
@@ -552,7 +552,7 @@
       "Package": "RcppEigen",
       "Version": "0.3.4.0.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "Rcpp",
@@ -758,7 +758,7 @@
       "Package": "SparseM",
       "Version": "1.84-2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "graphics",
@@ -2352,7 +2352,7 @@
       "Package": "ggsci",
       "Version": "3.2.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "ggplot2",
@@ -3239,7 +3239,7 @@
       "Package": "microbenchmark",
       "Version": "1.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "R",
         "graphics",
@@ -3261,7 +3261,7 @@
       "Package": "minqa",
       "Version": "1.2.8",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "Rcpp"
       ],
@@ -3389,7 +3389,7 @@
       "Package": "nloptr",
       "Version": "2.1.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Hash": "27550641889a3abf3aec4d91186311ec"
     },
     "nnet": {
@@ -3564,7 +3564,7 @@
       "Package": "pbkrtest",
       "Version": "0.5.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "Requirements": [
         "MASS",
         "Matrix",
@@ -4076,13 +4076,13 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.1.2",
+      "Version": "1.1.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "utils"
       ],
-      "Hash": "695c69bbeb715a0cdaa18b41d08347df"
+      "Hash": "dbe7cc815b478931d08fb48359811dec"
     },
     "reproducible": {
       "Package": "reproducible",
